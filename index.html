@@ -1844,6 +1844,29 @@ body.hc-open #alex-bubble, body.hc-open #fab-root { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { .wg-grid.edit .wg { animation: none; } }
 
+/* ---------- Hidden time ---------- */
+.ht-btn b { font-size: 13px; font-weight: 800; letter-spacing: .04em; }
+.stage.theatre .ht-btn b { color: inherit; }
+.wg-ht { font-weight: 800; letter-spacing: .04em; padding: 0 12px; }
+.ht { position: fixed; inset: 0; z-index: 200; background: #000; display: grid; place-items: center; cursor: none; -webkit-user-select: none; user-select: none; touch-action: none;
+  opacity: 0; transition: opacity .7s ease; }
+.ht.in { opacity: 1; } .ht.out { opacity: 0; pointer-events: none; transition-duration: .35s; }
+.ht-bar { position: relative; width: min(46vw, 560px); min-width: 220px; height: 10px; border-radius: 999px; overflow: hidden;
+  background: rgba(255, 255, 255, .045); transition: transform 8s ease-in-out; }
+.ht-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 999px; background: var(--accent); opacity: .62; transition: width 1s linear, background .8s, opacity .8s; }
+.ht[data-k="brk"] .ht-fill { background: var(--good); opacity: .4; }
+.ht[data-k="idle"] .ht-bar { background: rgba(255, 255, 255, .03); }
+.ht.paused .ht-fill { animation: htpause 3s ease-in-out infinite; }
+@keyframes htpause { 50% { opacity: .22; } }
+.ht.done .ht-fill { opacity: .8; animation: htdone 4s ease-in-out infinite; }
+@keyframes htdone { 50% { opacity: .35; } }
+.ht-mark { position: absolute; right: calc(18px + var(--sar)); bottom: calc(14px + var(--sab)); min-width: 56px; height: 44px; padding: 0 10px; border-radius: 14px;
+  font-size: 15px; font-weight: 800; letter-spacing: .08em; color: rgba(255, 255, 255, .085); background: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.ht-mark:active { color: rgba(255, 255, 255, .3); }
+body.ht-open { overflow: hidden; }
+@media (max-width: 720px) { .ht-bar { width: 70vw; height: 8px; } }
+@media (prefers-reduced-motion: reduce) { .ht-bar { transition: none; } .ht.paused .ht-fill, .ht.done .ht-fill { animation: none; } }
+
 </style>
 </head>
 <body>
@@ -3065,6 +3088,7 @@ function stageHTML() {
     '<button class="icon-btn" data-act="cycleFace" aria-label="Change clock face">' + ic('clock', 21) + '</button>' +
     '<button class="icon-btn' + (s.tick ? ' on' : '') + '" data-act="toggleTick" aria-label="Ticking sound">' + ic(s.tick ? 'sound' : 'mute', 21) + '</button>' +
     '<button class="icon-btn" data-act="openPad" aria-label="Distraction pad">' + ic('note', 21) + '</button>' +
+    '<button class="icon-btn ht-btn" data-act="htOn" aria-label="Hidden time: black screen with a quiet progress bar"><b>HT</b></button>' +
     '<button class="icon-btn' + (V.zen ? ' on' : '') + '" data-act="toggleZen" aria-label="Full-screen clock">' + ic(V.zen ? 'shrink' : 'expand', 21) + '</button></div>';
 
   if (brk) {
@@ -6090,7 +6114,7 @@ W.timer = {
       sub = next ? 'Next: ' + next.title : (S.settings.mode === 'pomodoro' ? p.focus + ' min focus, ' + p.brk + ' min break' : 'Stopwatch');
     }
     const btns = t ? (t.paused ? '<button class="wg-play" data-act="timerResume" aria-label="Resume">' + ic('play', 22) + '</button>' : '<button class="wg-play" data-act="timerPause" aria-label="Pause">' + ic('pause', 22) + '</button>') +
-      (w > 2 ? '<button class="wg-btn" data-act="timerStop">' + ic('stop', 16) + 'Finish</button>' : '')
+      (w > 2 ? '<button class="wg-btn" data-act="timerStop">' + ic('stop', 16) + 'Finish</button>' : '') + '<button class="wg-btn wg-ht" data-act="htOn" aria-label="Hidden time">HT</button>'
       : '<button class="wg-play" data-act="' + (next ? 'taskPlay" data-id="' + next.id : 'timerStart') + '" aria-label="Start focus">' + ic('play', 22) + '</button>' + (w > 2 ? '<button class="wg-btn" data-act="go" data-view="focus">' + ic('timer', 16) + 'Open timer</button>' : '');
     const chips = !t && w >= 4 && h >= 3 ? '<div class="wg-chips">' + S.settings.presets.slice(0, w >= 6 ? 6 : 3).map(x => '<button class="chip' + (x.id === p.id ? ' on' : '') + '" data-act="setPreset" data-id="' + x.id + '">' + x.focus + ' / ' + x.brk + '</button>').join('') + '</div>' : '';
     return '<div class="wg-timer' + (t && !t.paused && t.phase === 'focus' ? ' live' : '') + '">' + wgHead('Focus timer', 'timer', 'data-act="go" data-view="focus"', '<span class="wg-tlab">' + label + '</span>') +
@@ -6483,6 +6507,53 @@ setInterval(() => {
   const ck = $('#wg-grid .wg-clk'), t = S.timer;
   if (ck && t) { const el = timerElapsed(), s = t.planned ? fmtClock(Math.ceil(Math.max(0, t.planned - el))) : fmtClock(el); if (ck.textContent !== s) ck.textContent = s; }
 }, 1000);
+
+/* ---------- Hidden time (HT): a pure black screen with one quiet bar, so nobody nearby can read the clock ---------- */
+const HT = { on: false, iv: 0, drift: 0, last: '' };
+function htProgress() {
+  const t = S.timer; if (!t) return { p: 0, k: 'idle' };
+  const el = timerElapsed();
+  if (t.planned) return { p: clamp(el / t.planned, 0, 1), k: t.phase === 'break' ? 'brk' : 'foc', paused: t.paused };
+  return { p: (el % 3600) / 3600, k: t.phase === 'break' ? 'brk' : 'foc', paused: t.paused };   // stopwatch: one sweep per hour
+}
+function htPaint() {
+  const el = $('#ht'); if (!el) return;
+  let r = htProgress();
+  if (r.k === 'foc' && r.p < .5) HT.endFull = false; else if (r.k === 'foc' && r.p > .97) HT.endFull = true;
+  if (r.k === 'idle' && HT.endFull) r = { p: 1, k: 'foc' };            // the round just finished: keep the bar full and softly pulsing
+  const fill = $('#ht-fill', el);
+  if (fill) fill.style.width = (r.p * 100).toFixed(3) + '%';
+  const key = r.k + (r.paused ? 'p' : '') + (r.p >= 1 ? 'd' : '');
+  if (key !== HT.last) { HT.last = key; el.dataset.k = r.k; el.classList.toggle('paused', !!r.paused); el.classList.toggle('done', r.p >= 1); }
+}
+/* the bar wanders a few pixels now and then so it never sits in one spot on the OLED screen */
+function htDrift() {
+  const b = $('#ht-bar'); if (!b) return;
+  b.style.transform = 'translate(' + Math.round((Math.random() - .5) * 60) + 'px,' + Math.round((Math.random() - .5) * 80) + 'px)';
+}
+function htOn() {
+  if (HT.on) return; HT.on = true;
+  audioInit();
+  const el = document.createElement('div'); el.id = 'ht'; el.className = 'ht'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', 'Hidden time');
+  el.innerHTML = '<div class="ht-bar" id="ht-bar"><i class="ht-fill" id="ht-fill"></i></div><button class="ht-mark" data-act="htOff" aria-label="Show the screen again">HT</button>';
+  document.body.appendChild(el); document.body.classList.add('ht-open');
+  HT.last = ''; htPaint();
+  requestAnimationFrame(() => el.classList.add('in'));
+  clearInterval(HT.iv); HT.iv = setInterval(htPaint, 1000);
+  clearInterval(HT.drift); HT.drift = setInterval(htDrift, 60000);
+  if (S.timer) wakeOn();
+}
+function htOff() {
+  const el = $('#ht'); HT.on = false; clearInterval(HT.iv); clearInterval(HT.drift);
+  document.body.classList.remove('ht-open');
+  if (!el) return; el.classList.remove('in'); el.classList.add('out'); setTimeout(() => el.remove(), 450);
+}
+A.htOn = () => htOn();
+A.htOff = () => htOff();
+document.addEventListener('keydown', e => {
+  if (HT.on && e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); htOff(); return; }
+  if (!HT.on && (e.key === 'h' || e.key === 'H') && V.view === 'focus' && !modalStack.length && !/^(INPUT|TEXTAREA|SELECT)$/.test((document.activeElement || {}).tagName)) { e.preventDefault(); htOn(); }
+}, true);
 
 /* ============================================================
    Focus — Settings (everything is editable) and app start
