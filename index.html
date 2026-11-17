@@ -1546,6 +1546,38 @@ body.hc-open #alex-bubble, body.hc-open #fab-root { display: none; }
   .hc-music { left: 10px; right: 10px; width: auto; }
 }
 
+/* hand control: Previous above a big Next, bottom-left */
+.hc-nav { position: absolute; z-index: 7; left: calc(22px + var(--sal)); bottom: calc(22px + var(--sab)); display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.hc-prev { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; color: #FFE7BF; background: rgba(30, 14, 6, .62); border: 1px solid rgba(255, 210, 150, .32); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+.hc-prev > svg { transform: rotate(180deg); }
+.hc-prev:disabled { opacity: .35; }
+.hc-prev:active:not(:disabled) { transform: scale(.92); }
+.hc-nextb { position: relative; width: 96px; height: 96px; border-radius: 50%; display: grid; place-items: center; color: #3A1800; -webkit-tap-highlight-color: transparent;
+  background: radial-gradient(circle at 35% 30%, #FFF2C2, #FFC94F 45%, #F29512 80%); box-shadow: 0 12px 34px rgba(255, 150, 30, .45), 0 0 0 6px rgba(30, 14, 6, .45); }
+.hc-nextb > svg { position: absolute; inset: -9px; width: calc(100% + 18px); height: calc(100% + 18px); transform: rotate(-90deg); pointer-events: none; }
+.hc-nextb .t { fill: none; stroke: rgba(255, 210, 150, .18); stroke-width: 3; }
+.hc-nextb .f { fill: none; stroke: #FFD36B; stroke-width: 3.5; stroke-linecap: round; transition: stroke-dashoffset .5s cubic-bezier(.2, .8, .2, 1); filter: drop-shadow(0 0 4px rgba(255, 190, 70, .9)); }
+.hc-nl { display: flex; flex-direction: column; align-items: center; gap: 0; line-height: 1; }
+.hc-nl b { font-size: 15px; font-weight: 800; letter-spacing: .01em; }
+.hc-nextb:active { transform: scale(.94); }
+.hc-nextb.last { background: radial-gradient(circle at 35% 30%, #E9FFE2, #8EE07A 45%, #3FAE4B 80%); color: #0B2A0E; box-shadow: 0 12px 34px rgba(80, 200, 90, .4), 0 0 0 6px rgba(30, 14, 6, .45); }
+.hc-pos { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 5px 12px; border-radius: 12px; background: rgba(30, 14, 6, .62); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.hc-pos b { font-size: 14px; color: #FFE39A; font-weight: 700; }
+.hc-pos em { font-style: normal; font-size: 11px; color: rgba(255, 236, 210, .7); white-space: nowrap; }
+.hc-done.nudge { animation: hcnudge .9s cubic-bezier(.2, .9, .3, 1.4); }
+@keyframes hcnudge { 30% { transform: scale(1.1); } 60% { transform: scale(.97); } }
+/* the music card moves right so it never sits on the controls */
+@media (orientation: landscape) and (min-width: 901px) {
+  .hc-music { left: auto; right: 14px; transform: none; width: min(392px, calc(100% - 150px)); }
+  @keyframes hcmin { from { opacity: 0; transform: translateY(20px); } }
+}
+@media (max-width: 720px) {
+  .hc-nav { flex-direction: row; gap: 10px; left: 12px; bottom: calc(12px + var(--sab)); align-items: center; }
+  .hc-nextb { width: 70px; height: 70px; order: -1; } .hc-nl b { font-size: 12.5px; }
+  .hc-prev { width: 46px; height: 46px; }
+  .hc-music { bottom: calc(100px + var(--sab)); }
+}
+
 /* ---------- cloud sync: sign-in screen and settings card ---------- */
 .cg { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: calc(20px + var(--sat)) 20px calc(20px + var(--sab)); overflow-y: auto;
   background: radial-gradient(120% 80% at 50% 0%, rgba(255, 150, 60, .16), rgba(0, 0, 0, 0) 55%), rgba(0, 0, 0, .78); -webkit-backdrop-filter: blur(22px) saturate(1.2); backdrop-filter: blur(22px) saturate(1.2);
@@ -1584,6 +1616,233 @@ body.hc-open #alex-bubble, body.hc-open #fab-root { display: none; }
 .cl-opt { display: flex; flex-direction: column; gap: 6px; padding: 16px; border-radius: 18px; background: var(--card2); font-size: 13.5px; color: var(--text2); }
 .cl-opt b { font-size: 16px; color: var(--text); }
 @media (max-width: 520px) { .cl-opts { grid-template-columns: 1fr; } .cg-card { padding: 24px 20px 18px; } }
+
+/* ---------- Home widgets ---------- */
+.home2 { display: flex; flex-direction: column; gap: 16px; }
+.home2 > .notice { display: flex; align-items: center; gap: 16px; padding: 16px 20px; border-color: var(--accent); flex-wrap: wrap; }
+.home2 > .alex-home { display: flex; align-items: center; gap: 16px; padding: 14px 20px 14px 14px; cursor: pointer; }
+.wg-bar { display: flex; align-items: center; gap: 10px; min-height: 34px; margin: -4px 0 -6px; }
+.wg-bar.on { position: sticky; top: 0; z-index: 6; margin: 0; padding: 10px 12px; border-radius: 20px; background: color-mix(in srgb, var(--card) 86%, transparent); border: 1px solid var(--line); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); box-shadow: var(--shadow); }
+.wg-editb { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 14px; border-radius: 16px; font-size: 13.5px; font-weight: 600; color: var(--text2); background: var(--card); border: 1px solid var(--line); }
+.wg-editb:active { transform: scale(.96); }
+.wg-tip { font-size: 13px; color: var(--text3); }
+@media (max-width: 760px) { .wg-tip { display: none; } }
+
+.wg-grid { --cols: 8; display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); grid-auto-rows: 70px; grid-auto-flow: row dense; gap: 16px; position: relative; }
+.wg { position: relative; padding: 0; overflow: hidden; border-radius: 26px; display: flex; min-width: 0; min-height: 0; isolation: isolate; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.view.enter .wg { animation: wgin .55s cubic-bezier(.2, .8, .2, 1) both; animation-delay: var(--d); }
+@keyframes wgin { from { opacity: 0; transform: translateY(14px) scale(.98); } }
+.wg-in { flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column; padding: 16px 18px; gap: 8px; }
+.wg[data-w="2"] .wg-in { padding: 14px 15px; }
+.wg-fill { flex: 1; display: flex; flex-direction: column; gap: 8px; text-align: left; min-height: 0; color: inherit; margin: -16px -18px; padding: 16px 18px; }
+.wg[data-w="2"] .wg-fill { margin: -14px -15px; padding: 14px 15px; }
+.wg-h { display: flex; align-items: center; gap: 7px; min-height: 22px; font-size: 13.5px; color: var(--text2); flex: none; }
+.wg-h b { font-weight: 650; color: var(--text); font-size: 14px; flex: 0 1 auto; }
+.wg-ic { width: 22px; height: 22px; border-radius: 7px; display: grid; place-items: center; flex: none; background: var(--accent-soft); color: var(--accent); }
+.wg-tlab { margin-left: auto; font-size: 12.5px; font-weight: 600; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.wg-more { margin-left: auto; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; color: var(--text3); flex: none; }
+.wg-tlab + .wg-more { margin-left: 4px; }
+.wg-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.wg-btn { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 13px; border-radius: 17px; font-size: 13.5px; font-weight: 600; background: var(--card2); color: var(--text); white-space: nowrap; }
+.wg-btn:active, .wg-play:active { transform: scale(.95); }
+.wg-big { flex: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 3px; min-height: 0; }
+.wg-big > b { font-size: 40px; font-weight: 300; letter-spacing: -.035em; line-height: 1; }
+.wg-big > span { font-size: 13px; color: var(--text2); max-width: 100%; }
+.wg-empty { flex: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 10px; font-size: 13.5px; color: var(--text2); }
+.ell2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* timer */
+.wg-timer { flex: 1; display: flex; flex-direction: column; gap: 4px; min-height: 0; }
+.wg-clk { font-size: clamp(34px, 4.2vw, 58px); font-weight: 200; letter-spacing: -.04em; line-height: 1.05; margin-top: auto; }
+.wg[data-w="2"] .wg-clk { font-size: 36px; }
+.wg[data-h="2"]:not([data-w="2"]) .wg-clk { font-size: 40px; margin-top: 0; }
+.wg-timer.live .wg-clk { color: var(--accent); }
+.wg-timer.live .wg-tlab { color: var(--accent); }
+.wg-sub { font-size: 13.5px; color: var(--text2); }
+.wg-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.wg-chips .chip { height: 30px; font-size: 12.5px; }
+.wg-foot { margin-top: auto; }
+.wg-play { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--accent-ink); flex: none; box-shadow: 0 6px 18px color-mix(in srgb, var(--accent) 35%, transparent); }
+.wg[data-h="2"]:not([data-w="2"]) .wg-timer { display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto 1fr; column-gap: 12px; }
+.wg[data-h="2"]:not([data-w="2"]) .wg-timer .wg-h { grid-column: 1 / -1; }
+.wg[data-h="2"]:not([data-w="2"]) .wg-timer .wg-clk { align-self: center; }
+.wg[data-h="2"]:not([data-w="2"]) .wg-timer .wg-sub { display: none; }
+.wg[data-h="2"]:not([data-w="2"]) .wg-timer .wg-foot { margin: 0; align-self: center; flex-wrap: nowrap; }
+.wg[data-w="2"] .wg-timer .wg-foot { justify-content: flex-start; }
+
+/* today */
+.wg-today { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; min-height: 0; }
+.wg-today.side { flex-direction: row; justify-content: flex-start; gap: 26px; }
+.wg-today .wg-areas { width: 100%; display: grid; gap: 10px; }
+.wg-today.side .wg-areas { flex: 1; }
+.wg-tring { position: relative; flex: none; }
+.wg-tring svg { width: 100%; height: 100%; }
+.wg-tmid { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.wg-tmid b { font-weight: 300; letter-spacing: -.03em; line-height: 1.05; }
+.wg-tmid span { font-size: 12px; color: var(--text2); }
+.wg[data-w="4"][data-h="4"] .wg-today:not(.side) { flex-direction: row; gap: 18px; }
+.wg[data-w="4"][data-h="4"] .wg-today:not(.side) .wg-areas { flex: 1; }
+
+/* naam jap */
+.wg-jap { flex: 1; display: flex; flex-direction: column; gap: 8px; margin: -16px -18px; padding: 16px 18px; min-height: 0; position: relative; cursor: pointer; touch-action: manipulation;
+  background: radial-gradient(90% 90% at 30% 60%, rgba(255, 150, 50, .12), transparent 70%); }
+.wg[data-w="2"] .wg-jap { margin: -14px -15px; padding: 14px 15px; }
+.wg-jap:active .wg-jring { transform: scale(.96); }
+.wg-jmain { flex: 1; display: flex; align-items: center; gap: 18px; min-height: 0; }
+.wg[data-w="2"] .wg-jmain { justify-content: center; }
+.wg-jring { position: relative; flex: none; display: grid; place-items: center; transition: transform .12s; color: #FF9F43; }
+.wg-jring svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.wg-jring svg circle:last-child { stroke: #FF9F43; }
+.wg-jn { position: relative; font-size: 22px; font-weight: 600; letter-spacing: -.02em; color: var(--text); }
+.wg-jn.bump { animation: wgbump .3s ease; }
+@keyframes wgbump { 40% { transform: scale(1.18); color: #FFB45A; } }
+.wg-jtxt { display: flex; flex-direction: column; gap: 3px; min-width: 0; font-size: 13px; color: var(--text2); }
+.wg-jtxt b { font-size: 17px; color: var(--text); font-weight: 650; }
+.wg-hint { color: var(--text3); font-size: 12px; margin-top: 4px; }
+.wg-jbars { display: flex; align-items: flex-end; gap: 6px; height: 64px; flex: none; }
+.wg-jbars span { flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 3px; }
+.wg-jbars i { width: 100%; border-radius: 5px; background: linear-gradient(180deg, #FFB45A, #FF8A1F); max-height: calc(100% - 16px); }
+.wg-jbars em { font-style: normal; font-size: 11px; color: var(--text3); }
+.wg-undo { position: absolute; right: 14px; bottom: 12px; height: 28px; padding: 0 10px; border-radius: 14px; font-size: 12.5px; font-weight: 600; background: var(--card2); color: var(--text2); display: inline-flex; align-items: center; gap: 2px; }
+.wg-fx { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.wg-fx i { position: absolute; left: 50%; top: 50%; font-style: normal; font-weight: 700; font-size: 15px; color: #FFB45A; transform: translate(-50%, -50%); animation: wgfloat 1s ease-out forwards; }
+@keyframes wgfloat { to { opacity: 0; transform: translate(-50%, -150%); } }
+
+/* tasks */
+.wg-tasks { flex: 1; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.wg-task { display: flex; align-items: center; gap: 10px; min-height: 46px; border-bottom: 1px solid var(--line); font-size: 14.5px; }
+.wg-task:last-child { border-bottom: 0; }
+.wg-task.done span { color: var(--text3); text-decoration: line-through; }
+.wg-chk { width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--line2); display: grid; place-items: center; flex: none; color: var(--accent-ink); }
+.wg-chk.on { background: var(--good); border-color: var(--good); color: #fff; }
+.wg-star { color: var(--gold-a, #F5B841); display: inline-flex; }
+.wg-tplay { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); flex: none; }
+.wg-more-l { align-self: flex-start; font-size: 13px; font-weight: 600; color: var(--accent); padding: 8px 0 0; }
+.wg-add { display: flex; gap: 8px; flex: none; }
+.wg-add .input { height: 40px; font-size: 14.5px; flex: 1; min-width: 0; }
+.wg-add .wg-btn { height: 40px; width: 40px; padding: 0; justify-content: center; }
+
+/* habits */
+.wg-hab { flex: 1; display: flex; flex-wrap: wrap; align-content: center; gap: 10px 14px; min-height: 0; overflow: hidden; }
+.wg-hab .hh-item { width: 74px; }
+
+/* calendar */
+.wg-date { flex: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; margin: -14px -15px; padding: 14px 15px; cursor: pointer; }
+.wg-date span { font-size: 13px; font-weight: 700; color: var(--bad); text-transform: uppercase; letter-spacing: .04em; }
+.wg-date b { font-size: 52px; font-weight: 300; letter-spacing: -.04em; line-height: 1; }
+.wg-date em { font-style: normal; font-size: 13px; color: var(--text2); }
+.wg-evs, .wg-revs { flex: 1; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.wg-ev { display: flex; align-items: center; gap: 10px; min-height: 44px; text-align: left; border-bottom: 1px solid var(--line); font-size: 14px; color: var(--text); }
+.wg-ev:last-child { border-bottom: 0; }
+.wg-evd { width: 34px; display: flex; flex-direction: column; align-items: center; line-height: 1.05; flex: none; }
+.wg-evd b { font-size: 17px; font-weight: 600; } .wg-evd em { font-style: normal; font-size: 10.5px; color: var(--text3); text-transform: uppercase; }
+.wg-revs .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+
+/* streak, rank, goal */
+.wg-streak .wg-flame { color: var(--text3); }
+.wg-streak.kept .wg-flame { color: #FF8A1F; filter: drop-shadow(0 0 10px rgba(255, 138, 31, .5)); }
+.wg-pips { display: flex; gap: 3px; color: #64D2FF; margin-top: 4px; }
+.wg-crown { color: var(--gold-a, #F5B841); }
+.wg-rk { font-size: 22px !important; font-weight: 700 !important; letter-spacing: -.02em !important; }
+.wg-big .bar { width: 100%; margin-top: 6px; }
+.wg-goal { flex: 1; display: flex; align-items: center; gap: 16px; min-height: 0; }
+.wg-goal.sm { flex-direction: column; align-items: flex-start; gap: 6px; }
+.wg-gring { position: relative; flex: none; display: grid; place-items: center; }
+.wg-gring svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.wg-gring b { position: relative; font-size: 19px; font-weight: 600; } .wg-gring small { font-size: 11px; color: var(--text2); }
+.wg-gt { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.wg-gt b { font-size: 16px; font-weight: 650; }
+.wg-ring { display: inline-block; position: relative; }
+.wg-ring svg { width: 100%; height: 100%; }
+
+/* chalisa */
+.wg-hc { position: relative; overflow: hidden; color: #FFF3DE; background: radial-gradient(120% 120% at 80% 20%, #4a1d06, #1a0b04 70%); }
+.wg-hc .wg-h, .wg-hc .wg-h b { color: #FFE2B0; }
+.wg-hc .wg-ic { background: rgba(255, 170, 70, .2); color: #FFB45A; }
+.wg-hcbg { position: absolute; right: -14%; top: -6%; bottom: -6%; width: 62%; z-index: -1; opacity: .5; -webkit-mask-image: linear-gradient(90deg, transparent, #000 45%); mask-image: linear-gradient(90deg, transparent, #000 45%); }
+.wg-hcbg img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; }
+.wg[data-w="2"] .wg-hcbg { opacity: .28; width: 100%; right: -30%; }
+.wg-hcm { flex: 1; display: flex; align-items: center; gap: 14px; min-height: 0; }
+.wg[data-w="2"] .wg-hcm { flex-direction: column; align-items: flex-start; gap: 6px; justify-content: center; }
+.wg-hcr { position: relative; display: grid; place-items: center; flex: none; }
+.wg-hcr svg { display: block; }
+.wg-hcr svg circle:last-child { stroke: #FFC85A; }
+.wg-hcr b { position: absolute; font-size: 20px; font-weight: 700; color: #FFE39A; }
+.wg[data-w="2"] .wg-hcr { display: none; }
+.wg-hct { display: flex; flex-direction: column; gap: 3px; min-width: 0; font-size: 12.5px; color: rgba(255, 236, 210, .75); }
+.wg-hct b { font-size: 17px; color: #FFE39A; }
+.wg-open { color: #FFC77D; font-weight: 650; margin-top: 4px; }
+
+/* week */
+.wg-wk { flex: 1; display: flex; gap: 8px; min-height: 0; }
+.wg-wkd { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 0; }
+.wg-wkb { flex: 1; width: 100%; max-width: 34px; position: relative; border-radius: 8px; background: var(--card2); overflow: hidden; min-height: 20px; }
+.wg-wkb i { position: absolute; left: 0; right: 0; bottom: 0; border-radius: 8px; background: var(--accent); }
+.wg-wkb em { position: absolute; left: 0; right: 0; height: 0; border-top: 1.5px dashed color-mix(in srgb, var(--text) 35%, transparent); }
+.wg-wkd.future .wg-wkb i { opacity: .3; }
+.wg-wkl { font-size: 11.5px; color: var(--text3); font-weight: 600; } .wg-wkd.today .wg-wkl { color: var(--accent); }
+.wg-wkv { font-size: 11px; color: var(--text2); }
+
+/* report, clock, quote, alex, sync */
+.wg-grade { font-size: 44px; font-weight: 700; letter-spacing: -.03em; }
+.wt-report .report { flex: 1; min-height: 0; overflow: hidden; }
+.wg-clock { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 4px; }
+.wg-time { font-size: clamp(30px, 3.4vw, 52px); font-weight: 250; letter-spacing: -.035em; line-height: 1; }
+.wg-cdate { font-size: 13.5px; color: var(--text2); }
+.wg-quote { flex: 1; display: flex; gap: 8px; align-items: center; min-height: 0; }
+.wg-qm { font-size: 64px; line-height: .6; color: var(--accent); font-family: Georgia, serif; align-self: flex-start; margin-top: 18px; }
+.wg-quote p { font-size: clamp(15px, 1.5vw, 19px); font-weight: 550; line-height: 1.35; letter-spacing: -.01em; }
+.wg[data-w="2"] .wg-quote p { font-size: 14px; } .wg[data-w="2"] .wg-qm { font-size: 44px; }
+.wg-alex { flex: 1; display: flex; flex-direction: column; gap: 4px; min-height: 0; overflow: hidden; }
+.wg-alex b { font-size: 16px; font-weight: 650; line-height: 1.3; }
+.wg-alex span { font-size: 13.5px; line-height: 1.4; }
+.wg-sync { flex: 1; display: flex; flex-direction: column; gap: 8px; justify-content: center; }
+.wg-none { grid-column: 1 / -1; grid-row: span 3; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+
+/* ---- edit mode ---- */
+.wg-grid.edit .wg-in { pointer-events: none; }
+.wg-grid.edit .wg { cursor: grab; touch-action: none; animation: wgjig .32s ease-in-out infinite alternate; animation-delay: calc(var(--d) * -1); box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--accent) 45%, transparent); }
+.wg-grid.edit .wg:nth-child(2n) { animation-direction: alternate-reverse; animation-duration: .36s; }
+@keyframes wgjig { from { transform: rotate(-.45deg); } to { transform: rotate(.45deg); } }
+.wg-grid.edit .wg.drag { animation: none; z-index: 20; cursor: grabbing; box-shadow: 0 26px 60px rgba(0, 0, 0, .45), 0 0 0 2px var(--accent); opacity: .97; }
+.wg-grid.edit .wg.sizing { animation: none; z-index: 15; box-shadow: 0 0 0 2px var(--accent); }
+.wg-grid.dragging .wg:not(.drag) { animation: none; }
+.wg.lift { transform: scale(1.03); transition: transform .14s; box-shadow: 0 18px 40px rgba(0, 0, 0, .35); }
+.wg.hello { animation: wghello .6s cubic-bezier(.2, .9, .3, 1.3) !important; }
+@keyframes wghello { from { opacity: 0; transform: scale(.85); } }
+.wg.bye { transition: transform .18s, opacity .18s; transform: scale(.85) !important; opacity: 0; }
+.wg-x { position: absolute; z-index: 5; left: 8px; top: 8px; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: color-mix(in srgb, var(--text) 82%, transparent); color: var(--bg); box-shadow: 0 2px 8px rgba(0, 0, 0, .3); }
+.wg-szs { position: absolute; z-index: 5; left: 50%; bottom: 8px; transform: translateX(-50%); display: flex; gap: 2px; padding: 3px; border-radius: 14px; background: color-mix(in srgb, var(--bg) 78%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid var(--line); box-shadow: 0 4px 14px rgba(0, 0, 0, .25); }
+.wg-szs button { min-width: 34px; height: 28px; padding: 0 6px; border-radius: 10px; font-size: 12px; font-weight: 700; color: var(--text2); }
+.wg-szs button.on { background: var(--accent); color: var(--accent-ink); }
+.wg-rs { position: absolute; z-index: 6; right: 0; bottom: 0; width: 44px; height: 44px; display: grid; place-items: center; cursor: nwse-resize; touch-action: none; }
+.wg-rs i { width: 18px; height: 18px; border-right: 4px solid var(--accent); border-bottom: 4px solid var(--accent); border-radius: 0 0 8px 0; margin: -6px -6px 0 0; }
+.wg-rs[data-sz]::after { content: attr(data-sz); position: absolute; right: 40px; bottom: 40px; padding: 4px 8px; border-radius: 8px; background: var(--accent); color: var(--accent-ink); font-size: 12px; font-weight: 700; white-space: nowrap; }
+.wg-grid.edit .wg[data-w="2"] .wg-szs { bottom: 6px; } .wg-grid.edit .wg[data-w="2"] .wg-szs button { min-width: 28px; padding: 0 4px; }
+
+/* gallery */
+.wga-modal { max-width: 980px; }
+.wga-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+.wga { display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: 22px; background: var(--card2); }
+.wga-pv { position: relative; display: block; overflow: hidden; border-radius: 16px; background: color-mix(in srgb, var(--bg) 60%, transparent); padding: 4px; }
+.wga-w { pointer-events: none; position: absolute; left: 50%; top: 4px; transform-origin: 50% 0; }
+.wga-t { display: flex; flex-direction: column; gap: 3px; } .wga-t b { font-size: 15.5px; }
+.wga-tags { display: flex; gap: 6px; margin-top: 4px; } .wga-tags .chip { height: 24px; font-size: 11.5px; }
+.wga-szs { display: flex; gap: 4px; flex-wrap: wrap; }
+.wga-szs button { height: 30px; padding: 0 10px; border-radius: 15px; font-size: 12.5px; font-weight: 600; background: var(--card); color: var(--text2); }
+.wga-szs button.on { background: var(--accent); color: var(--accent-ink); }
+.wga-go { align-self: flex-start; }
+
+@media (max-width: 720px) {
+  .wg-grid { grid-auto-rows: 62px; gap: 12px; }
+  .wg-in { padding: 13px 14px; }
+  .wg-fill, .wg-jap { margin: -13px -14px; padding: 13px 14px; }
+  .wg-big > b { font-size: 34px; }
+  .wt-today .wg-tring { width: 116px !important; height: 116px !important; }
+  .wt-today .wg-tmid b { font-size: 20px !important; }
+  .wg-today { gap: 14px !important; }
+}
+@media (prefers-reduced-motion: reduce) { .wg-grid.edit .wg { animation: none; } }
 
 </style>
 </head>
@@ -2488,6 +2747,7 @@ function renderChrome() {
 function render() {
   if (!VIEWS[V.view]) V.view = 'home';
   document.body.dataset.view = V.view;
+  if (V.view !== 'home' && typeof WGE !== 'undefined') WGE.edit = false;
   alexChallengeCheck();
   renderChrome();
   const v = $('#view');
@@ -5305,6 +5565,9 @@ function hcOpen(from) {
     '<div class="hc-tw"><span class="hc-tglow" aria-hidden="true" lang="hi">श्री हनुमान चालीसा</span><h2 class="hc-title" lang="hi">श्री हनुमान चालीसा</h2></div>' +
     '<div class="hc-tr"><button class="hc-mus" data-act="hcMusic">' + ic('music', 18) + '<span>Music</span></button><div class="hc-pill" id="hc-pill">' + hcPillHTML() + '</div></div></header>' +
     '<main class="hc-read" id="hc-read"><div class="hc-col"><div class="hc-gap"></div>' + hcVersesHTML() + hcEndHTML() + '<div class="hc-gap b"></div></div></main>' +
+    '<div class="hc-nav" id="hc-nav"><button class="hc-prev" data-act="hcPrev" aria-label="Previous verse">' + ic('chevd', 22) + '</button>' +
+    '<button class="hc-nextb" data-act="hcNext" aria-label="Next verse"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" class="t"/><circle cx="50" cy="50" r="46" class="f" id="hc-navr" stroke-dasharray="289" stroke-dashoffset="289"/></svg><span class="hc-nl">' + ic('chevd', 26) + '<b>Next</b></span></button>' +
+    '<span class="hc-pos"><b class="num" id="hc-pos">1 / ' + HC_N + '</b><em id="hc-posk"></em></span></div>' +
     '<div class="hc-fx" id="hc-fx"></div>';
   document.body.appendChild(el); document.body.classList.add('hc-open');
   requestAnimationFrame(() => el.classList.add('in'));
@@ -5331,7 +5594,7 @@ function hcOnScroll() {
   const mid = rd.scrollTop + rd.clientHeight * .44, vs = rd.querySelectorAll('.hc-v');
   let best = 0, bd = 1e9;
   for (let i = 0; i < vs.length; i++) { const v = vs[i], c = v.offsetTop + v.offsetHeight / 2, d = Math.abs(c - mid); if (d < bd) { bd = d; best = i; } }
-  hcSetAct(best);
+  if (!(HC.navT != null && Date.now() - HC.navAt < 900)) hcSetAct(best);
   const max = rd.scrollHeight - rd.clientHeight, pr = max > 0 ? rd.scrollTop / max : 0, pb = $('#hc-prog'); if (pb) pb.style.transform = 'scaleX(' + pr.toFixed(4) + ')';
   const end = $('#hc-end');
   if (end) { const er = end.getBoundingClientRect(), rr = rd.getBoundingClientRect(); end.classList.toggle('show', er.top < rr.bottom - 80); }
@@ -5340,7 +5603,33 @@ function hcSetAct(i) {
   if (i === HC.act) return; HC.act = i;
   const vs = document.querySelectorAll('#hc-read .hc-v');
   vs.forEach((v, k) => { v.classList.toggle('on', k === i); v.classList.toggle('near', Math.abs(k - i) === 1); });
+  hcNavPaint(i);
 }
+/* which verse is this, in words: Doha 1, Chaupai 12 ... */
+function hcVerseName(i) { if (i < 2) return 'Doha ' + (i + 1); if (i === HC_N - 1) return 'Closing doha'; return 'Chaupai ' + (i - 1); }
+function hcNavPaint(i) {
+  const pos = $('#hc-pos'); if (!pos) return;
+  pos.textContent = (i + 1) + ' / ' + HC_N;
+  const k = $('#hc-posk'); if (k) k.textContent = hcVerseName(i);
+  const r = $('#hc-navr'); if (r) r.setAttribute('stroke-dashoffset', (289 * (1 - (i + 1) / HC_N)).toFixed(1));
+  const pv = $('.hc-prev'); if (pv) pv.disabled = i <= 0;
+  const nx = $('.hc-nextb'); if (nx) { nx.classList.toggle('last', i >= HC_N - 1); const b = nx.querySelector('b'); if (b) b.textContent = i >= HC_N - 1 ? 'Finish' : 'Next'; }
+}
+/* hand control: quick taps keep counting from where the last tap was heading, not from the scroll position */
+function hcStep(d) {
+  HC.userAt = Date.now() + 4000;
+  const base = HC.navT != null && Date.now() - HC.navAt < 900 ? HC.navT : HC.act;
+  if (d > 0 && base >= HC_N - 1) {
+    const rd = $('#hc-read'); if (rd) rd.scrollTo({ top: rd.scrollHeight, behavior: S.settings.motion ? 'smooth' : 'auto' });
+    const b = $('#hc-end .hc-done'); if (b) { b.classList.remove('nudge'); void b.offsetWidth; b.classList.add('nudge'); }
+    HC.navT = null; return;
+  }
+  const to = clamp(base + d, 0, HC_N - 1); if (to === base && d < 0) return;
+  HC.navT = to; HC.navAt = Date.now();
+  hcSetAct(to); hcGo(to);
+}
+A.hcNext = () => hcStep(1);
+A.hcPrev = () => hcStep(-1);
 function hcGo(i, instant) {
   const rd = $('#hc-read'), v = rd && rd.querySelector('.hc-v[data-i="' + i + '"]'); if (!v) return;
   const top = v.offsetTop + v.offsetHeight / 2 - rd.clientHeight * .44;
@@ -5505,7 +5794,7 @@ CH.hcFollow = el => { hcData().follow = !!el.checked; save(); };
 document.addEventListener('keydown', e => {
   if (!HC.open) return;
   if (e.key === 'Escape' && !modalStack.length) { e.preventDefault(); hcClose(); }
-  else if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && !modalStack.length) { e.preventDefault(); HC.userAt = Date.now(); hcGo(clamp(HC.act + (e.key === 'ArrowDown' ? 1 : -1), 0, HC_N - 1)); }
+  else if ((e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'ArrowRight' || e.key === 'ArrowLeft') && !modalStack.length) { e.preventDefault(); hcStep(e.key === 'ArrowDown' || e.key === 'ArrowRight' ? 1 : -1); }
 }, true);
 
 /* ---------- cloud sync: sign in once, your data lives in your own Firebase space and on every device you sign in on ---------- */
@@ -5768,6 +6057,432 @@ window.addEventListener('online', () => { if (!cloudEnabled()) return; if (!CL.f
 window.addEventListener('offline', () => { if (CL.user) cloudState('offline'); });
 /* test hook: only when a test supplies a pretend Firebase */
 if (window.__FOCUS_FB) window.__F = { get S() { return S; }, get CL() { return CL; }, get V() { return V; }, japLife, japCount, go, render, cloudCheck, idbGet };
+
+/* ============================================================
+   Focus — Home widgets: add, remove, resize and arrange anything
+   ============================================================ */
+const WG_ROW = 70, WG_GAP = 16;
+const WG_SIZES = { S: [2, 2], M: [4, 2], L: [4, 4], XL: [8, 4] };
+const WG_SIZE_NAMES = { S: 'Small', M: 'Medium', L: 'Large', XL: 'Extra large' };
+const WG_NAME = id => { const it = wgItems().find(x => x.id === id); return it ? W[it.t] : null; };
+const W = {};   // the widget catalogue
+
+/* ---------- small helpers ---------- */
+const wgHead = (title, icon, act, extra) => '<div class="wg-h">' + (icon ? '<span class="wg-ic">' + ic(icon, 15) + '</span>' : '') + '<b class="ell">' + title + '</b>' + (extra || '') + (act ? '<button class="wg-more" ' + act + ' aria-label="Open">' + ic('chevr', 16) + '</button>' : '') + '</div>';
+function wgRing(p, size, stroke, cls) { return '<span class="wg-ring ' + (cls || '') + '" style="width:' + size + 'px;height:' + size + 'px">' + ringSVG(p, size, stroke) + '</span>'; }
+function wgCols() { const g = $('#wg-grid'); const w = g ? g.clientWidth : (window.innerWidth - 140); return w >= 1050 ? 8 : w >= 640 ? 6 : 4; }
+function wgSizeKey(it) { for (const k in WG_SIZES) { const s = WG_SIZES[k]; if (s[0] === it.w && s[1] === it.h) return k; } return null; }
+
+/* ---------- the catalogue ---------- */
+/* free: true = resize by dragging the corner. Every widget also has the four quick sizes. */
+W.timer = {
+  name: 'Focus timer', desc: 'Start, pause or stop a session right from Home', icon: 'timer', free: true, def: [4, 2],
+  render(w, h) {
+    const t = S.timer, p = preset(), tk = todayKey(), next = tasksOn(tk).filter(x => !x.done)[0];
+    let digits, label, sub;
+    if (t) {
+      const el = timerElapsed();
+      digits = t.planned ? fmtClock(Math.ceil(Math.max(0, t.planned - el))) : fmtClock(el);
+      label = t.phase === 'break' ? 'Break' : t.paused ? 'Paused' : 'Focus';
+      sub = t.phase === 'break' ? 'Rest. The next round is waiting.' : (t.taskId && taskById(t.taskId) ? taskById(t.taskId).title : tagText(t) || 'Focus session');
+    } else {
+      digits = S.settings.mode === 'pomodoro' ? fmtClock(p.focus * 60) : '00:00'; label = 'Ready';
+      sub = next ? 'Next: ' + next.title : (S.settings.mode === 'pomodoro' ? p.focus + ' min focus, ' + p.brk + ' min break' : 'Stopwatch');
+    }
+    const btns = t ? (t.paused ? '<button class="wg-play" data-act="timerResume" aria-label="Resume">' + ic('play', 22) + '</button>' : '<button class="wg-play" data-act="timerPause" aria-label="Pause">' + ic('pause', 22) + '</button>') +
+      (w > 2 ? '<button class="wg-btn" data-act="timerStop">' + ic('stop', 16) + 'Finish</button>' : '')
+      : '<button class="wg-play" data-act="' + (next ? 'taskPlay" data-id="' + next.id : 'timerStart') + '" aria-label="Start focus">' + ic('play', 22) + '</button>' + (w > 2 ? '<button class="wg-btn" data-act="go" data-view="focus">' + ic('timer', 16) + 'Open timer</button>' : '');
+    const chips = !t && w >= 4 && h >= 3 ? '<div class="wg-chips">' + S.settings.presets.slice(0, w >= 6 ? 6 : 3).map(x => '<button class="chip' + (x.id === p.id ? ' on' : '') + '" data-act="setPreset" data-id="' + x.id + '">' + x.focus + ' / ' + x.brk + '</button>').join('') + '</div>' : '';
+    return '<div class="wg-timer' + (t && !t.paused && t.phase === 'focus' ? ' live' : '') + '">' + wgHead('Focus timer', 'timer', 'data-act="go" data-view="focus"', '<span class="wg-tlab">' + label + '</span>') +
+      '<b class="wg-clk num">' + digits + '</b>' + (h >= 3 || w >= 4 ? '<span class="wg-sub ell">' + esc(sub) + '</span>' : '') + chips + '<div class="wg-row wg-foot">' + btns + '</div></div>';
+  }
+};
+W.today = {
+  name: 'Today\'s focus', desc: 'Hours focused today against your target, by area', icon: 'chart', free: true, def: [4, 4],
+  render(w, h) {
+    const tk = todayKey(), di = dayInfo(tk), live = liveSec(), sec = di.sec + live, T = S.settings.targets, target = T.daily * 60, liveArea = live && S.timer ? S.timer.areaId : null;
+    const ringSize = Math.min(w * 60, h * 70) - (w <= 2 ? 30 : 46), big = ringSize >= 150;
+    const ring = '<div class="wg-tring" style="width:' + ringSize + 'px;height:' + ringSize + 'px">' + ringSVG(target ? sec / target : 0, ringSize, big ? 14 : 10) + '<div class="wg-tmid"><b class="num" style="font-size:' + Math.round(ringSize * .17) + 'px">' + fmtDur(sec) + '</b><span class="num">of ' + fmtDur(target) + '</span></div></div>';
+    const areas = (w >= 6 || (w >= 4 && h >= 3)) ? '<div class="wg-areas">' + S.areas.map(a => {
+      const s = (di.byArea[a.id] || 0) + (liveArea === a.id ? live : 0), tg = (T.areas[a.id] || 0) * 60;
+      return '<div class="ar"><div class="row"><i class="dot" style="background:var(--c' + a.color + ')"></i><span class="grow ell">' + esc(a.name) + '</span><span class="num small">' + fmtDur(s) + (tg ? '<span class="faint"> of ' + fmtDur(tg) + '</span>' : '') + '</span></div><div class="bar"><i style="width:' + (tg ? clamp(s / tg, 0, 1) * 100 : (s ? 100 : 0)) + '%;background:var(--c' + a.color + ')"></i></div></div>';
+    }).join('') + '</div>' : '';
+    const side = w >= 6 && h >= 3;
+    return wgHead('Today\'s focus', 'chart', 'data-act="go" data-view="stats"') + '<div class="wg-today' + (side ? ' side' : '') + '">' + ring + areas + '</div>';
+  }
+};
+W.jap = {
+  name: 'Naam Jap', desc: 'Tap to count naam right from Home', icon: 'diya', free: true, def: [4, 3],
+  render(w, h) {
+    const J = S.jap, tk = todayKey(), today = japDayTotal(tk), naam = japSel(), M = J.mala || 108, inM = today % M, malas = Math.floor(today / M);
+    const rs = Math.max(64, Math.min(w * 46, h * 64) - 20);
+    let bars = '';
+    if (w >= 4 && h >= 4) { const vals = []; for (let i = 6; i >= 0; i--) vals.push(japDayTotal(addDays(tk, -i))); const mx = Math.max(1, ...vals); bars = '<div class="wg-jbars">' + vals.map((v, i) => '<span title="' + fmtIN(v) + '"><i style="height:' + Math.max(3, v / mx * 100) + '%"></i><em>' + DOW[parseKey(addDays(tk, i - 6)).getDay()].charAt(0) + '</em></span>').join('') + '</div>'; }
+    return '<div class="wg-jap" data-act="wgJap" role="button" aria-label="Count one naam">' + wgHead('Naam Jap', 'diya', 'data-act="go" data-view="jsr"', w > 2 ? '<span class="wg-tlab">' + esc(naam ? naam.name : '') + '</span>' : '') +
+      '<div class="wg-jmain"><span class="wg-jring" style="width:' + rs + 'px;height:' + rs + 'px">' + ringSVG(inM / M, rs, 7) + '<b class="num wg-jn">' + fmtIN(today) + '</b></span>' +
+      (w > 2 ? '<div class="wg-jtxt"><b class="num">' + fmtIN(malas) + ' mala' + (malas === 1 ? '' : 's') + '</b><span class="num">' + inM + ' of ' + M + ' in this mala</span>' + (J.goal ? '<span class="num">Goal ' + fmtIN(J.goal) + '</span>' : '') + '<span class="wg-hint">Tap anywhere to count</span></div>' : '') + '</div>' + bars +
+      (w > 2 && h >= 3 ? '<button class="wg-undo" data-act="wgJapUndo" aria-label="Undo one">' + ic('minus', 14) + '1</button>' : '') + '<div class="wg-fx"></div></div>';
+  }
+};
+W.tasks = {
+  name: 'Tasks', desc: 'Today\'s must-do and to-do list. Tick them off here', icon: 'tasks', free: true, def: [4, 4],
+  render(w, h) {
+    const tk = todayKey(), list = tasksOn(tk), open = list.filter(t => !t.done), done = list.length - open.length;
+    if (w <= 2 && h <= 2) return wgHead('Tasks', 'tasks', 'data-act="go" data-view="tasks"') + '<div class="wg-big"><b class="num">' + open.length + '</b><span>' + (list.length ? 'left of ' + list.length : 'tasks today') + '</span></div>';
+    const order = list.slice().sort((a, b) => (a.done - b.done) || (b.mustDo - a.mustDo));
+    const rows = Math.max(1, Math.floor((h * (WG_ROW + WG_GAP) - WG_GAP - 70 - (h >= 4 ? 52 : 0)) / 46));
+    const items = order.slice(0, rows).map(t => '<div class="wg-task' + (t.done ? ' done' : '') + '"><button class="wg-chk' + (t.done ? ' on' : '') + '" data-act="wgTask" data-id="' + t.id + '" aria-label="' + (t.done ? 'Mark not done' : 'Mark done') + '">' + (t.done ? ic('check', 14) : '') + '</button><span class="grow ell">' + esc(t.title) + '</span>' +
+      (t.mustDo ? '<span class="wg-star">' + ic('starf', 13) + '</span>' : '') + (!t.done && w >= 4 ? '<button class="wg-tplay" data-act="taskPlay" data-id="' + t.id + '" aria-label="Start focus on this task">' + ic('play', 14) + '</button>' : '') + '</div>').join('');
+    const more = order.length > rows ? '<button class="wg-more-l" data-act="go" data-view="tasks">' + (order.length - rows) + ' more</button>' : '';
+    return wgHead('Tasks', 'tasks', 'data-act="go" data-view="tasks"', '<span class="wg-tlab num">' + done + '/' + list.length + '</span>') +
+      '<div class="wg-tasks">' + (items || '<div class="wg-empty">No tasks for today yet.</div>') + more + '</div>' +
+      (h >= 4 ? '<div class="wg-add"><input class="input" id="wg-task-in" placeholder="Add a task for today" data-enter="wgTaskAdd" aria-label="Add a task"><button class="wg-btn" data-act="wgTaskAdd" aria-label="Add">' + ic('plus', 16) + '</button></div>' : '');
+  }
+};
+W.habits = {
+  name: 'Habits', desc: 'Tick today\'s habits', icon: 'habit', free: true, def: [4, 2],
+  render(w, h) {
+    const tk = todayKey(), todays = habitsToday(), doneN = todays.filter(x => x.log[tk]).length;
+    if (!liveHabits().length) return wgHead('Habits', 'habit') + '<div class="wg-empty">Add daily habits and tick them off here.<button class="wg-btn" data-act="habitNew">' + ic('plus', 15) + 'Add habit</button></div>';
+    if (w <= 2 && h <= 2) return wgHead('Habits', 'habit', 'data-act="go" data-view="habits"') + '<div class="wg-big">' + wgRing(todays.length ? doneN / todays.length : 0, 70, 8) + '<span class="num">' + doneN + ' of ' + todays.length + '</span></div>';
+    return wgHead('Habits', 'habit', 'data-act="go" data-view="habits"', '<span class="wg-tlab num">' + doneN + '/' + todays.length + '</span>') + '<div class="wg-hab">' +
+      (todays.length ? todays.map(x => { const on = !!x.log[tk]; return '<button class="hh-item' + (on ? ' on' : '') + '" style="--hc:var(--c' + x.color + ')" data-act="habitToggle" data-id="' + x.id + '" data-k="' + tk + '" aria-label="' + esc(x.name) + '"><span class="hh-disc">' + ic(x.icon || 'habit', 22) + '</span><span class="hh-name ell">' + esc(x.name) + '</span></button>'; }).join('') : '<div class="wg-empty">No habits are due today.</div>') + '</div>';
+  }
+};
+W.calendar = {
+  name: 'Calendar', desc: 'Upcoming events and exam countdown', icon: 'calendar', free: true, def: [4, 2],
+  render(w, h) {
+    const tk = todayKey(), cds = countdowns(), d = parseKey(tk);
+    if (w <= 2 && h <= 2) {
+      if (cds.length) return wgHead('Countdown', 'flag', 'data-act="go" data-view="calendar"') + '<div class="wg-big"><b class="num">' + diffDays(tk, cds[0].date) + '</b><span class="ell">days to ' + esc(cds[0].title) + '</span></div>';
+      return '<div class="wg-date" data-act="go" data-view="calendar" role="button"><span>' + DOWL[d.getDay()] + '</span><b class="num">' + d.getDate() + '</b><em>' + MONTHS[d.getMonth()] + '</em></div>';
+    }
+    const ups = []; for (let i = 0; i < 30 && ups.length < 12; i++) { const k = addDays(tk, i); eventsOn(k).forEach(e => ups.push([k, e])); }
+    const rows = Math.max(1, Math.floor((h * (WG_ROW + WG_GAP) - WG_GAP - 66) / 44));
+    const list = ups.slice(0, rows).map(x => '<button class="wg-ev" data-act="calJump" data-k="' + x[0] + '"><span class="wg-evd"><b class="num">' + parseKey(x[0]).getDate() + '</b><em>' + DOW[parseKey(x[0]).getDay()] + '</em></span><span class="grow ell">' + esc(x[1].title) + '</span>' + (x[1].type === 'exam' ? '<span class="wg-star">' + ic('flag', 13) + '</span>' : '') + '<span class="faint small">' + relDay(x[0]) + '</span></button>').join('');
+    const cd = cds.length && w >= 4 ? '<span class="wg-tlab num">' + diffDays(tk, cds[0].date) + ' days to ' + esc(cds[0].title) + '</span>' : '';
+    return wgHead('Calendar', 'calendar', 'data-act="go" data-view="calendar"', cd) + '<div class="wg-evs">' + (list || '<div class="wg-empty">Nothing planned in the next 30 days.<button class="wg-btn" data-act="eventNew" data-type="exam">' + ic('plus', 15) + 'Add exam date</button></div>') + '</div>';
+  }
+};
+W.streak = {
+  name: 'Streak', desc: 'Your day streak and freeze days', icon: 'flame', def: [2, 2],
+  render(w, h) {
+    const tk = todayKey(), st = currentStreak(), kept = S.days[tk] && S.days[tk].kept, left = Math.max(0, minSec() - (dayInfo(tk).sec + liveSec()));
+    let pips = ''; for (let i = 0; i < Math.min(5, S.freezes); i++) pips += ic('snow', 13);
+    return '<button class="wg-fill wg-streak' + (kept ? ' kept' : '') + '" data-act="go" data-view="trophies">' + wgHead('Streak', 'flame') + '<div class="wg-big"><span class="wg-flame">' + ic('flame', w >= 4 ? 40 : 30) + '</span><b class="num">' + st + '</b><span>' + (kept || !left ? 'day streak' : fmtDur(left) + ' to keep it') + '</span>' + (pips && h >= 2 ? '<span class="wg-pips">' + pips + '</span>' : '') + '</div></button>';
+  }
+};
+W.targets = {
+  name: 'Targets', desc: 'Day, week and month targets with this week\'s bars', icon: 'target', def: [4, 4],
+  render(w, h) {
+    const tk = todayKey(), sec = dayInfo(tk).sec + liveSec(), tg = S.settings.targets.daily * 60;
+    if (w <= 2) return wgHead('Target', 'target', 'data-act="go" data-view="stats"') + '<div class="wg-big">' + wgRing(tg ? sec / tg : 0, 74, 8) + '<span class="num">' + Math.round(tg ? Math.min(1, sec / tg) * 100 : 0) + '% of today</span></div>';
+    return wgHead('Targets', 'target', 'data-act="go" data-view="stats"') + '<div class="wg-tg">' + targetBars() + (h >= 4 ? weekStrip() : '') + '</div>';
+  }
+};
+W.goal = {
+  name: 'Main goal', desc: 'Progress on the one goal you are working towards', icon: 'mountain', def: [4, 2],
+  render(w, h) {
+    const g = mainGoal();
+    if (!g) return wgHead('Main goal', 'mountain') + '<div class="wg-empty">Set the one goal you are working towards.<button class="wg-btn" data-act="go" data-view="goals">' + ic('plus', 15) + 'Set goal</button></div>';
+    const pct = goalPct(g), days = goalDays(g), nx = goalNext(g), rs = w <= 2 ? 70 : Math.min(110, h * 46);
+    return '<button class="wg-fill" data-act="go" data-view="goals">' + wgHead('Main goal', 'mountain') + '<div class="wg-goal' + (w <= 2 ? ' sm' : '') + '"><span class="wg-gring" style="width:' + rs + 'px;height:' + rs + 'px">' + ringSVG(pct, rs, 8) + '<b class="num">' + Math.round(pct * 100) + '<small>%</small></b></span>' +
+      '<span class="wg-gt"><b class="ell2">' + esc(g.title) + '</b>' + (w > 2 ? '<span class="small muted ell">' + (g.achievedAt ? 'Achieved' : nx ? 'Next: ' + esc(nx.title) : 'Add steps') + '</span>' : '') + (days != null && !g.achievedAt ? '<span class="small faint num">' + daysText(days) + '</span>' : '') + '</span></div></button>';
+  }
+};
+W.chalisa = {
+  name: 'Hanuman Chalisa', desc: 'Paths today and a quick way to open the Chalisa', icon: 'book', def: [2, 2],
+  render(w, h) {
+    const hd = hcData(), t = hcToday(), p = Math.min(1, t / hd.goal), st = hcStreak();
+    return '<button class="wg-fill wg-hc" data-act="hcOpen">' + '<span class="wg-hcbg"><img src="' + HNM_SRC + '" alt="" draggable="false"></span>' + wgHead('Hanuman Chalisa', 'book') +
+      '<div class="wg-hcm"><span class="wg-hcr">' + ringSVG(p, w <= 2 ? 62 : 80, 7) + '<b class="num">' + t + '</b></span><span class="wg-hct"><b class="num">' + t + ' / ' + hd.goal + ' path</b>' + (w > 2 ? '<span class="num">' + plural(hd.total, 'path') + ' in total' + (st ? ' · ' + plural(st, 'day') + ' in a row' : '') + '</span>' : '') + '<span class="wg-open">Read now ›</span></span></div></button>';
+  }
+};
+W.week = {
+  name: 'This week', desc: 'Hours focused each day this week', icon: 'chart', def: [4, 2],
+  render(w, h) {
+    const tk = todayKey(), ws = weekStartKey(tk), vals = []; for (let i = 0; i < 7; i++) { const k = addDays(ws, i); vals.push([k, dayInfo(k).sec + (k === tk ? liveSec() : 0)]); }
+    const tg = S.settings.targets.daily * 60 || 1, mx = Math.max(tg, ...vals.map(v => v[1])), tot = vals.reduce((a, v) => a + v[1], 0);
+    return wgHead('This week', 'chart', 'data-act="go" data-view="stats"', '<span class="wg-tlab num">' + fmtDur(tot) + '</span>') + '<div class="wg-wk">' + vals.map(v => '<button class="wg-wkd' + (v[0] === tk ? ' today' : '') + (v[0] > tk ? ' future' : '') + '" data-act="calJump" data-k="' + v[0] + '"><span class="wg-wkb"><i style="height:' + clamp(v[1] / mx, 0, 1) * 100 + '%"></i><em style="bottom:' + (tg / mx * 100) + '%"></em></span>' + (h >= 3 && w >= 4 ? '<span class="num wg-wkv">' + (v[1] ? (v[1] / 3600).toFixed(1) : '') + '</span>' : '') + '<span class="wg-wkl">' + DOW[parseKey(v[0]).getDay()].charAt(0) + '</span></button>').join('') + '</div>';
+  }
+};
+W.rank = {
+  name: 'Rank and XP', desc: 'Your royal rank and XP to the next one', icon: 'crown', def: [2, 2],
+  render(w, h) {
+    const ri = rankInfo(S.xp);
+    return '<button class="wg-fill" data-act="go" data-view="trophies">' + wgHead('Rank', 'crown') + '<div class="wg-big"><span class="wg-crown">' + ic('crown', w >= 4 ? 36 : 28) + '</span><b class="wg-rk">' + esc(ri.cur.name) + '</b><span class="num">' + (ri.next ? (ri.next.xp - S.xp).toLocaleString() + ' XP to ' + esc(ri.next.name) : S.xp.toLocaleString() + ' XP') + '</span><span class="bar"><i style="width:' + ri.pct * 100 + '%"></i></span></div></button>';
+  }
+};
+W.revise = {
+  name: 'Revisions due', desc: 'Topics that are due for revision', icon: 'repeat', def: [2, 2],
+  render(w, h) {
+    const due = revDue();
+    if (w <= 2 || h <= 2) return '<button class="wg-fill" data-act="go" data-view="revise">' + wgHead('Revise', 'repeat') + '<div class="wg-big"><b class="num">' + due.length + '</b><span>' + (due.length ? 'to revise today' : 'All caught up') + '</span></div></button>';
+    const rows = Math.max(1, Math.floor((h * (WG_ROW + WG_GAP) - WG_GAP - 66) / 40));
+    return wgHead('Revisions due', 'repeat', 'data-act="go" data-view="revise"', '<span class="wg-tlab num">' + due.length + '</span>') + '<div class="wg-revs">' + (due.length ? due.slice(0, rows).map(r => '<button class="wg-ev" data-act="go" data-view="revise"><span class="dot" style="background:var(--c' + ((areaById(r.areaId) || {}).color || 1) + ')"></span><span class="grow ell">' + esc(r.label || tagText(r) || 'Revision') + '</span><span class="faint small">' + relDay(r.due) + '</span></button>').join('') : '<div class="wg-empty">Nothing to revise today.</div>') + '</div>';
+  }
+};
+W.report = {
+  name: 'Report card', desc: 'Today\'s grade and what it is made of', icon: 'star', def: [4, 4],
+  render(w, h) {
+    const tk = todayKey(), r = reportCard(tk);
+    if (w <= 2 || h <= 2) return wgHead('Report', 'star') + (r ? '<div class="wg-big"><span class="wg-grade g' + r.grade.charAt(0) + '">' + r.grade + '</span><span class="num">' + r.score + ' / 100</span></div>' : '<div class="wg-empty">No report yet</div>');
+    return wgHead('Today\'s report card', 'star') + reportHTML(tk, true);
+  }
+};
+W.clock = {
+  name: 'Clock', desc: 'The time and date', icon: 'clock', def: [2, 2],
+  render(w, h) {
+    const now = new Date(), d = todayKey();
+    return '<div class="wg-clock"><b class="num wg-time">' + fmtTime(now.getTime()) + '</b><span class="wg-cdate">' + fmtDate(d, 'long') + '</span></div>';
+  }
+};
+W.quote = {
+  name: 'Quote', desc: 'A line to keep you going, changes every day', icon: 'sparkle', def: [4, 2],
+  render(w, h) {
+    const own = (S.settings.quotes || []).filter(Boolean), pool = own.length ? own.concat(ALEX_LINES) : ALEX_LINES, n = diffDays('2026-01-01', todayKey());
+    const q = pool[((n % pool.length) + pool.length) % pool.length];
+    return '<div class="wg-quote"><span class="wg-qm">“</span><p>' + esc(q) + '</p></div>';
+  }
+};
+W.alex = {
+  get name() { return (S ? coachName() : 'Alex') + '\'s tip'; }, desc: 'Your coach\'s top tip right now', icon: 'sparkle', def: [4, 2],
+  render(w, h) {
+    const top = alexInsights()[0];
+    return '<button class="wg-fill" data-act="alexOpen">' + wgHead(esc(coachName()), 'sparkle') + '<div class="wg-alex"><b>' + esc(top ? top.title : 'All quiet') + '</b>' + (h >= 3 || w >= 4 ? '<span class="muted">' + esc(top ? (top.text || '') : '') + '</span>' : '') + '</div></button>';
+  }
+};
+W.sync = {
+  name: 'Backup and sync', desc: 'Cloud sync status and your last backup', icon: 'shield', def: [4, 2],
+  render(w, h) {
+    const on = !!CL.user, st = CL.state;
+    const line = on ? (st === 'ok' ? 'Saved online' + (CL.at ? ' at ' + fmtTime(CL.at) : '') : st === 'sync' ? 'Syncing…' : st === 'offline' ? 'Offline, will sync later' : 'Sync needs a look') : 'Not signed in';
+    const dot = on ? (st === 'ok' ? 'ok' : st === 'offline' ? 'off' : st === 'sync' ? 'busy' : 'bad') : 'off';
+    return wgHead('Backup and sync', 'shield') + '<div class="wg-sync"><span class="cl-st"><i class="cl-dot ' + dot + '"></i>' + esc(line) + '</span>' +
+      (w > 2 ? '<span class="small muted num">' + (S.lastBackup ? 'Last backup ' + relDay(dkey(S.lastBackup)).toLowerCase() + ' at ' + fmtTime(S.lastBackup) : 'No backup file saved yet') + '</span>' : '') +
+      '<div class="wg-row">' + (on ? '<button class="wg-btn" data-act="cloudSyncNow">' + ic('repeat', 15) + 'Sync</button>' : cloudEnabled() ? '<button class="wg-btn" data-act="cloudSignIn">Sign in</button>' : '') + (w > 2 ? '<button class="wg-btn" data-act="backupSave">' + ic('download', 15) + 'Back up</button>' : '') + '</div></div>';
+  }
+};
+const WG_ORDER = ['timer', 'today', 'jap', 'tasks', 'habits', 'calendar', 'streak', 'targets', 'goal', 'chalisa', 'week', 'rank', 'revise', 'report', 'clock', 'quote', 'alex', 'sync'];
+
+function wgDefault() {
+  const L = [['today', 4, 4], ['timer', 4, 2], ['streak', 2, 2], ['rank', 2, 2], ['jap', 4, 3], ['habits', 4, 3], ['tasks', 4, 4], ['calendar', 4, 2], ['chalisa', 2, 2], ['revise', 2, 2], ['goal', 4, 2], ['week', 4, 2], ['targets', 4, 4], ['report', 4, 4]];
+  return L.map(x => ({ id: uid(), t: x[0], w: x[1], h: x[2] }));
+}
+function wgItems() {
+  if (!S.home || !Array.isArray(S.home.items)) S.home = { items: wgDefault() };
+  S.home.items = S.home.items.filter(it => it && W[it.t]);
+  return S.home.items;
+}
+
+/* ---------- Home ---------- */
+const WGE = { edit: false, drag: null, lp: 0, lastSwap: 0, raf: 0, scrollV: 0 };
+function wgHTML(it, i, cols) {
+  const d = W[it.t], w = Math.min(it.w, cols), h = it.h, sk = wgSizeKey(it);
+  let chrome = '';
+  if (WGE.edit) {
+    chrome = '<button class="wg-x" data-act="wgRemove" data-id="' + it.id + '" aria-label="Remove ' + esc(d.name) + '">' + ic('minus', 16) + '</button>' +
+      '<div class="wg-szs">' + Object.keys(WG_SIZES).map(k => '<button class="' + (sk === k ? 'on' : '') + '" data-act="wgSize" data-id="' + it.id + '" data-v="' + k + '" aria-label="' + WG_SIZE_NAMES[k] + '">' + k + '</button>').join('') + '</div>' +
+      (d.free ? '<span class="wg-rs" data-id="' + it.id + '" aria-label="Drag to resize"><i></i></span>' : '');
+  }
+  return '<section class="wg card wt-' + it.t + (d.free ? ' free' : '') + '" data-wid="' + it.id + '" data-w="' + w + '" data-h="' + h + '" style="grid-column:span ' + w + ';grid-row:span ' + h + ';order:' + i + ';--d:' + ((i % 5) * .07).toFixed(2) + 's"><div class="wg-in">' + d.render(w, h) + '</div>' + chrome + '</section>';
+}
+VIEWS.home = () => {
+  if (V.view !== 'home') WGE.edit = false;
+  const items = wgItems(), cols = WGE.cols || 8;
+  let h = '<div class="home2">';
+  if (!storageOK) h += '<section class="card notice bad"><span class="tile-ic">' + ic('shield', 22) + '</span><div class="grow"><b>Your changes are not being saved</b><div class="small muted">The iPad is refusing to store more data for Focus. Save a backup file now so nothing is lost.</div></div><button class="btn primary" data-act="backupSave">' + ic('download', 18) + 'Back up now</button></section>';
+  else if (backupDue()) h += '<section class="card notice"><span class="tile-ic">' + ic('download', 22) + '</span><div class="grow"><b>Weekly backup is due</b><div class="small muted num">' + (S.lastBackup ? 'Last backup ' + fmtDate(dkey(S.lastBackup)) + ' at ' + fmtTime(S.lastBackup) : 'No backup saved yet') + '. Tap, then choose Save to Files.</div></div><button class="btn primary" data-act="backupSave">' + ic('download', 18) + 'Back up now</button></section>';
+  h += alexHomeHTML();
+  h += '<div class="wg-bar' + (WGE.edit ? ' on' : '') + '">' + (WGE.edit
+    ? '<button class="btn sm wg-addb" data-act="wgAdd">' + ic('plus', 16) + 'Add widget</button><span class="wg-tip">Drag to move. Use the sizes or the corner to resize.</span><span class="grow"></span><button class="btn sm" data-act="wgReset">Reset</button><button class="btn sm primary" data-act="wgDone">Done</button>'
+    : '<span class="grow"></span><button class="wg-editb" data-act="wgEdit" aria-label="Edit Home">' + ic('sliders', 15) + 'Edit</button>') + '</div>';
+  h += '<div class="wg-grid' + (WGE.edit ? ' edit' : '') + '" id="wg-grid" style="--cols:' + cols + '">' + (items.length ? items.map((it, i) => wgHTML(it, i, cols)).join('') : '<div class="wg-none card"><b>Your Home is empty</b><span class="muted">Add the widgets you want to see first.</span><button class="btn primary" data-act="wgAdd">' + ic('plus', 17) + 'Add widget</button></div>') + '</div>';
+  return h + '</div>';
+};
+MOUNT.home = () => {
+  uiClock();
+  const g = $('#wg-grid'); if (!g) return;
+  const c = wgCols(); if (c !== WGE.cols) { WGE.cols = c; g.style.setProperty('--cols', c); $$('.wg', g).forEach(el => { const it = wgItems().find(x => x.id === el.dataset.wid); if (it) { const w = Math.min(it.w, c); el.style.gridColumn = 'span ' + w; el.dataset.w = w; } }); if (!WGE.redraw) { WGE.redraw = 1; setTimeout(() => { WGE.redraw = 0; if (V.view === 'home' && !WGE.drag) keepScroll(render); }, 0); } }
+  if (!WGE.ro && window.ResizeObserver) { WGE.ro = new ResizeObserver(() => { const gg = $('#wg-grid'); if (!gg || V.view !== 'home' || WGE.drag) return; if (wgCols() !== WGE.cols) keepScroll(render); }); }
+  if (WGE.ro) { WGE.ro.disconnect(); WGE.ro.observe(g); }
+  g.addEventListener('pointerdown', wgDown);
+};
+
+/* ---------- edit mode ---------- */
+function wgEdit(on) { WGE.edit = on; keepScroll(render); }
+A.wgEdit = () => wgEdit(true);
+A.wgDone = () => { save(); wgEdit(false); toast('Home saved'); };
+A.wgReset = () => confirmBox('Reset Home?', 'Your widgets go back to the starting layout.', 'Reset', () => { wgFlip(() => { S.home.items = wgDefault(); save(); keepScroll(render); }); });
+A.wgRemove = el => {
+  const it = wgItems().find(x => x.id === el.dataset.id); if (!it) return;
+  const card = el.closest('.wg'); if (card) card.classList.add('bye');
+  setTimeout(() => wgFlip(() => { S.home.items = wgItems().filter(x => x.id !== it.id); save(); keepScroll(render); }), 180);
+  toast(W[it.t].name + ' removed. Add it back any time');
+};
+A.wgSize = el => {
+  const it = wgItems().find(x => x.id === el.dataset.id), s = WG_SIZES[el.dataset.v]; if (!it || !s) return;
+  wgFlip(() => { it.w = Math.min(s[0], WGE.cols || 8); it.h = s[1]; save(); keepScroll(render); });
+};
+
+/* FLIP: remember where every widget was, change things, then glide each one to its new place */
+function wgRects() { const m = {}; $$('#wg-grid .wg').forEach(el => { m[el.dataset.wid] = el.getBoundingClientRect(); }); return m; }
+function wgFlip(change, skip) {
+  const before = wgRects(); change();
+  if (!S.settings.motion) return;
+  $$('#wg-grid .wg').forEach(el => {
+    const id = el.dataset.wid; if (id === skip) return;
+    const a = before[id], b = el.getBoundingClientRect();
+    if (!a) { el.classList.add('hello'); return; }
+    const dx = a.left - b.left, dy = a.top - b.top, sx = a.width / b.width, sy = a.height / b.height;
+    if (Math.abs(dx) < 1 && Math.abs(dy) < 1 && Math.abs(sx - 1) < .01 && Math.abs(sy - 1) < .01) return;
+    el.style.transition = 'none'; el.style.transformOrigin = '0 0';
+    el.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(' + sx + ',' + sy + ')';
+    void el.offsetWidth;
+    el.style.transition = 'transform .38s cubic-bezier(.2,.8,.2,1)'; el.style.transform = '';
+    setTimeout(() => { el.style.transition = ''; el.style.transformOrigin = ''; }, 420);
+  });
+}
+
+/* pointer: long-press to start editing; in edit mode drag to move, corner to resize */
+function wgDown(e) {
+  if (e.button > 0) return;
+  const card = e.target.closest('.wg'); if (!card) return;
+  if (!WGE.edit) {
+    if (e.target.closest('input,textarea,select')) return;
+    const x0 = e.clientX, y0 = e.clientY;
+    clearTimeout(WGE.lp);
+    const cancel = ev => { if (!ev || ev.type !== 'pointermove' || Math.hypot(ev.clientX - x0, ev.clientY - y0) > 9) { clearTimeout(WGE.lp); off(); } };
+    const off = () => { window.removeEventListener('pointermove', cancel); window.removeEventListener('pointerup', cancel); window.removeEventListener('pointercancel', cancel); };
+    window.addEventListener('pointermove', cancel); window.addEventListener('pointerup', cancel); window.addEventListener('pointercancel', cancel);
+    WGE.lp = setTimeout(() => { off(); WGE.suppress = Date.now(); card.classList.add('lift'); setTimeout(() => wgEdit(true), 140); }, 520);
+    return;
+  }
+  if (e.target.closest('.wg-x,.wg-szs')) return;
+  const rs = e.target.closest('.wg-rs');
+  e.preventDefault();
+  if (rs) { wgResizeStart(e, card); return; }
+  wgDragStart(e, card);
+}
+function wgDragStart(e, card) {
+  const g = $('#wg-grid'), r = card.getBoundingClientRect();
+  const D = WGE.drag = { id: card.dataset.wid, el: card, gx: e.clientX - r.left, gy: e.clientY - r.top, x: e.clientX, y: e.clientY, x0: e.clientX, y0: e.clientY, on: false, pid: e.pointerId };
+  try { card.setPointerCapture(e.pointerId); } catch (er) { /* ignore */ }
+  const move = ev => {
+    D.x = ev.clientX; D.y = ev.clientY;
+    if (!D.on) { if (Math.hypot(D.x - D.x0, D.y - D.y0) < 6) return; D.on = true; card.classList.add('drag'); g.classList.add('dragging'); wgAutoScroll(); }
+    wgPlace(); wgHit();
+  };
+  const up = () => {
+    card.removeEventListener('pointermove', move); card.removeEventListener('pointerup', up); card.removeEventListener('pointercancel', up);
+    cancelAnimationFrame(WGE.raf); WGE.drag = null; g.classList.remove('dragging');
+    if (!D.on) return;
+    card.style.transition = 'transform .3s cubic-bezier(.2,.8,.2,1)'; card.style.transform = '';
+    setTimeout(() => { card.classList.remove('drag'); card.style.transition = ''; }, 300);
+    save();
+  };
+  card.addEventListener('pointermove', move); card.addEventListener('pointerup', up); card.addEventListener('pointercancel', up);
+}
+function wgPlace() {
+  const D = WGE.drag; if (!D || !D.on) return;
+  const g = $('#wg-grid'), gr = g.getBoundingClientRect();
+  D.el.style.transform = 'translate(' + (D.x - D.gx - (gr.left + D.el.offsetLeft)) + 'px,' + (D.y - D.gy - (gr.top + D.el.offsetTop)) + 'px) scale(1.03)';
+}
+function wgHit() {
+  const D = WGE.drag; if (!D || Date.now() - WGE.lastSwap < 160) return;
+  const items = wgItems(), from = items.findIndex(x => x.id === D.id); if (from < 0) return;
+  let to = -1;
+  $$('#wg-grid .wg').forEach(el => {
+    if (el === D.el || to >= 0) return;
+    const r = el.getBoundingClientRect(), mx = r.width * .18, my = r.height * .18;
+    if (D.x > r.left + mx && D.x < r.right - mx && D.y > r.top + my && D.y < r.bottom - my) to = items.findIndex(x => x.id === el.dataset.wid);
+  });
+  if (to < 0 || to === from) return;
+  WGE.lastSwap = Date.now();
+  wgFlip(() => {
+    items.splice(to, 0, items.splice(from, 1)[0]);
+    items.forEach((it, i) => { const el = $('#wg-grid .wg[data-wid="' + it.id + '"]'); if (el) el.style.order = i; });
+  }, D.id);
+  wgPlace();
+}
+function wgAutoScroll() {
+  const step = () => {
+    const D = WGE.drag; if (!D || !D.on) return;
+    const v = $('#view'); if (v) { const r = v.getBoundingClientRect(), z = 90; let dy = 0; if (D.y < r.top + z) dy = -Math.ceil((r.top + z - D.y) / 6); else if (D.y > r.bottom - z) dy = Math.ceil((D.y - (r.bottom - z)) / 6); if (dy) { v.scrollTop += dy; wgPlace(); wgHit(); } }
+    WGE.raf = requestAnimationFrame(step);
+  };
+  WGE.raf = requestAnimationFrame(step);
+}
+function wgResizeStart(e, card) {
+  const it = wgItems().find(x => x.id === card.dataset.wid); if (!it) return;
+  const g = $('#wg-grid'), cols = WGE.cols || 8, gw = g.clientWidth, cw = (gw - WG_GAP * (cols - 1)) / cols;
+  const R = { x0: e.clientX, y0: e.clientY, w0: Math.min(it.w, cols), h0: it.h, cw };
+  card.classList.add('sizing');
+  const tgt = e.target.closest('.wg-rs'); try { tgt.setPointerCapture(e.pointerId); } catch (er) { /* ignore */ }
+  const move = ev => {
+    const nw = clamp(Math.round(R.w0 + (ev.clientX - R.x0) / (cw + WG_GAP)), 2, cols), nh = clamp(Math.round(R.h0 + (ev.clientY - R.y0) / (WG_ROW + WG_GAP)), 2, 8);
+    if (nw === Math.min(it.w, cols) && nh === it.h) return;
+    wgFlip(() => { it.w = nw; it.h = nh; card.style.gridColumn = 'span ' + nw; card.style.gridRow = 'span ' + nh; card.dataset.w = nw; card.dataset.h = nh; }, it.id);
+    const tip = card.querySelector('.wg-rs'); if (tip) tip.dataset.sz = nw + ' × ' + nh;
+  };
+  const up = () => { tgt.removeEventListener('pointermove', move); tgt.removeEventListener('pointerup', up); tgt.removeEventListener('pointercancel', up); card.classList.remove('sizing'); save(); keepScroll(render); };
+  tgt.addEventListener('pointermove', move); tgt.addEventListener('pointerup', up); tgt.addEventListener('pointercancel', up);
+}
+/* a long-press must not also tap the button under the finger */
+document.addEventListener('click', e => { if (WGE.suppress && Date.now() - WGE.suppress < 700 && e.target.closest('#wg-grid')) { e.stopPropagation(); e.preventDefault(); WGE.suppress = 0; } }, true);
+
+/* ---------- add widget gallery ---------- */
+let WGA = {};
+A.wgAdd = () => {
+  WGA = {};
+  const have = new Set(wgItems().map(x => x.t));
+  const cards = WG_ORDER.map(t => {
+    const d = W[t], s = d.def, pw = s[0] * 140 + (s[0] - 1) * WG_GAP, ph = s[1] * WG_ROW + (s[1] - 1) * WG_GAP;
+    let prev = ''; try { prev = d.render(s[0], s[1]); } catch (e) { prev = ''; }
+    return '<div class="wga' + (have.has(t) ? ' has' : '') + '"><div class="wga-pv"><div class="wg card wga-w wt-' + t + '" data-w="' + s[0] + '" data-h="' + s[1] + '" style="width:' + pw + 'px;height:' + ph + 'px"><div class="wg-in">' + prev + '</div></div></div>' +
+      '<div class="wga-t"><b>' + esc(d.name) + '</b><span class="small muted">' + esc(d.desc) + '</span><span class="wga-tags">' + (d.free ? '<span class="chip static on">Resizable</span>' : '<span class="chip static">4 sizes</span>') + (have.has(t) ? '<span class="chip static">On Home</span>' : '') + '</span></div>' +
+      '<div class="wga-szs">' + Object.keys(WG_SIZES).map(k => '<button class="' + (WG_SIZES[k][0] === s[0] && WG_SIZES[k][1] === s[1] ? 'on' : '') + '" data-act="wgaSz" data-t="' + t + '" data-v="' + k + '">' + WG_SIZE_NAMES[k] + '</button>').join('') + '</div>' +
+      '<button class="btn sm primary wga-go" data-act="wgAddGo" data-t="' + t + '">' + ic('plus', 15) + (have.has(t) ? 'Add another' : 'Add') + '</button></div>';
+  }).join('');
+  openModal(modalHead('Add a widget', 'Pick a size, then add it to the top of your Home.') + '<div class="modal-b"><div class="wga-grid">' + cards + '</div></div>', { cls: 'wide wga-modal' });
+  requestAnimationFrame(() => $$('.wga-pv').forEach(pv => { const w = pv.firstChild; if (!w) return; const sc = Math.min(1, (pv.clientWidth - 8) / w.offsetWidth, 190 / w.offsetHeight); w.style.transform = 'translateX(-50%) scale(' + sc + ')'; pv.style.height = Math.ceil(w.offsetHeight * sc + 8) + 'px'; }));
+};
+A.wgaSz = el => { WGA[el.dataset.t] = el.dataset.v; $$('.wga-szs button[data-t="' + el.dataset.t + '"]').forEach(b => b.classList.toggle('on', b === el)); };
+A.wgAddGo = el => {
+  const t = el.dataset.t, d = W[t]; if (!d) return;
+  const s = WG_SIZES[WGA[t]] || d.def;
+  closeModal();
+  const it = { id: uid(), t, w: Math.min(s[0], WGE.cols || 8), h: s[1] };
+  wgFlip(() => { wgItems().unshift(it); save(); WGE.edit = true; keepScroll(render); });
+  const v = $('#view'), g = $('#wg-grid'); if (v && g) v.scrollTo({ top: Math.max(0, g.getBoundingClientRect().top - v.getBoundingClientRect().top + v.scrollTop - 90), behavior: 'smooth' });
+  const n = $('#wg-grid .wg[data-wid="' + it.id + '"]'); if (n) n.classList.add('hello');
+  toast(d.name + ' added');
+};
+
+/* ---------- widget actions ---------- */
+A.wgJap = (el, e) => {
+  if (WGE.edit) return;
+  if (e && e.target.closest('.wg-more,.wg-undo')) return;
+  audioInit(); japCount(1, null);
+  const card = el.closest('.wg'); if (!card) return;
+  const it = wgItems().find(x => x.id === card.dataset.wid); if (!it) return;
+  const inn = card.querySelector('.wg-in'); inn.innerHTML = W.jap.render(+card.dataset.w, +card.dataset.h);
+  if (S.jap.sound !== 'off') try { japSound(); } catch (er) { /* ignore */ }
+  const fx = inn.querySelector('.wg-fx'), naam = japSel();
+  if (fx && S.settings.motion) { const f = document.createElement('i'); f.textContent = naam ? naam.name : '+1'; fx.appendChild(f); setTimeout(() => f.remove(), 1000); }
+  const n = inn.querySelector('.wg-jn'); if (n) { n.classList.remove('bump'); void n.offsetWidth; n.classList.add('bump'); }
+};
+A.wgJapUndo = el => { japCount(-1, null); const card = el.closest('.wg'); if (card) card.querySelector('.wg-in').innerHTML = W.jap.render(+card.dataset.w, +card.dataset.h); };
+A.wgTask = el => { toggleTask(el.dataset.id); keepScroll(render); };
+A.wgTaskAdd = () => { const i = $('#wg-task-in'); const t = i && i.value.trim(); if (!t) return; addTask({ title: t, areaId: S.sel.areaId, subjectId: S.sel.subjectId, topicId: S.sel.topicId }); keepScroll(render); const n = $('#wg-task-in'); if (n) n.focus(); };
+
+/* live parts: clock and timer, once a second while Home is open */
+setInterval(() => {
+  if (V.view !== 'home' || document.hidden) return;
+  const tm = $('#wg-grid .wg-time'); if (tm) { const s = fmtTime(Date.now()); if (tm.textContent !== s) tm.textContent = s; }
+  const ck = $('#wg-grid .wg-clk'), t = S.timer;
+  if (ck && t) { const el = timerElapsed(), s = t.planned ? fmtClock(Math.ceil(Math.max(0, t.planned - el))) : fmtClock(el); if (ck.textContent !== s) ck.textContent = s; }
+}, 1000);
 
 /* ============================================================
    Focus — Settings (everything is editable) and app start
