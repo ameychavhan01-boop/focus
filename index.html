@@ -1111,13 +1111,17 @@ body.zen .th-quote span { font-size: 21px; }
 .jsr-k { position: absolute; left: 22px; top: 18px; display: inline-flex; align-items: center; gap: 7px; font-size: 13.5px; font-weight: 650; color: #FFC77D; }
 .jsr-title { font-family: "Rozha One", "Kohinoor Devanagari", "ITF Devanagari", "Devanagari Sangam MN", "Noto Serif Devanagari", serif; font-weight: 400; font-size: 66px; line-height: 1.3; padding: 0 .12em; letter-spacing: .01em;
   background: linear-gradient(100deg, #FFE3A3 0%, #FFB347 26%, #FFF7E3 48%, #FFB347 70%, #FFE3A3 100%); background-size: 260% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
-  animation: jshine 7s linear infinite; filter: drop-shadow(0 0 18px rgba(255, 150, 50, .5)); }
+  animation: jshine 7s linear infinite; -webkit-font-smoothing: antialiased; }
+/* glow is a separate blurred copy behind the text: Safari blurs gradient text if a filter is put on it directly */
+.jsr-tw { position: relative; display: grid; place-items: center; }
+.jsr-tw > * { grid-area: 1 / 1; }
+.jsr-glow { font-family: "Rozha One", "Kohinoor Devanagari", "ITF Devanagari", "Devanagari Sangam MN", "Noto Serif Devanagari", serif; font-size: 66px; line-height: 1.3; padding: 0 .12em; letter-spacing: .01em; color: #FF9A3C; opacity: .55; filter: blur(16px); pointer-events: none; -webkit-user-select: none; user-select: none; }
 @keyframes jshine { from { background-position: 100% 0; } to { background-position: -160% 0; } }
 .jsr-tabs { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); background: rgba(0, 0, 0, .35); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
 .jsr-tabs button { color: rgba(255, 240, 220, .72); } .jsr-tabs button.on { background: rgba(255, 196, 120, .22); color: #FFE7BF; box-shadow: none; }
 :root[data-theme="light"] .jsr-tabs button.on { background: rgba(255, 196, 120, .22); }
-.view.enter .jsr-title { animation: jshine 7s linear infinite, jrise 1s cubic-bezier(.2, .8, .2, 1) both; }
-@keyframes jrise { from { opacity: 0; transform: translateY(14px) scale(.96); filter: blur(10px); } }
+.view.enter .jsr-tw { animation: jrise 1s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes jrise { from { opacity: 0; transform: translateY(14px) scale(.96); } }
 
 .jp-grid { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; }
 .jp-pad { position: relative; border-radius: 30px; overflow: hidden; display: grid; place-items: center; isolation: isolate; touch-action: none; cursor: pointer; -webkit-user-select: none; user-select: none; container-type: size; min-height: 0;
@@ -1257,7 +1261,7 @@ body.zen .jsr .jsr-hero { height: 108px; }
 }
 @media (max-width: 720px) {
   .jsr-hero { height: auto; flex-direction: column; padding: 46px 12px 14px; gap: 8px; }
-  .jsr-title { font-size: 46px; }
+  .jsr-title, .jsr-glow { font-size: 46px; }
   .jsr-tabs { position: static; transform: none; }
   .jp-grid { grid-template-rows: auto auto; }
   .jp-pad { height: 74vw; min-height: 300px; }
@@ -4269,7 +4273,7 @@ function japPaceText(life) {
   const lg = S.jap.lifeGoal, tk = todayKey();
   const parts = [];
   if (next) { const d = Math.ceil((next - life) / avg); parts.push('At your pace of ' + fmtIN(avg) + ' a day you reach ' + fmtIN(next) + ' by ' + fmtDate(addDays(tk, d), 'full') + ' (' + humanIn(d) + ').'); }
-  if (lg > life && (!next || lg !== next)) { const d = Math.ceil((lg - life) / avg); parts.push('Your lifetime goal of ' + inWords(lg) + ' ' + humanIn(d) + '.'); }
+  if (lg > life && (!next || lg !== next) && (lg - life) / avg <= 36500) { const d = Math.ceil((lg - life) / avg); parts.push('Your lifetime goal of ' + inWords(lg) + ' ' + humanIn(d) + '.'); }
   return parts.join(' ');
 }
 
@@ -4427,7 +4431,7 @@ document.addEventListener('keydown', e => {
 function jsrHero(tab) {
   let em = ''; for (let i = 0; i < 16; i++) em += '<i style="left:' + ((i * 37) % 100) + '%;animation-delay:-' + ((i * 1.7) % 9).toFixed(1) + 's;animation-duration:' + (7 + (i * 1.3) % 5).toFixed(1) + 's"></i>';
   return '<section class="jsr-hero"><div class="jsr-rays"></div><div class="jsr-embers">' + em + '</div>' +
-    '<div class="jsr-k">' + ic('diya', 18) + 'Naam Jap</div><h2 class="jsr-title" lang="hi">जय श्री राम</h2>' +
+    '<div class="jsr-k">' + ic('diya', 18) + 'Naam Jap</div><div class="jsr-tw"><span class="jsr-glow" aria-hidden="true" lang="hi">जय श्री राम</span><h2 class="jsr-title" lang="hi">जय श्री राम</h2></div>' +
     '<div class="seg jsr-tabs"><button class="' + (tab === 'counter' ? 'on' : '') + '" data-act="jsrTab" data-v="counter">Counter</button><button class="' + (tab === 'insights' ? 'on' : '') + '" data-act="jsrTab" data-v="insights">Insights</button></div></section>';
 }
 function jsrBeadsSVG() {
