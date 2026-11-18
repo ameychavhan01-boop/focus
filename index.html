@@ -97,6 +97,9 @@ svg { display: block; flex: none; }
 .tb-left { display: flex; align-items: baseline; gap: 12px; min-width: 0; padding-right: 30px; overflow: hidden; }
 /* JSR Enterprises wordmark: a long black pill, centred on the screen */
 .brand { height: 36px; padding: 0 22px; border-radius: 18px; background: #000; display: flex; align-items: center; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .2); transform: translateX(calc((-86px - var(--sal)) / 2)); }
+button.brand { border: 0; margin: 0; font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; transition: box-shadow .25s, scale .18s; }
+button.brand:active { scale: .97; box-shadow: inset 0 0 0 1px rgba(255, 220, 160, .45), 0 0 18px rgba(255, 190, 90, .35); }
+button.brand:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .brand img { height: 11px; width: auto; display: block; }
 .brand-fixed { position: fixed; top: calc(18px + var(--sat)); left: 50%; transform: translateX(-50%); z-index: 5; opacity: .6; display: none; }
 .tb-title { font-size: 28px; font-weight: 700; letter-spacing: -.022em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 0 0 auto; max-width: 100%; }
@@ -1867,6 +1870,67 @@ body.ht-open { overflow: hidden; }
 @media (max-width: 720px) { .ht-bar { width: 70vw; height: 8px; } }
 @media (prefers-reduced-motion: reduce) { .ht-bar { transition: none; } .ht.paused .ht-fill, .ht.done .ht-fill { animation: none; } }
 
+/* ---------- JSR dial (half-disc plate under the logo) ---------- */
+.dial { position: fixed; inset: 0; z-index: 48; pointer-events: none; }
+.dial-back { position: absolute; inset: 0; pointer-events: auto; background: rgba(0, 0, 0, 0); transition: background .4s ease; -webkit-tap-highlight-color: transparent; }
+.dial.in .dial-back { background: rgba(0, 0, 0, .22); }
+.dial-plate { position: absolute; pointer-events: auto; touch-action: none; border-radius: 0 0 9999px 9999px; overflow: hidden;
+  background: radial-gradient(120% 120% at 50% 0%, rgba(44, 36, 22, .94) 0%, rgba(16, 14, 12, .96) 46%, rgba(6, 6, 7, .97) 100%);
+  -webkit-backdrop-filter: blur(22px) saturate(1.3); backdrop-filter: blur(22px) saturate(1.3);
+  box-shadow: inset 0 0 0 1px rgba(221, 185, 111, .32), inset 0 -1px 0 rgba(255, 228, 170, .22), 0 26px 60px rgba(0, 0, 0, .45), 0 0 0 1px rgba(0, 0, 0, .4);
+  clip-path: circle(0px at var(--hx, 50%) 0); transition: clip-path .55s cubic-bezier(.22, 1, .36, 1); color: #F5F5F7; }
+.dial.in .dial-plate { clip-path: circle(150% at var(--hx, 50%) 0); }
+.dial.out .dial-plate { clip-path: circle(0px at var(--hx, 50%) 0); transition-duration: .32s; transition-timing-function: cubic-bezier(.55, 0, .7, .4); }
+.dial-plate::before { content: ''; position: absolute; left: 8%; right: 8%; top: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255, 220, 150, .55), transparent); }
+.dial-art { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.dial-art path { fill: none; stroke: rgba(221, 185, 111, .16); stroke-width: 1; }
+.dial-art .dial-r2 { stroke: rgba(221, 185, 111, .22); stroke-dasharray: 2 5; }
+.dial-ticks line { stroke: rgba(221, 185, 111, .22); stroke-width: 1; stroke-linecap: round; }
+.dial-ticks line.mj { stroke: rgba(221, 185, 111, .45); stroke-width: 1.4; }
+.dial.in .dial-art { animation: dialSpin .9s cubic-bezier(.22, 1, .36, 1) both; transform-origin: 50% 0; }
+@keyframes dialSpin { from { transform: rotate(-14deg); opacity: 0; } to { transform: none; opacity: 1; } }
+
+.dial-hub { position: absolute; left: 50%; top: 0; transform: translateX(-50%); border: 0; margin: 0; padding: 0 0 4px; border-radius: 0 0 9999px 9999px; cursor: pointer;
+  background: radial-gradient(100% 140% at 50% 0%, rgba(221, 185, 111, .2), rgba(221, 185, 111, .04) 70%); box-shadow: inset 0 0 0 1px rgba(221, 185, 111, .28);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; color: #F5F5F7; font-family: var(--round); -webkit-tap-highlight-color: transparent;
+  opacity: 0; transition: opacity .35s ease .12s, background .2s; }
+.dial.in .dial-hub { opacity: 1; }
+.dial-hub b { font-size: 17px; font-weight: 700; letter-spacing: -.01em; color: #FFE7B0; }
+.dial-hub span { display: flex; align-items: center; gap: 3px; font-size: 11.5px; color: rgba(235, 235, 245, .62); }
+.dial-hub span svg { color: #FFB340; }
+.dial-hub:active { background: radial-gradient(100% 140% at 50% 0%, rgba(221, 185, 111, .34), rgba(221, 185, 111, .08) 70%); }
+
+.dial-it { position: absolute; width: 84px; margin: 0; padding: 0; border: 0; background: none; color: #F5F5F7; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 7px; font: 600 12.5px/1.1 var(--font); -webkit-tap-highlight-color: transparent;
+  transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(.3); opacity: 0;
+  transition: transform .58s cubic-bezier(.34, 1.4, .5, 1) calc(.06s + var(--i) * .045s), opacity .3s ease calc(.06s + var(--i) * .045s); }
+.dial.in .dial-it { transform: translate(-50%, -50%); opacity: 1; }
+.dial.out .dial-it { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(.3); opacity: 0; transition: transform .26s ease-in, opacity .2s ease; }
+.dial-ic { position: relative; width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; color: #FFE2A3;
+  background: radial-gradient(circle at 50% 30%, rgba(255, 226, 160, .2), rgba(221, 185, 111, .07) 70%); box-shadow: inset 0 0 0 1px rgba(221, 185, 111, .38), 0 6px 16px rgba(0, 0, 0, .35);
+  transition: transform .18s ease, background .2s, box-shadow .2s; }
+.dial-lb { color: rgba(245, 245, 247, .86); letter-spacing: .01em; white-space: nowrap; }
+.dial-it:active .dial-ic, .dial-it.picked .dial-ic { transform: scale(.9); background: radial-gradient(circle at 50% 30%, rgba(255, 226, 160, .42), rgba(221, 185, 111, .16) 70%); }
+.dial-it.on .dial-ic { background: linear-gradient(160deg, #FFE39A, #B5830F); color: #1B1404; box-shadow: 0 0 0 1px rgba(255, 228, 170, .6), 0 0 22px rgba(255, 196, 90, .45); }
+.dial-it.on .dial-lb { color: #FFE7B0; }
+.dial-it:focus-visible { outline: none; }
+.dial-it:focus-visible .dial-ic { box-shadow: 0 0 0 2px #FFE39A; }
+.dial-n { position: absolute; top: -3px; right: -5px; min-width: 19px; height: 19px; padding: 0 5px; border-radius: 10px; background: #FF5A4F; color: #fff; font: 700 11px/19px var(--font); box-shadow: 0 0 0 2px #121010; }
+.brand.open { box-shadow: inset 0 0 0 1px rgba(255, 220, 160, .45), 0 0 16px rgba(255, 190, 90, .28); }
+
+@media (max-width: 520px) {
+  .dial-it { width: 66px; gap: 5px; font-size: 11px; }
+  .dial-ic { width: 44px; height: 44px; }
+  .dial-ic svg { width: 20px; height: 20px; }
+  .dial-hub b { font-size: 14px; }
+  .dial-hub span { font-size: 10px; }
+}
+.dial.calm .dial-plate, .dial.calm .dial-it, .dial.calm .dial-hub, .dial.calm .dial-back { transition: none !important; }
+.dial.calm .dial-art { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  .dial-plate, .dial-it, .dial-hub { transition-duration: .01s !important; transition-delay: 0s !important; }
+  .dial .dial-art { animation: none; }
+}
+
 </style>
 </head>
 <body>
@@ -2734,6 +2798,7 @@ const NAV = [
   ['home', 'home', 'Home'], ['habits', 'habit', 'Habits'], ['jsr', 'diya', 'JSR'], ['focus', 'timer', 'Focus'], ['tasks', 'tasks', 'Tasks'], ['calendar', 'calendar', 'Calendar'],
   ['goals', 'mountain', 'Goals'], ['stats', 'chart', 'Stats'], ['trophies', 'trophy', 'Trophies'], ['revise', 'repeat', 'Revise'], ['setup', 'sliders', 'Settings']
 ];
+const RAIL_IDS = ['home', 'habits', 'jsr', 'focus', 'tasks', 'calendar'];   // the rest live in the JSR dial under the logo
 const VIEWS = {};      // name -> () => html
 const MOUNT = {};      // name -> () => void (after html is in the page)
 const ENTER = {};      // name -> () => void (only when you navigate to the screen)
@@ -2747,14 +2812,13 @@ function renderShell() {
   $('#app').innerHTML =
     '<nav class="rail" id="rail" aria-label="Sections"></nav>' +
     '<div class="main"><header class="topbar"><div class="tb-left"><h1 class="tb-title" id="tb-title"></h1><span class="tb-sub ell" id="tb-sub"></span></div>' +
-    '<div class="brand"><img src="' + LOGO + '" alt="JSR Enterprises"></div>' +
+    '<button class="brand" id="brand" data-act="dialToggle" aria-label="JSR menu" aria-haspopup="true" aria-expanded="false"><img src="' + LOGO + '" alt="JSR Enterprises" draggable="false"></button>' +
     '<div class="tb-right" id="tb-right"></div></header><main class="view" id="view"></main></div>';
   const lf = $('.brand-fixed img'); if (lf) lf.src = LOGO;
 }
 function renderChrome() {
   const due = revDue().length; const habLeft = habitsToday().filter(h => !h.log[todayKey()]).length;
-  $('#rail').innerHTML = NAV.map((n, i) =>
-    (n[0] === 'setup' ? '<div class="sp"></div>' : '') +
+  $('#rail').innerHTML = NAV.filter(n => RAIL_IDS.includes(n[0])).map((n, i) =>
     '<button class="rail-btn' + (V.view === n[0] ? ' on' : '') + '" data-act="go" data-view="' + n[0] + '" aria-label="' + n[2] + '">' + ic(n[1], 24) +
     '<span class="lb">' + n[2] + '</span>' + (n[0] === 'revise' && due ? '<span class="count">' + due + '</span>' : '') + (n[0] === 'habits' && habLeft ? '<span class="count soft">' + habLeft + '</span>' : '') + '</button>').join('');
   const t = (TITLES[V.view] || (() => ['Focus', '']))();
@@ -6554,6 +6618,78 @@ document.addEventListener('keydown', e => {
   if (HT.on && e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); htOff(); return; }
   if (!HT.on && (e.key === 'h' || e.key === 'H') && V.view === 'focus' && !modalStack.length && !/^(INPUT|TEXTAREA|SELECT)$/.test((document.activeElement || {}).tagName)) { e.preventDefault(); htOn(); }
 }, true);
+
+/* ---------- JSR dial: tap the logo and a half-disc plate unfolds with the less-used pages ---------- */
+const DIAL_ITEMS = [
+  { id: 'goals', icon: 'mountain', label: 'Goals', act: 'go' },
+  { id: 'stats', icon: 'chart', label: 'Stats', act: 'go' },
+  { id: 'trophies', icon: 'trophy', label: 'Trophies', act: 'go' },
+  { id: 'revise', icon: 'repeat', label: 'Revise', act: 'go' },
+  { id: 'backup', icon: 'download', label: 'Back up', act: 'backup' },
+  { id: 'setup', icon: 'sliders', label: 'Settings', act: 'go' }
+];
+const DL = { open: false, busy: 0 };
+
+function dialHTML(R, ir) {
+  const n = DIAL_ITEMS.length, due = revDue().length, a0 = 20, a1 = 160;
+  let items = '', ticks = '';
+  DIAL_ITEMS.forEach((it, i) => {
+    const ang = (a0 + (a1 - a0) * (n === 1 ? .5 : i / (n - 1))) * Math.PI / 180;
+    const x = R + Math.cos(ang) * ir * -1, y = Math.sin(ang) * ir;      // left to right along the curve
+    const on = it.act === 'go' && V.view === it.id;
+    items += '<button class="dial-it' + (on ? ' on' : '') + '" style="left:' + x.toFixed(1) + 'px;top:' + y.toFixed(1) + 'px;--i:' + i + ';--dx:' + (R - x).toFixed(1) + 'px;--dy:' + (-y).toFixed(1) + 'px" data-act="dialPick" data-id="' + it.id + '" aria-label="' + it.label + '">' +
+      '<span class="dial-ic">' + ic(it.icon, 24) + (it.id === 'revise' && due ? '<span class="dial-n num">' + due + '</span>' : '') + '</span><span class="dial-lb">' + it.label + '</span></button>';
+  });
+  for (let d = 6; d <= 174; d += 6) { const a = d * Math.PI / 180, r1 = R - 10, r2 = R - (d % 30 === 0 ? 20 : 15); ticks += '<line x1="' + (R + Math.cos(a) * r1).toFixed(1) + '" y1="' + (Math.sin(a) * r1).toFixed(1) + '" x2="' + (R + Math.cos(a) * r2).toFixed(1) + '" y2="' + (Math.sin(a) * r2).toFixed(1) + '"' + (d % 30 === 0 ? ' class="mj"' : '') + '/>'; }
+  const tk = todayKey(), sec = dayInfo(tk).sec + liveSec(), st = currentStreak(), hub = Math.round(R * .34);
+  return '<div class="dial-plate" id="dial-plate" style="width:' + 2 * R + 'px;height:' + R + 'px">' +
+    '<svg class="dial-art" viewBox="0 0 ' + 2 * R + ' ' + R + '" aria-hidden="true">' +
+      '<path class="dial-r1" d="M ' + (R - (R - 26)) + ' 0 A ' + (R - 26) + ' ' + (R - 26) + ' 0 0 0 ' + (R + (R - 26)) + ' 0"/>' +
+      '<path class="dial-r2" d="M ' + (R - hub - 14) + ' 0 A ' + (hub + 14) + ' ' + (hub + 14) + ' 0 0 0 ' + (R + hub + 14) + ' 0"/>' +
+      '<g class="dial-ticks">' + ticks + '</g></svg>' +
+    '<button class="dial-hub" data-act="dialPick" data-id="home" style="width:' + 2 * hub + 'px;height:' + hub + 'px" aria-label="Home">' +
+      '<b class="num">' + fmtDur(sec) + '</b><span class="num">' + ic('flame', 13) + st + (st === 1 ? ' day' : ' days') + '</span></button>' +
+    items + '</div>';
+}
+function dialOpen() {
+  if (DL.open || Date.now() - DL.busy < 350) return;
+  const b = $('#brand'); if (!b) return;
+  DL.open = true; DL.busy = Date.now();
+  const r = b.getBoundingClientRect(), vw = window.innerWidth;
+  const R = Math.round(clamp((vw - 20) / 2, 150, 280)), ir = Math.round(R * .7);
+  const el = document.createElement('div'); el.id = 'dial'; el.className = 'dial' + (S.settings.motion ? '' : ' calm');
+  el.innerHTML = '<div class="dial-back" data-act="dialClose"></div>' + dialHTML(R, ir);
+  document.body.appendChild(el);
+  const p = $('#dial-plate', el);
+  p.style.left = Math.round(clamp(r.left + r.width / 2 - R, 8, vw - 2 * R - 8)) + 'px';
+  p.style.top = Math.round(r.bottom + 10) + 'px';
+  p.style.setProperty('--hx', (r.left + r.width / 2 - parseFloat(p.style.left)).toFixed(0) + 'px');
+  b.setAttribute('aria-expanded', 'true'); b.classList.add('open');
+  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('in')));
+  /* swipe up on the plate to fold it away */
+  let y0 = null;
+  p.addEventListener('pointerdown', e => { y0 = e.clientY; }, { passive: true });
+  p.addEventListener('pointermove', e => { if (y0 != null && e.clientY - y0 < -36) { y0 = null; dialClose(); } }, { passive: true });
+  p.addEventListener('pointerup', () => { y0 = null; }, { passive: true });
+}
+function dialClose(after) {
+  const el = $('#dial'); const b = $('#brand');
+  if (b) { b.setAttribute('aria-expanded', 'false'); b.classList.remove('open'); }
+  if (!el) { DL.open = false; if (after) after(); return; }
+  DL.open = false; DL.busy = Date.now();
+  el.classList.remove('in'); el.classList.add('out');
+  setTimeout(() => el.remove(), S.settings.motion ? 380 : 10);
+  if (after) setTimeout(after, S.settings.motion ? 170 : 0);
+}
+A.dialToggle = () => { if (DL.open) dialClose(); else dialOpen(); };
+A.dialClose = () => dialClose();
+A.dialPick = el => {
+  const id = el.dataset.id, it = DIAL_ITEMS.find(x => x.id === id);
+  el.classList.add('picked');
+  dialClose(() => { if (it && it.act === 'backup') A.backupSave(); else go(id); });
+};
+document.addEventListener('keydown', e => { if (DL.open && e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); dialClose(); } }, true);
+window.addEventListener('resize', () => { if (DL.open) dialClose(); });
 
 /* ============================================================
    Focus — Settings (everything is editable) and app start
