@@ -102,7 +102,7 @@ def mix(ver, out):
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-f', 'f32le', '-ar', str(SR), '-ac', '2', '-i', '-', raw],
                    input=mixd.astype(np.float32).tobytes(), check=True)
     # loudness standard for Reels/Shorts (~ -14 LUFS), true-peak safe
-    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', raw, '-af', 'loudnorm=I=-14:TP=-1.5:LRA=11', '-ar', str(SR), out], check=True)
+    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', raw, '-af', 'loudnorm=I=-14:TP=-1.5:LRA=11:linear=true,alimiter=limit=0.4:level=disabled:attack=1:release=40', '-ar', str(SR), out], check=True)
     os.remove(raw)
     print('saved', out)
 
