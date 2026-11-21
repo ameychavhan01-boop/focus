@@ -1369,6 +1369,209 @@ body.zen .jsr .jsr-hero { height: 108px; }
   .jsr.th-dar .jp-pad.dar { height: min(66vh, 1000px); }
   body.zen .jsr.th-dar .jp-pad.dar { height: min(74vh, 1100px); }
 }
+
+/* ---------- JSR: Sankalp (jap vow with a self-adjusting daily plan) ---------- */
+.jsr.counter { display: block; overflow-y: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.jsr.counter::-webkit-scrollbar { display: none; }
+.jsr-top { flex: none; height: 100%; display: flex; flex-direction: column; gap: 16px; }
+.skx { --sk-g: #FFD27A; position: relative; isolation: isolate; overflow: hidden; color: #FFF3DE; border-radius: 28px; border: 1px solid rgba(255, 190, 110, .22);
+  background: radial-gradient(110% 130% at 0% 0%, rgba(255, 140, 40, .2) 0%, rgba(255, 140, 40, 0) 45%), radial-gradient(90% 170% at 88% 135%, #6b2a06 0%, #2a1004 50%, #0d0704 100%);
+  box-shadow: 0 22px 60px -30px rgba(255, 120, 30, .55), inset 0 1px 0 rgba(255, 225, 175, .09);
+  --text: #FFF3DE; --text2: rgba(255, 236, 210, .72); --text3: rgba(255, 236, 210, .46); --card2: rgba(255, 200, 130, .1); --line: rgba(255, 200, 130, .14); --line2: rgba(255, 200, 130, .26); }
+.sk-rays { position: absolute; left: 14%; top: 50%; width: 1500px; height: 1500px; margin: -750px; z-index: -1; pointer-events: none; background: repeating-conic-gradient(from 0deg, rgba(255, 196, 110, .075) 0deg 3deg, transparent 3deg 11deg); animation: jspin 150s linear infinite;
+  -webkit-mask-image: radial-gradient(closest-side, #000 4%, transparent 30%); mask-image: radial-gradient(closest-side, #000 4%, transparent 30%); }
+.sk-embers { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.sk-embers i { position: absolute; bottom: -8px; width: 3.5px; height: 3.5px; border-radius: 50%; background: #FFC266; box-shadow: 0 0 8px #FF9F43; opacity: 0; animation: ember 9s linear infinite; }
+.sk-k { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 650; color: #FFC77D; letter-spacing: .02em; }
+.sk-trk { fill: none; stroke: rgba(255, 200, 130, .12); }
+.sk-prg { fill: none; stroke-linecap: round; filter: drop-shadow(0 0 8px rgba(255, 150, 50, .6)); transition: stroke-dashoffset .6s cubic-bezier(.2, .8, .2, 1); }
+.view.enter .sk-prg { animation: skdraw 1.5s cubic-bezier(.3, .7, .2, 1) .25s both; }
+@keyframes skdraw { from { stroke-dashoffset: var(--c); } }
+.sk-bar { display: block; width: 100%; height: 5px; border-radius: 3px; background: rgba(255, 200, 130, .14); overflow: hidden; margin-top: 6px; }
+.sk-bar i { display: block; height: 100%; border-radius: 3px; background: linear-gradient(90deg, #FF8A2A, #FFD27A); box-shadow: 0 0 10px rgba(255, 170, 70, .6); transition: width .4s cubic-bezier(.2, .8, .2, 1); }
+.sk-bar.lg { height: 8px; border-radius: 4px; max-width: 440px; margin-top: 4px; }
+.sk-adj { display: inline-flex; align-items: flex-start; gap: 8px; font-size: 13.5px; line-height: 1.38; padding: 8px 13px; border-radius: 13px; background: rgba(255, 200, 130, .1); color: #FFE2B8; max-width: 440px; }
+.sk-adj svg { flex: none; margin-top: 1px; }
+.sk-adj.up { background: rgba(255, 140, 40, .18); color: #FFD3A1; box-shadow: inset 0 0 0 1px rgba(255, 150, 60, .32); }
+.sk-adj.ahead, .sk-adj.win { background: rgba(255, 214, 120, .15); color: #FFE7A8; box-shadow: inset 0 0 0 1px rgba(255, 214, 120, .25); }
+.sk-adj.bad { background: rgba(255, 100, 80, .15); color: #FFC3B8; box-shadow: inset 0 0 0 1px rgba(255, 110, 90, .28); }
+.sk-btn { background: linear-gradient(135deg, #FFDF94, #FF9F43); color: #2A1204; font-weight: 700; border: 0; box-shadow: 0 10px 26px -10px rgba(255, 150, 50, .8); }
+.sk-ghost { background: rgba(255, 220, 170, .1); color: #FFE7BF; border: 1px solid rgba(255, 200, 130, .22); }
+.skx .btn.sm, .sk-acts .btn { height: 38px; padding: 0 16px; border-radius: 19px; font-size: 14px; }
+.sk-disc { color: #2A1204; background: radial-gradient(circle at 30% 25%, #FFE9B0, #FF9F43 58%, #B8560C); box-shadow: 0 0 0 8px rgba(255, 159, 67, .15), 0 0 54px rgba(255, 150, 50, .5); animation: skglow 3.4s ease-in-out infinite alternate; }
+@keyframes skglow { to { box-shadow: 0 0 0 13px rgba(255, 159, 67, .08), 0 0 86px rgba(255, 150, 50, .7); } }
+@keyframes skpulse { 50% { box-shadow: 0 0 0 2px #FFD27A, 0 0 22px rgba(255, 180, 80, .95); } }
+@keyframes skbob { 50% { transform: translateY(3px); } }
+.sk-shine { background: linear-gradient(100deg, #FFE3A3 0%, #FFB347 28%, #FFF7E3 50%, #FFB347 72%, #FFE3A3 100%); background-size: 260% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; animation: jshine 8s linear infinite; }
+
+/* Home widget */
+.wt-sankalp { border-color: rgba(255, 190, 110, .26); }
+.wg-sk.skx { border: 0; border-radius: 0; box-shadow: none; cursor: pointer; }
+.wg-sk { position: relative; overflow: hidden; }
+.wg[data-w="2"] .wg-sk { margin: -14px -15px; padding: 14px 15px; }
+.wg-sk:active { filter: brightness(1.06); }
+.wg-sk .sk-rays { left: 18%; }
+.wg-sk.wide { flex-direction: row; align-items: center; gap: 24px; padding: 16px 26px; }
+.wg-sk.mid { gap: 10px; }
+.wg-sk.tiny { gap: 8px; }
+.skh-top, .skh-trow { display: flex; align-items: center; gap: 16px; min-width: 0; }
+.skh-trow { gap: 12px; flex: 1; min-height: 0; }
+.skh-ring { position: relative; flex: none; display: grid; place-items: center; }
+.skh-ring svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.skh-ring::before { content: ""; position: absolute; inset: 16%; border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 150, 50, .3), rgba(255, 150, 50, 0)); animation: jbreathe 6s ease-in-out infinite alternate; }
+.skh-mid, .sk-ringm { position: relative; display: flex; flex-direction: column; align-items: center; line-height: 1; }
+.skh-mid b { font-weight: 300; letter-spacing: -.03em; color: #FFF6E6; } .skh-mid b small { font-size: .45em; color: var(--text2); }
+.skh-mid span { font-size: 10px; color: var(--text3); margin-top: 5px; text-transform: uppercase; letter-spacing: .14em; font-weight: 650; }
+.skh-main { display: flex; flex-direction: column; gap: 6px; min-width: 0; align-items: flex-start; }
+.skh-title { font-size: 19px; font-weight: 750; letter-spacing: -.02em; line-height: 1.15; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wg-sk.wide .skh-title { font-size: 25px; }
+.wg-sk.wide.h4 .skh-title { font-size: 30px; }
+.wg-sk .skh-title, .sk-title, .sk-empty h2 { background: linear-gradient(100deg, #FFE3A3 0%, #FFB347 28%, #FFF7E3 50%, #FFB347 72%, #FFE3A3 100%); background-size: 260% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; animation: jshine 8s linear infinite; }
+.skh-sub { font-size: 13.5px; color: var(--text2); line-height: 1.4; }
+.skh-line { font-size: 20px; font-weight: 650; letter-spacing: -.02em; } .skh-line small { font-size: 13px; font-weight: 500; color: var(--text2); }
+.skh-main > .sk-bar { width: 100%; max-width: 300px; margin-top: 0; }
+.skh-tl { font-size: 13px; font-weight: 650; color: #FFE2B8; }
+.wg-sk.tiny .sk-bar { margin-top: auto; }
+.skh-stats { display: flex; gap: 26px; margin-top: 4px; }
+.skh-stats > div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.skh-stats > div > span:not(.sk-bar), .sk-facts > div > span, .sk-today .label { font-size: 11px; text-transform: uppercase; letter-spacing: .12em; color: var(--text3); font-weight: 650; }
+.skh-stats b { font-size: 22px; font-weight: 650; letter-spacing: -.02em; line-height: 1.15; }
+.skh-stats small { font-size: 12.5px; color: var(--text2); white-space: nowrap; }
+.skh-today { min-width: 140px; }
+.skh-side { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; flex: none; max-width: 44%; }
+.skh-days { display: flex; gap: 6px; align-items: flex-end; }
+.wg-sk.mid .skh-days { gap: 8px; }
+.skd-m { display: flex; flex-direction: column; align-items: center; gap: 5px; width: 20px; }
+.skd-mb { position: relative; width: 12px; height: 52px; border-radius: 6px; background: rgba(255, 200, 130, .1); display: flex; align-items: flex-end; overflow: hidden; }
+.skd-mb i { width: 100%; border-radius: 6px; background: linear-gradient(0deg, #FF8A2A, #FFD27A); }
+.skd-m.short .skd-mb i { background: linear-gradient(0deg, rgba(255, 138, 42, .55), rgba(255, 210, 122, .55)); }
+.skd-m.miss .skd-mb { box-shadow: inset 0 0 0 1.5px rgba(255, 110, 90, .6); }
+.skd-m.today .skd-mb { box-shadow: 0 0 0 2px #FFD27A, 0 0 14px rgba(255, 180, 80, .7); animation: skpulse 2.4s ease-in-out infinite; }
+.skd-m.fut .skd-mb { background: rgba(255, 200, 130, .05); box-shadow: inset 0 0 0 1px rgba(255, 200, 130, .16); }
+.skd-ml { font-size: 10.5px; color: var(--text3); } .skd-m.today .skd-ml { color: #FFD27A; font-weight: 700; }
+.wg-sk .sk-adj { font-size: 12.5px; padding: 7px 11px; max-width: 380px; }
+.skh-diya { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; flex: none; color: #2A1204; background: radial-gradient(circle at 30% 25%, #FFE9B0, #FF9F43 58%, #B8560C); box-shadow: 0 0 0 7px rgba(255, 159, 67, .15), 0 0 44px rgba(255, 150, 50, .5); animation: skglow 3.4s ease-in-out infinite alternate; }
+.wg-sk.empty { flex-direction: row; align-items: center; gap: 20px; }
+.wg-sk.empty .btn { margin-top: 4px; }
+
+/* JSR: strip beside the counter */
+.jp-sk { display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-align: left; width: 100%; color: inherit; cursor: pointer; border-color: rgba(255, 159, 67, .32);
+  background: linear-gradient(120deg, rgba(255, 159, 67, .16), rgba(255, 159, 67, .03) 62%), var(--card); }
+.jp-sk-ic { width: 38px; height: 38px; border-radius: 50%; flex: none; display: grid; place-items: center; color: #2A1204; background: radial-gradient(circle at 30% 25%, #FFE3A3, #FF9F43 60%, #C2600F); box-shadow: 0 0 18px rgba(255, 150, 50, .45); }
+.jp-sk-t, .jp-sk .grow { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.jp-sk b { font-size: 18px; font-weight: 650; letter-spacing: -.01em; } .jp-sk b small { font-size: 13px; font-weight: 500; color: var(--text2); }
+.jp-sk .bar { height: 5px; margin-top: 3px; } .jp-sk .bar > i { background: linear-gradient(90deg, #FF8A2A, #FFC266); }
+.jp-sk-go, .jp-sk.empty > svg { color: var(--jsf); animation: skbob 2.2s ease-in-out infinite; flex: none; }
+
+/* JSR: the section */
+.sk { display: flex; flex-direction: column; gap: 16px; margin-top: 18px; padding-bottom: 10px; scroll-margin-top: 4px; }
+.sk-hero { padding: 24px 28px 26px; }
+.sk-top { display: flex; align-items: flex-start; gap: 16px; }
+.sk-title { font-size: 36px; font-weight: 750; letter-spacing: -.028em; line-height: 1.12; margin-top: 6px; }
+.sk-why { display: flex; align-items: center; gap: 7px; color: var(--text2); font-size: 14.5px; margin-top: 8px; font-style: italic; }
+.sk-why svg { color: #FF9F6B; flex: none; }
+.sk-acts { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; flex: none; }
+.sk-body { display: grid; grid-template-columns: auto minmax(0, 1.05fr) minmax(0, 1fr); gap: 32px; align-items: center; margin-top: 20px; }
+.sk-ringw { position: relative; width: 212px; height: 212px; display: grid; place-items: center; }
+.sk-ringw svg { position: absolute; inset: 0; }
+.sk-ringw::before { content: ""; position: absolute; inset: 26px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 150, 50, .3), rgba(255, 150, 50, 0)); animation: jbreathe 6s ease-in-out infinite alternate; }
+.sk-ringm b { font-size: 56px; font-weight: 200; letter-spacing: -.04em; color: #FFF6E6; text-shadow: 0 0 26px rgba(255, 160, 60, .4); } .sk-ringm b small { font-size: 22px; color: var(--text2); font-weight: 300; }
+.sk-ringm span { font-size: 14px; color: var(--text2); margin-top: 8px; }
+.sk-today { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.sk-big { font-size: 66px; font-weight: 200; letter-spacing: -.045em; line-height: 1; color: #FFF6E6; text-shadow: 0 0 30px rgba(255, 160, 60, .38); }
+.sk-tsub { font-size: 14px; color: var(--text2); }
+.sk-today .sk-adj { margin-top: 6px; }
+.sk-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.sk-facts > div { padding: 14px 16px; border-radius: 18px; background: rgba(255, 220, 170, .06); border: 1px solid rgba(255, 200, 130, .13); display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.sk-facts b { font-size: 25px; font-weight: 650; letter-spacing: -.02em; line-height: 1.15; }
+.sk-facts small { font-size: 12px; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sk-hero.done { border-color: rgba(255, 214, 120, .5); box-shadow: 0 0 0 1px rgba(255, 214, 120, .2), 0 26px 70px -28px rgba(255, 170, 60, .8); }
+.sk-plan .card-h .faint { margin-left: auto; text-align: right; }
+.sk-days { display: grid; grid-template-columns: repeat(auto-fit, minmax(116px, 1fr)); gap: 10px; }
+.skd { position: relative; padding: 12px 14px 12px; border-radius: 17px; background: var(--card2); display: flex; flex-direction: column; gap: 2px; min-width: 0; border: 1px solid transparent; transition: border-color .3s, box-shadow .3s; }
+.skd-h { display: flex; justify-content: space-between; gap: 6px; font-size: 12px; color: var(--text3); font-weight: 650; }
+.skd-n { font-size: 22px; font-weight: 650; letter-spacing: -.02em; margin-top: 5px; }
+.skd-s { font-size: 12px; color: var(--text3); }
+.skd-bar { display: block; height: 4px; border-radius: 2px; background: var(--line2); overflow: hidden; margin-top: 8px; }
+.skd-bar i { display: block; height: 100%; border-radius: 2px; background: var(--jsf); transition: width .4s; }
+.skd-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 650; margin-top: 7px; color: var(--text3); }
+.skd.met { background: linear-gradient(160deg, rgba(255, 159, 67, .2), rgba(255, 159, 67, .05)); border-color: rgba(255, 159, 67, .32); }
+.skd.met .skd-tag { color: var(--jsf); }
+.skd.short .skd-tag { color: #E58A2E; } .skd.short .skd-bar i { background: rgba(255, 159, 67, .55); }
+.skd.miss { border-color: rgba(255, 90, 70, .3); } .skd.miss .skd-tag { color: var(--bad); } .skd.miss .skd-n { color: var(--text3); }
+.skd.fut { background: transparent; border: 1px dashed var(--line2); } .skd.fut .skd-n { color: var(--text2); font-weight: 550; }
+.skd.today { --text: #FFF3DE; --text2: rgba(255, 236, 210, .72); --text3: rgba(255, 236, 210, .5); --line2: rgba(255, 200, 130, .18); color: #FFF3DE;
+  background: radial-gradient(120% 120% at 50% 0%, #4a1f07 0%, #1c0c04 70%); border-color: rgba(255, 200, 120, .5); box-shadow: 0 0 0 1px rgba(255, 190, 110, .18), 0 14px 32px -14px rgba(255, 140, 40, .8); }
+.skd.today .skd-tag { color: #FFD27A; }
+.skd.today .skd-bar i { background: linear-gradient(90deg, #FF8A2A, #FFD27A); }
+.skd.today.hit { border-color: #FFD27A; box-shadow: 0 0 0 1px rgba(255, 214, 120, .5), 0 0 26px rgba(255, 180, 80, .55); }
+.sk-row { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.sk-svg { display: block; width: 100%; height: auto; overflow: visible; }
+.sk-gl { stroke: var(--line); stroke-width: 1; }
+.sk-ax { fill: var(--text3); font-size: 11px; font-family: inherit; }
+.sk-even { stroke: var(--text3); stroke-width: 1.5; stroke-dasharray: 5 5; fill: none; }
+.sk-line { stroke: #FF9F43; stroke-width: 3; fill: none; stroke-linejoin: round; stroke-linecap: round; }
+.sk-proj { stroke: #FF9F43; stroke-width: 2.2; stroke-dasharray: 1 7; stroke-linecap: round; fill: none; opacity: .75; }
+.sk-dot { fill: #FFD27A; stroke: #FF9F43; stroke-width: 3; }
+.sk-lg { display: inline-block; width: 16px; height: 3px; border-radius: 2px; }
+.sk-lg.a { background: #FF9F43; } .sk-lg.b { background: repeating-linear-gradient(90deg, var(--text3) 0 4px, transparent 4px 7px); }
+.skh-row { display: flex; align-items: center; gap: 12px; padding: 11px 2px; border-bottom: 1px solid var(--line); }
+.skh-row:last-child { border-bottom: 0; }
+.skh-row b { font-size: 15px; font-weight: 650; }
+.skh-ic { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--card2); color: var(--text3); flex: none; }
+.skh-row.ok .skh-ic { background: rgba(255, 159, 67, .18); color: var(--jsf); }
+.skh-res { font-weight: 650; font-size: 14px; color: var(--text2); white-space: nowrap; } .skh-row.ok .skh-res { color: var(--jsf); }
+.sk-empty { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: 22px 10px 6px; }
+.sk-bigdiya { width: 104px; height: 104px; border-radius: 50%; display: grid; place-items: center; color: #2A1204; margin-bottom: 8px; background: radial-gradient(circle at 30% 25%, #FFE9B0, #FF9F43 58%, #B8560C); box-shadow: 0 0 0 10px rgba(255, 159, 67, .14), 0 0 70px rgba(255, 150, 50, .55); animation: skglow 3.4s ease-in-out infinite alternate; }
+.sk-empty h2 { font-size: 40px; font-weight: 750; letter-spacing: -.03em; line-height: 1.12; }
+.sk-empty p { max-width: 640px; color: var(--text2); font-size: 15.5px; line-height: 1.48; }
+.sk-presets { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; width: 100%; max-width: 860px; margin: 12px 0 8px; }
+.sk-pre { padding: 16px 18px; border-radius: 19px; background: rgba(255, 220, 170, .07); border: 1px solid rgba(255, 200, 130, .2); display: flex; flex-direction: column; gap: 4px; text-align: left; color: #FFF3DE; cursor: pointer; transition: transform .15s, background .2s, border-color .2s; }
+.sk-pre:hover { background: rgba(255, 220, 170, .12); border-color: rgba(255, 200, 130, .4); }
+.sk-pre:active { transform: scale(.97); }
+.sk-pre b { font-size: 23px; font-weight: 700; letter-spacing: -.02em; } .sk-pre span { font-size: 12.5px; color: rgba(255, 236, 210, .66); }
+.sk-pre.plain { background: var(--card2); border-color: var(--line); color: var(--text); } .sk-pre.plain span { color: var(--text2); }
+.sk-pre.plain:hover { border-color: var(--jsf); }
+.sk-ext { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 10px; }
+.sk-form .chips { margin-top: 8px; }
+.sk-form .chip.on { background: rgba(255, 159, 67, .16); color: var(--jsf); }
+.sk-in { font-size: 20px; font-weight: 650; height: 50px; font-variant-numeric: tabular-nums; }
+.sk-prev { padding: 18px 22px; border-radius: 22px; display: flex; flex-direction: column; gap: 6px; }
+.sk-prev-n { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.sk-prev-n b { font-size: 44px; font-weight: 250; letter-spacing: -.04em; line-height: 1.05; color: #FFF6E6; text-shadow: 0 0 24px rgba(255, 160, 60, .35); }
+.sk-prev-n span { color: var(--text2); font-size: 15px; }
+.sk-prev-s { font-size: 13px; color: var(--text2); }
+.jp-pop.sk-pop { top: 12%; } .jp-pop.sk-pop b { font-size: 24px; }
+
+@media (orientation: portrait) and (min-width: 700px) {
+  .jp-sk { grid-column: 1 / -1; order: 1; }
+  .jw, .jp-theme, .jp-acts { order: 2; }
+}
+/* one-column JSR (iPad upright): the top grows with its content and the page scrolls on to Sankalp */
+@media (orientation: portrait) and (min-width: 721px), (max-width: 1100px) and (min-width: 721px) {
+  .jsr-top { height: auto; min-height: 100%; }
+  .jsr.counter .jp-grid { flex: none; grid-template-rows: auto auto; }
+  .jsr.counter .jp-pad:not(.dar) { height: min(54vh, 700px); min-height: 320px; }
+}
+@media (orientation: portrait), (max-width: 1100px) {
+  .sk-body { grid-template-columns: auto minmax(0, 1fr); }
+  .sk-facts { grid-column: 1 / -1; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  .sk-hero { padding: 20px 18px 22px; }
+  .sk-top { flex-direction: column; }
+  .sk-acts { justify-content: flex-start; }
+  .sk-title { font-size: 28px; }
+  .sk-body { grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 22px; }
+  .sk-today { align-items: center; text-align: center; }
+  .sk-facts { grid-template-columns: 1fr 1fr; width: 100%; }
+  .sk-presets { grid-template-columns: 1fr 1fr; }
+  .sk-row { grid-template-columns: minmax(0, 1fr); }
+  .sk-empty h2 { font-size: 30px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sk-rays, .sk-embers i, .skh-diya, .sk-bigdiya, .sk-disc, .skd-m.today .skd-mb, .jp-sk-go, .jp-sk.empty > svg { animation: none; }
+}
 @media (max-width: 720px) {
   .jp-pad.dar { height: 128vw; max-height: 76vh; }
   .dr-top { gap: 10px; padding: 0 16px; height: 48px; top: 25px; }
@@ -2064,7 +2267,7 @@ function defaults() {
     timer: null, round: 0, planDone: {},
     installedAt: Date.now(), lastBackup: null, backupAsked: 0,
     habits: [], habitDays: {}, goals: [], mainGoal: null,
-    jap: { naams: [{ id: 'n1', name: 'Ram', color: 4 }, { id: 'n2', name: 'Sita Ram', color: 2 }], sel: 'n1', theme: 'mala', days: {}, hours: {}, opening: 0, goal: 1000, lifeGoal: 10000000, mala: 108, interval: 0.7, sound: 'tick', stopAt: 0, goalHit: {}, tab: 'counter', irange: '30d', itype: 'daily', inaam: null }
+    jap: { naams: [{ id: 'n1', name: 'Ram', color: 4 }, { id: 'n2', name: 'Sita Ram', color: 2 }], sel: 'n1', theme: 'mala', days: {}, hours: {}, opening: 0, goal: 1000, lifeGoal: 10000000, mala: 108, interval: 0.7, sound: 'tick', stopAt: 0, goalHit: {}, tab: 'counter', irange: '30d', itype: 'daily', inaam: null, sankalp: null, skHist: [] }
   };
 }
 
@@ -2087,6 +2290,8 @@ function hydrate(data) {
   out.jap = Object.assign({}, d.jap, data.jap || {});
   ['days', 'hours', 'goalHit'].forEach(k => { if (!out.jap[k] || typeof out.jap[k] !== 'object') out.jap[k] = {}; });
   if (!Array.isArray(out.jap.naams) || !out.jap.naams.length) out.jap.naams = d.jap.naams;
+  if (!Array.isArray(out.jap.skHist)) out.jap.skHist = [];
+  if (out.jap.sankalp && (typeof out.jap.sankalp !== 'object' || !out.jap.sankalp.start || !(out.jap.sankalp.target > 0) || !(out.jap.sankalp.days > 0))) out.jap.sankalp = null;
   if (!data.installedAt) out.installedAt = Date.now();
   return out;
 }
@@ -2955,11 +3160,17 @@ function runCelebrations() {
   else if (it.type === 'rank') { art = '<div class="emblem big">' + ic('crown', 84) + '</div>'; kicker = 'Rank up'; title = it.rank; text = 'You climbed to rank ' + (it.index + 1) + ' of ' + S.ranks.length + '.'; }
   else if (it.type === 'perfect') { art = '<div class="badge-disc big">' + ic('star', 70) + '</div>'; kicker = 'Perfect day'; title = 'Daily target complete'; text = 'You hit your full ' + fmtDur(S.settings.targets.daily * 60) + ' target. +' + S.settings.xpPerfectDay + ' XP'; }
   else if (it.type === 'jap') { art = '<div class="badge-disc big jsr-disc">' + ic('diya', 70) + '</div>'; kicker = 'Daily naam jap complete'; title = fmtIN(it.n) + ' naam today'; text = 'You reached your daily goal of ' + fmtIN(S.jap.goal) + '. Jai Shri Ram.'; }
+  else if (it.type === 'skStart' || it.type === 'skDone') {
+    const sk = S.jap.sankalp || S.jap.skHist[S.jap.skHist.length - 1] || { title: 'Sankalp', target: 0, days: 1, start: todayKey() };
+    art = '<div class="badge-disc big jsr-disc">' + ic('diya', 70) + '</div>'; title = sk.title;
+    if (it.type === 'skStart') { kicker = 'Sankalp taken'; text = fmtIN(Math.ceil(sk.target / sk.days)) + ' a day for ' + plural(sk.days, 'day') + ', until ' + fmtDate(addDays(sk.start, sk.days - 1)) + '. If a day falls short, the rest is spread over the days left.'; }
+    else { const used = sk.doneAt ? diffDays(sk.start, dkey(sk.doneAt)) + 1 : sk.days; kicker = 'Sankalp complete'; text = fmtIN(sk.target) + ' naam in ' + plural(used, 'day') + (used < sk.days ? ', ' + plural(sk.days - used, 'day') + ' early' : '') + '. Jai Shri Ram.'; }
+  }
   else if (it.type === 'japm') { art = '<div class="badge-disc big jsr-disc">' + ic('diya', 70) + '</div>'; kicker = 'Naam jap milestone'; title = fmtIN(it.m); text = inWords(it.m) + ' naam in your lifetime count.'; }
   else if (it.type === 'challenge') { art = '<div class="badge-disc big">' + ic('bolt', 70) + '</div>'; kicker = 'Weekly challenge complete'; title = it.title; text = coachName() + ' set it, you finished it. +' + it.xp + ' XP'; }
   else if (it.type === 'goal') { art = trophySVG('gold', 190); kicker = 'Goal achieved'; title = it.title; text = 'Every step is done. You made it to the summit. +' + S.settings.xpGoal + ' XP'; }
   else if (it.type === 'freeze') { art = '<div class="badge-disc big cold">' + ic('snow', 70) + '</div>'; kicker = 'Freeze earned'; title = it.streak + '-day streak'; text = 'You now hold ' + S.freezes + ' freeze day' + (S.freezes > 1 ? 's' : '') + '. A freeze saves your streak on a day you miss.'; }
-  const big = it.type === 'trophy' || it.type === 'rank' || it.type === 'goal' || it.type === 'japm' || it.type === 'jap';
+  const big = it.type === 'trophy' || it.type === 'rank' || it.type === 'goal' || it.type === 'japm' || it.type === 'jap' || it.type === 'skDone';
   const el = document.createElement('div');
   el.className = 'moment ondark' + (big ? ' big' : '');
   el.innerHTML = '<canvas class="confetti"></canvas><div class="moment-in"><div class="moment-art">' + art + '</div><div class="moment-k">' + esc(kicker) + '</div><h2>' + esc(title) + '</h2><p>' + esc(text) + '</p>' +
@@ -2969,7 +3180,7 @@ function runCelebrations() {
   if (big) { chime('win'); confetti($('.confetti', el)); }
   flush();
 }
-A.momentDone = () => { $$('.moment').forEach(m => m.remove()); celOn = false; stopConfetti(); renderChrome(); setTimeout(runCelebrations, 150); setTimeout(alexFlush, 1100); };
+A.momentDone = () => { $$('.moment').forEach(m => m.remove()); celOn = false; stopConfetti(); renderChrome(); if (skDirty) { skDirty = false; if (V.view === 'jsr' && !JA) keepScroll(render); } setTimeout(runCelebrations, 150); setTimeout(alexFlush, 1100); };
 
 let confRAF = null;
 function stopConfetti() { if (confRAF) cancelAnimationFrame(confRAF); confRAF = null; }
@@ -3768,7 +3979,7 @@ VIEWS.stats = () => {
 A.statRange = el => { V.statsRange = el.dataset.v; statSel = null; hourSel = null; render(); };
 A.statSel = el => { const i = Number(el.dataset.i); statSel = statSel === i ? null : i; keepScroll(render); };
 A.hourSel = el => { const i = Number(el.dataset.i); hourSel = hourSel === i ? null : i; keepScroll(render); };
-function keepScroll(fn) { const v = $('#view'); const y = v ? v.scrollTop : 0; fn(); const v2 = $('#view'); if (v2) v2.scrollTop = y; }
+function keepScroll(fn) { const v = $('#view'); const y = v ? v.scrollTop : 0; const j = $('.jsr.counter'); const jy = j ? j.scrollTop : 0; fn(); const v2 = $('#view'); if (v2) v2.scrollTop = y; const j2 = $('.jsr.counter'); if (j2 && jy) j2.scrollTop = jy; }
 
 /* ============================================================
    Focus — Trophies (rank ladder, streak, cabinet, badges) and Revise
@@ -4751,6 +4962,7 @@ function alexMore(add) {
     if (gap >= 3) add({ id: 'gap', tone: 'warn', icon: 'clock', pri: 79, title: plural(Math.floor(gap), 'hour') + ' since your last round', text: 'Long gaps are where days get lost. One 25-minute round restarts the engine.', act: { label: 'Start a round', act: 'alexStart', attrs: '' } });
   }
   if (S.jap.goal > 0 && hr >= 19) { const jt = japDayTotal(tk); if (jt < S.jap.goal && Object.keys(S.jap.days).length) add({ id: 'jap', icon: 'diya', pri: 52, title: 'Naam jap: ' + fmtIN(S.jap.goal - jt) + ' to go today', text: 'You have ' + fmtIN(jt) + ' of your ' + fmtIN(S.jap.goal) + ' today. The auto counter can help you finish.', act: { label: 'Open JSR', act: 'alexGo', attrs: 'data-view="jsr"' } }); }
+  skAlex(add, hr);
   const ws = weekStartKey(tk);
   if (tk === ws && S.alexReviewSeen !== ws && rangeSec(addDays(ws, -7), addDays(ws, -1)) > 0) add({ id: 'review', icon: 'chart', pri: 68, title: 'Last week\'s review is ready', text: 'See your grade, your wins and the one thing to fix this week.', act: { label: 'Open review', act: 'alexReview', attrs: '' } });
   const avg7 = rangeSec(addDays(tk, -7), addDays(tk, -1)) / 7;
@@ -5025,6 +5237,7 @@ function japCount(n, pt) {
     const ms = JAP_MS.find(m => lifeBefore < m && JM.life >= m); if (ms) celebrate({ type: 'japm', m: ms });
   }
   japLive(n, after, pt);
+  skAfterCount(n);
 }
 function japBeadsN() { return Math.min(S.jap.mala, 108); }
 function japSetBeads(idx, flash) {
@@ -5158,7 +5371,7 @@ function jsrCounterHTML() {
     '<div class="jp-hint">' + 'Tap anywhere here to count · the space bar counts too' + '</div><div class="jp-fx" id="jp-fx"></div></section>') +
     '<aside class="jp-side"><div class="chips jp-naams">' + J.naams.map(n => '<button class="chip' + (naam && n.id === naam.id ? ' on' : '') + '" data-act="japNaam" data-id="' + n.id + '"><i class="dot" style="background:var(--c' + n.color + ')"></i>' + esc(n.name) + '</button>').join('') + '<button class="chip" data-act="japNaamNew" aria-label="Add naam">' + ic('plus', 15) + '</button></div>' +
     '<div class="jp-cards"><div class="card jp-card" id="jt-card"><span class="label">Today</span><b class="num" id="jt-n">' + fmtIN(today) + '</b><div class="bar"><i id="jt-bar"></i></div><span class="small muted num" id="jt-sub"></span></div>' +
-    '<div class="card jp-card"><span class="label">Lifetime</span><b class="num" id="jl-n">' + fmtIN(life) + '</b><div class="bar"><i id="jl-bar"></i></div><span class="small muted num" id="jl-sub"></span></div></div>' +
+    '<div class="card jp-card"><span class="label">Lifetime</span><b class="num" id="jl-n">' + fmtIN(life) + '</b><div class="bar"><i id="jl-bar"></i></div><span class="small muted num" id="jl-sub"></span></div></div>' + skMiniHTML() +
     '<section class="card ja" id="jp-auto">' + japAutoHTML() + '</section>' +
     '<p class="jp-pace small muted" id="jp-pace">' + esc(japPaceText(life)) + '</p>' + japWeekHTML() +
     '<div class="jp-theme"><span class="label">Counter theme</span><div class="jp-ths">' +
@@ -5169,7 +5382,7 @@ function jsrCounterHTML() {
 VIEWS.jsr = () => {
   const tab = S.jap.tab === 'insights' ? 'insights' : 'counter';
   JM = { life: japLife() }; JB = -1;
-  return '<div class="jsr ' + tab + (tab === 'counter' && S.jap.theme === 'darshan' ? ' th-dar' : '') + '">' + jsrHero(tab) + (tab === 'counter' ? jsrCounterHTML() : jsrInsightsHTML()) + '</div>';
+  return '<div class="jsr ' + tab + (tab === 'counter' && S.jap.theme === 'darshan' ? ' th-dar' : '') + '">' + (tab === 'counter' ? '<div class="jsr-top">' + jsrHero(tab) + jsrCounterHTML() + '</div>' + skSectionHTML() : jsrHero(tab) + jsrInsightsHTML()) + '</div>';
 };
 MOUNT.jsr = () => {
   const pad = $('#jp-pad');
@@ -5233,6 +5446,332 @@ A.japNaamColor = el => { const n = japNaam(el.dataset.id); if (n) { n.color = Nu
 A.japNaamDel = el => { const n = japNaam(el.dataset.id); if (!n || S.jap.naams.length < 2) return; S.jap.naams = S.jap.naams.filter(x => x.id !== n.id); if (S.jap.sel === n.id) S.jap.sel = S.jap.naams[0].id; save(); japSetRender(); toast(n.name + ' removed. Its past counts stay in your totals'); };
 CH.japNaamRen = el => { const n = japNaam(el.dataset.id); if (n) { n.name = el.value.trim() || n.name; save(); } };
 A.japSetSave = () => { japSetSync(); closeModal(); render(); };
+
+/* ============================================================
+   JSR — Sankalp: a jap vow such as 1 lakh in 7 days.
+   Each day's target = what is still left ÷ the days still left,
+   so a missed or short day is spread over the days that remain.
+   ============================================================ */
+let skDirty = false;
+const SK_T = [[11000, '11,000'], [21000, '21,000'], [51000, '51,000'], [100000, '1 lakh'], [125000, '1.25 lakh'], [500000, '5 lakh'], [1100000, '11 lakh']];
+const SK_D = [7, 9, 11, 21, 40, 108];
+const SK_PRESETS = [[100000, 7], [125000, 11], [500000, 21], [1100000, 40]];
+const skEnd = sk => addDays(sk.start, sk.days - 1);
+function skNaamName(sk) { if (sk.naam === 'all') return 'All naams'; const n = japNaam(sk.naam); return n ? n.name : 'Naam'; }
+function skAutoTitle(target, naam) { const n = naam === 'all' ? null : japNaam(naam); return inWords(target) + ' ' + (n ? n.name + ' Naam' : 'Naam Jap'); }
+function skCount(sk, k) { const d = S.jap.days[k]; if (!d) return 0; if (sk.naam === 'all') { let t = 0; for (const id in d) t += d[id]; return t; } return d[sk.naam] || 0; }
+function skPlan(sk) {
+  const tk = todayKey(), T = sk.target, N = sk.days, end = skEnd(sk), rows = [];
+  let done = 0, doneBefore = 0, todayNeed = 0, todayDid = 0, todayIdx = -1;
+  for (let i = 0; i < N; i++) {
+    const k = addDays(sk.start, i), left = N - i;
+    if (k < tk) {
+      const need = Math.max(0, Math.ceil((T - done) / left)), did = skCount(sk, k);
+      rows.push({ k, i, need, did, st: need === 0 || did >= need ? 'met' : did > 0 ? 'short' : 'miss' }); done += did;
+    } else if (k === tk) {
+      doneBefore = done; todayNeed = Math.max(0, Math.ceil((T - done) / left)); todayDid = skCount(sk, k); todayIdx = i;
+      rows.push({ k, i, need: todayNeed, did: todayDid, st: 'today' }); done += todayDid;
+    } else rows.push({ k, i, need: 0, did: 0, st: 'fut' });
+  }
+  if (todayIdx < 0) doneBefore = done;
+  const fut = rows.filter(r => r.st === 'fut');
+  if (fut.length) { const got = tk < sk.start ? 0 : doneBefore + Math.max(todayDid, todayNeed); const per = Math.ceil(Math.max(0, T - got) / fut.length); fut.forEach(r => { r.need = per; }); }
+  const base = Math.ceil(T / N);
+  const state = sk.doneAt ? 'done' : tk < sk.start ? 'soon' : tk > end ? 'over' : 'live';
+  const dayNum = clamp(diffDays(sk.start, tk) + 1, 1, N), daysLeft = state === 'live' ? diffDays(tk, end) + 1 : 0;
+  const behind = state === 'live' ? Math.round(T / N * (dayNum - 1) - doneBefore) : 0;
+  return { rows, done, rem: Math.max(0, T - done), pct: clamp(done / T, 0, 1), todayNeed, todayDid, todayLeft: Math.max(0, todayNeed - todayDid), todayIdx, base, behind, extra: state === 'live' ? todayNeed - base : 0, state, dayNum, daysLeft, end, doneBefore };
+}
+/* keeps doneAt in step with the counts; celebrates the first time the vow is complete */
+function skSync(sk, p) {
+  if (!sk) return p;
+  const tk = todayKey();
+  if (p.done >= sk.target && !sk.doneAt && tk >= sk.start) {
+    sk.doneAt = Date.now(); save();
+    if (!sk.cheered) { sk.cheered = 1; save(); celebrate({ type: 'skDone' }); }
+    return skPlan(sk);
+  }
+  if (p.done < sk.target && sk.doneAt && tk <= skEnd(sk)) { sk.doneAt = null; save(); return skPlan(sk); }
+  return p;
+}
+const skCur = () => { const sk = S.jap.sankalp; if (!sk) return null; return { sk, p: skSync(sk, skPlan(sk)) }; };
+function skAdjText(sk, p) {
+  if (p.state === 'done') { const used = diffDays(sk.start, dkey(sk.doneAt)) + 1; return 'Completed on ' + fmtDate(dkey(sk.doneAt)) + (used < sk.days ? ' · ' + plural(sk.days - used, 'day') + ' early' : '') + '. Jai Shri Ram.'; }
+  if (p.state === 'soon') return 'Starts ' + relDay(sk.start).toLowerCase() + '. ' + fmtIN(p.base) + ' a day for ' + plural(sk.days, 'day') + '.';
+  if (p.state === 'over') return 'Time is over with ' + fmtIN(p.rem) + ' still left. Add a few days to finish it.';
+  if (p.dayNum === 1 && p.behind <= 0) return 'Day 1. ' + fmtIN(p.base) + ' a day finishes it on ' + fmtDate(p.end) + '.';
+  if (p.behind > 0) return fmtIN(p.behind) + ' missed before today, now spread over the ' + plural(p.daysLeft, 'day') + ' left: +' + fmtIN(Math.max(0, p.extra)) + ' a day.';
+  if (p.behind < 0) return 'You are ' + fmtIN(-p.behind) + ' ahead. Each day left needs ' + fmtIN(Math.max(0, -p.extra)) + ' less.';
+  return 'Right on track. Keep ' + fmtIN(p.todayNeed) + ' a day.';
+}
+const skTone = p => p.state === 'done' ? 'win' : p.state === 'over' ? 'bad' : p.behind > 0 ? 'up' : p.behind < 0 ? 'ahead' : 'ok';
+function skRing(pct, size, stroke, gid, id) {
+  const r = (size - stroke) / 2, c = 2 * Math.PI * r;
+  return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '" class="sk-ringsvg"><defs><linearGradient id="' + gid + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE7A8"/><stop offset=".55" stop-color="#FFB347"/><stop offset="1" stop-color="#FF7A1A"/></linearGradient></defs>' +
+    '<circle class="sk-trk" cx="' + size / 2 + '" cy="' + size / 2 + '" r="' + r + '" stroke-width="' + stroke + '"/>' +
+    '<circle class="sk-prg"' + (id ? ' id="' + id + '"' : '') + ' data-c="' + c.toFixed(1) + '" cx="' + size / 2 + '" cy="' + size / 2 + '" r="' + r + '" stroke="url(#' + gid + ')" stroke-width="' + stroke + '" stroke-dasharray="' + c.toFixed(1) + '" stroke-dashoffset="' + (c * (1 - clamp(pct, 0, 1))).toFixed(1) + '" style="--c:' + c.toFixed(1) + '" transform="rotate(-90 ' + size / 2 + ' ' + size / 2 + ')"/></svg>';
+}
+function skEmbers(n) { let s = ''; for (let i = 0; i < n; i++) s += '<i style="left:' + ((i * 41 + 7) % 100) + '%;animation-delay:-' + ((i * 1.9) % 9).toFixed(1) + 's;animation-duration:' + (8 + (i * 1.3) % 5).toFixed(1) + 's"></i>'; return '<div class="sk-embers" aria-hidden="true">' + s + '</div>'; }
+function skStatusIc(st) { return st === 'met' ? ic('check', 13) : st === 'miss' ? ic('x', 12) : st === 'short' ? ic('minus', 12) : ''; }
+
+/* ---------- Home widget (W.sankalp renders this at any size) ---------- */
+function skWidgetHTML(w, h) {
+  const c = skCur(), wide = w >= 6, tiny = w <= 2;
+  if (!c) {
+    return '<div class="wg-fill wg-sk skx empty' + (tiny ? ' tiny' : '') + '" data-act="skOpen" role="button" aria-label="Sankalp"><div class="sk-rays"></div>' + skEmbers(8) +
+      (tiny ? '' : '<span class="skh-diya">' + ic('diya', h >= 3 ? 34 : 26) + '</span>') + '<div class="skh-main grow"><span class="sk-k">' + ic('diya', 13) + 'Sankalp</span><b class="skh-title">Take a jap vow</b>' +
+      (w >= 4 ? '<span class="skh-sub">Like 1 lakh in 7 days. Miss a day and the rest is spread over the days left.</span>' : '') +
+      '<button class="btn sm sk-btn" data-act="skNew">' + ic('plus', 15) + (tiny ? 'Start' : 'Take a Sankalp') + '</button></div></div>';
+  }
+  const { sk, p } = c, rows = p.rows, live = p.state === 'live';
+  const kick = live ? 'Day ' + p.dayNum + ' of ' + sk.days : p.state === 'soon' ? 'Starts ' + fmtDate(sk.start, 'short') : p.state === 'over' ? 'Time is over' : 'Complete';
+  const tf = live ? (p.todayNeed ? clamp(p.todayDid / p.todayNeed, 0, 1) : 1) : p.pct;
+  const rs = tiny ? (h >= 3 ? Math.min(110, w * 40) : 68) : wide ? Math.min(150, h * 46 - (h >= 4 ? 30 : 10)) : Math.min(120, h * 44 - 6);
+  const ring = '<div class="skh-ring" style="width:' + rs + 'px;height:' + rs + 'px">' + skRing(p.pct, rs, Math.max(7, Math.round(rs / 13)), 'skg-h' + w + h) +
+    '<div class="skh-mid"><b class="num" style="font-size:' + Math.round(rs * .26) + 'px">' + Math.round(p.pct * 100) + '<small>%</small></b>' + (rs >= 90 ? '<span>done</span>' : '') + '</div></div>';
+  const todayTxt = live ? (p.todayLeft ? fmtIN(p.todayLeft) + ' left today' : 'Today’s target done') : p.state === 'soon' ? fmtIN(p.base) + ' a day' : p.state === 'over' ? fmtIN(p.rem) + ' still left' : fmtIN(p.done) + ' naam';
+  if (tiny) return '<div class="wg-fill wg-sk skx tiny ' + p.state + '" data-act="skOpen" role="button" aria-label="Open Sankalp">' + skEmbers(5) +
+    '<span class="sk-k">' + ic('diya', 13) + esc(kick) + '</span><div class="skh-trow">' + ring + '<div class="skh-main">' + (live ? '<b class="skh-line num">' + fmtIN(p.todayLeft) + '</b><span class="skh-tl">' + (p.todayLeft ? 'left today' : 'target done') + '</span>' : '<span class="skh-tl">' + esc(todayTxt) + '</span>') + '</div></div><span class="sk-bar"><i style="width:' + tf * 100 + '%"></i></span></div>';
+  const N = wide ? (h >= 3 ? 14 : 10) : 7;
+  let from = 0; if (rows.length > N) from = clamp(p.todayIdx < 0 ? (p.state === 'soon' ? 0 : rows.length - N) : p.todayIdx - 3, 0, rows.length - N);
+  const days = '<div class="skh-days">' + rows.slice(from, from + N).map(r => {
+    const f = r.need ? clamp(r.did / r.need, 0, 1) : (r.st === 'met' ? 1 : 0);
+    return '<span class="skd-m ' + r.st + '" title="Day ' + (r.i + 1) + '"><span class="skd-mb"><i style="height:' + (r.st === 'fut' ? 0 : f * 100) + '%"></i></span><span class="skd-ml num">' + (r.i + 1) + '</span></span>';
+  }).join('') + '</div>';
+  const today = live ? '<div class="skh-today"><span>Today</span><b class="num">' + fmtIN(p.todayDid) + '</b><small class="num">of ' + fmtIN(p.todayNeed) + '</small><span class="sk-bar"><i style="width:' + tf * 100 + '%"></i></span></div>' : '';
+  const stats = '<div class="skh-stats"><div><span>Done</span><b class="num">' + fmtIN(p.done) + '</b><small class="num">of ' + fmtIN(sk.target) + '</small></div>' + today +
+    (wide ? '<div><span>' + (live ? 'Days left' : 'Left') + '</span><b class="num">' + (live ? p.daysLeft : fmtIN(p.rem)) + '</b><small>' + esc(live ? 'ends ' + fmtDate(p.end, 'short') : todayTxt) + '</small></div>' : '') + '</div>';
+  const adj = '<span class="sk-adj ' + skTone(p) + '">' + esc(skAdjText(sk, p)) + '</span>';
+  if (wide) return '<div class="wg-fill wg-sk skx wide h' + Math.min(h, 4) + ' ' + p.state + '" data-act="skOpen" role="button" aria-label="Open Sankalp"><div class="sk-rays"></div>' + skEmbers(12) + ring +
+    '<div class="grow skh-main"><span class="sk-k">' + ic('diya', 13) + 'Sankalp · ' + esc(kick) + '</span><b class="skh-title">' + esc(sk.title) + '</b>' + stats + (h >= 4 ? adj : '') + '</div>' +
+    '<div class="skh-side">' + days + (h === 3 ? adj : '') + '</div></div>';
+  return '<div class="wg-fill wg-sk skx mid h' + Math.min(h, 4) + ' ' + p.state + '" data-act="skOpen" role="button" aria-label="Open Sankalp"><div class="sk-rays"></div>' + skEmbers(8) +
+    '<div class="skh-top">' + ring + '<div class="grow skh-main"><span class="sk-k">' + ic('diya', 13) + esc(kick) + '</span><b class="skh-title">' + esc(sk.title) + '</b>' +
+    (live ? '<span class="skh-line num">' + fmtIN(p.todayDid) + ' <small>of ' + fmtIN(p.todayNeed) + ' today</small></span><span class="sk-bar"><i style="width:' + tf * 100 + '%"></i></span>' : '<span class="skh-line num">' + esc(todayTxt) + '</span>') + '</div></div>' +
+    (h >= 4 ? days + adj : h === 3 ? adj : '') + '</div>';
+}
+function skWidgetLive() { $$('.wt-sankalp').forEach(card => { const inn = card.querySelector('.wg-in'); if (inn) inn.innerHTML = skWidgetHTML(+card.dataset.w, +card.dataset.h); }); }
+
+/* ---------- JSR: small strip beside the counter ---------- */
+function skMiniHTML() {
+  const c = skCur();
+  if (!c) return '<button class="card jp-sk empty" data-act="skJump"><span class="jp-sk-ic">' + ic('diya', 18) + '</span><span class="grow"><b>Take a Sankalp</b><span class="small muted">Set a jap vow with a daily plan</span></span>' + ic('chevd', 18) + '</button>';
+  const { sk, p } = c;
+  const top = p.state === 'live' ? '<b class="num" id="sks-t">' + fmtIN(p.todayDid) + '<small> / ' + fmtIN(p.todayNeed) + ' today</small></b>' : '<b>' + (p.state === 'done' ? 'Complete' : p.state === 'soon' ? 'Starts ' + relDay(sk.start).toLowerCase() : 'Time is over') + '</b>';
+  return '<button class="card jp-sk" data-act="skJump"><span class="jp-sk-ic">' + ic('diya', 18) + '</span><span class="grow jp-sk-t"><span class="label">Sankalp · ' + (p.state === 'live' ? 'Day ' + p.dayNum + ' of ' + sk.days : esc(sk.title)) + '</span>' + top +
+    '<span class="bar"><i id="sks-bar" style="width:' + (p.state === 'live' ? (p.todayNeed ? clamp(p.todayDid / p.todayNeed, 0, 1) * 100 : 100) : p.pct * 100) + '%"></i></span></span><span class="jp-sk-go">' + ic('chevd', 18) + '</span></button>';
+}
+
+/* ---------- JSR: the full section below the counter ---------- */
+function skHistHTML() {
+  const H = S.jap.skHist; if (!H.length) return '';
+  return '<section class="card sk-hist"><div class="card-h"><h3>Past Sankalps</h3><span class="faint num">' + H.length + '</span></div>' + H.slice().reverse().map(h => {
+    const ok = h.result === 'done';
+    return '<div class="skh-row' + (ok ? ' ok' : '') + '"><span class="skh-ic">' + ic(ok ? 'check' : 'flag', 15) + '</span><div class="grow"><b>' + esc(h.title) + '</b><div class="small muted num">' + fmtIN(h.target) + ' in ' + plural(h.days, 'day') + ' · ' + fmtDate(h.start, 'short') + ' – ' + fmtDate(addDays(h.start, h.days - 1), 'short') + (h.why ? ' · ' + esc(h.why) : '') + '</div></div>' +
+      '<span class="skh-res num">' + (ok ? 'Done' + (h.daysUsed ? ' in ' + plural(h.daysUsed, 'day') : '') : Math.round(100 * h.done / h.target) + '%') + '</span></div>';
+  }).join('') + '</section>';
+}
+function skChartHTML(sk, p) {
+  const W = 640, H = 210, L = 46, R = 14, Tp = 16, B = 28, N = sk.days, T = sk.target;
+  const x = i => L + (W - L - R) * i / N, y = v => Tp + (H - Tp - B) * (1 - clamp(v / T, 0, 1.08) / 1.08);
+  let cum = 0; const pts = [[x(0), y(0)]];
+  p.rows.forEach(r => { if (r.st === 'fut') return; cum += r.did; pts.push([x(r.i + 1), y(cum)]); });
+  const last = pts[pts.length - 1];
+  const line = pts.map((q, i) => (i ? 'L' : 'M') + f1(q[0]) + ' ' + f1(q[1])).join('');
+  const area = line + 'L' + f1(last[0]) + ' ' + y(0) + 'L' + x(0) + ' ' + y(0) + 'Z';
+  let grid = ''; [0, .5, 1].forEach(t => { grid += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + f1(y(T * t)) + '" y2="' + f1(y(T * t)) + '" class="sk-gl"/><text x="' + (L - 8) + '" y="' + f1(y(T * t) + 4) + '" text-anchor="end" class="sk-ax">' + (t ? inWords(Math.round(T * t)).replace(' lakh', 'L').replace(' crore', 'Cr') : '0') + '</text>'; });
+  const lab = [0, Math.floor((N - 1) / 2), N - 1].filter((v, i, a) => a.indexOf(v) === i).map(i => '<text x="' + f1(x(i + .5)) + '" y="' + (H - 8) + '" text-anchor="middle" class="sk-ax">Day ' + (i + 1) + '</text>').join('');
+  const proj = p.state === 'live' && last[0] < x(N) ? '<path d="M' + f1(last[0]) + ' ' + f1(last[1]) + 'L' + x(N) + ' ' + y(T) + '" class="sk-proj"/>' : '';
+  return '<section class="card sk-chart"><div class="card-h"><h3>Path to ' + esc(inWords(T)) + '</h3><div class="legend" style="margin-left:auto"><span><i class="sk-lg a"></i>Your jap</span><span><i class="sk-lg b"></i>Even pace</span></div></div>' +
+    '<svg viewBox="0 0 ' + W + ' ' + H + '" class="sk-svg" preserveAspectRatio="none"><defs><linearGradient id="skg-a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF9F43" stop-opacity=".42"/><stop offset="1" stop-color="#FF9F43" stop-opacity="0"/></linearGradient></defs>' + grid +
+    '<path d="M' + x(0) + ' ' + y(0) + 'L' + x(N) + ' ' + y(T) + '" class="sk-even"/>' + (pts.length > 1 ? '<path d="' + area + '" fill="url(#skg-a)"/><path d="' + line + '" class="sk-line"/>' : '') + proj +
+    (p.state !== 'soon' ? '<circle cx="' + f1(last[0]) + '" cy="' + f1(last[1]) + '" r="5.5" class="sk-dot"/>' : '') + lab + '</svg></section>';
+}
+function skDayCell(r, p) {
+  const f = r.need ? clamp(r.did / r.need, 0, 1) : (r.st === 'met' ? 1 : 0), today = r.st === 'today';
+  const tag = r.st === 'met' ? 'Done' : r.st === 'short' ? 'Short' : r.st === 'miss' ? 'Missed' : today ? 'Today' : '';
+  return '<div class="skd ' + r.st + '"' + (today ? ' id="skd-today"' : '') + '><div class="skd-h"><span class="num">Day ' + (r.i + 1) + '</span><span class="skd-dt">' + DOW[parseKey(r.k).getDay()] + ' ' + parseKey(r.k).getDate() + '</span></div>' +
+    '<b class="num skd-n"' + (r.st === 'fut' ? ' data-fut="1"' : '') + '>' + (r.st === 'fut' && !r.need ? '—' : fmtIN(r.st === 'fut' ? r.need : r.did)) + '</b>' +
+    '<span class="skd-s num">' + (r.st === 'fut' ? (r.need ? 'target' : 'nothing left') : 'of ' + fmtIN(r.need)) + '</span>' +
+    '<span class="skd-bar"><i style="width:' + (r.st === 'fut' ? 0 : f * 100) + '%"></i></span>' +
+    (tag ? '<span class="skd-tag">' + skStatusIc(r.st) + tag + '</span>' : '') + '</div>';
+}
+function skSectionHTML() {
+  const c = skCur();
+  if (!c) return '<section class="sk" id="sk"><div class="sk-hero skx empty"><div class="sk-rays"></div>' + skEmbers(16) +
+    '<div class="sk-empty"><span class="sk-bigdiya">' + ic('diya', 54) + '</span><span class="sk-k">' + ic('diya', 14) + 'Sankalp</span><h2>Take a jap vow</h2>' +
+    '<p>Pick a count and the days, like 1 lakh in 7 days. If you miss a day or do less, the rest is spread over the days left, so the Sankalp still completes on time.</p>' +
+    '<div class="sk-presets">' + SK_PRESETS.map(q => '<button class="sk-pre" data-act="skNew" data-t="' + q[0] + '" data-d="' + q[1] + '"><b class="num">' + inWords(q[0]) + '</b><span class="num">in ' + q[1] + ' days · ' + fmtIN(Math.ceil(q[0] / q[1])) + ' a day</span></button>').join('') + '</div>' +
+    '<button class="btn sk-btn" data-act="skNew">' + ic('plus', 17) + 'Make my own</button></div></div>' + skHistHTML() + '</section>';
+  const { sk, p } = c;
+  const live = p.state === 'live';
+  let acts = '';
+  if (p.state === 'done') acts = '<button class="btn sk-btn" data-act="skNew">' + ic('plus', 16) + 'Take a new Sankalp</button>';
+  else if (p.state === 'over') acts = '<button class="btn sk-btn" data-act="skExtend">' + ic('plus', 16) + 'Add days</button><button class="btn sk-ghost" data-act="skEnd">Close it</button>';
+  else acts = '<button class="btn sk-ghost" data-act="skEdit">' + ic('edit', 15) + 'Edit</button><button class="btn sk-ghost" data-act="skEnd">End</button>';
+  const big = live ? '<span class="label">Today’s target</span><b class="num sk-big" id="sk-tneed">' + fmtIN(p.todayNeed) + '</b>' +
+    '<span class="sk-bar lg"><i id="sk-tbar" style="width:' + (p.todayNeed ? clamp(p.todayDid / p.todayNeed, 0, 1) * 100 : 100) + '%"></i></span>' +
+    '<span class="sk-tsub num" id="sk-tsub">' + fmtIN(p.todayDid) + ' done · ' + (p.todayLeft ? fmtIN(p.todayLeft) + ' left today' : 'today’s target done') + '</span>'
+    : p.state === 'soon' ? '<span class="label">Daily target</span><b class="num sk-big">' + fmtIN(p.base) + '</b><span class="sk-tsub">Starts ' + esc(relDay(sk.start).toLowerCase()) + ', ' + fmtDate(sk.start) + '</span>'
+    : p.state === 'done' ? '<span class="label">Sankalp complete</span><b class="num sk-big">' + fmtIN(p.done) + '</b><span class="sk-tsub">naam offered</span>'
+    : '<span class="label">Still left</span><b class="num sk-big">' + fmtIN(p.rem) + '</b><span class="sk-tsub">Ended ' + fmtDate(p.end) + '</span>';
+  const facts = [['Done', '<span id="sk-done">' + fmtIN(p.done) + '</span>', 'of ' + fmtIN(sk.target)], ['Remaining', '<span id="sk-rem">' + fmtIN(p.rem) + '</span>', '≈ ' + fmtIN(p.rem / S.jap.mala) + ' malas'],
+    live ? ['Days left', p.daysLeft, 'ends ' + fmtDate(p.end, 'short')] : ['Days', sk.days, fmtDate(sk.start, 'short') + ' – ' + fmtDate(p.end, 'short')],
+    ['Daily average', live ? fmtIN(Math.ceil(p.rem && p.daysLeft ? (sk.target - p.doneBefore) / p.daysLeft : 0)) : fmtIN(p.base), live ? 'needed now · planned ' + fmtIN(p.base) : 'planned']];
+  return '<section class="sk" id="sk">' +
+    '<div class="sk-hero skx ' + p.state + '"><div class="sk-rays"></div>' + skEmbers(16) +
+    '<div class="sk-top"><div class="grow"><span class="sk-k">' + ic('diya', 14) + 'Sankalp · ' + (live ? 'Day ' + p.dayNum + ' of ' + sk.days : p.state === 'soon' ? 'Upcoming' : p.state === 'done' ? 'Complete' : 'Time is over') + ' · ' + esc(skNaamName(sk)) + '</span><h2 class="sk-title">' + esc(sk.title) + '</h2>' + (sk.why ? '<p class="sk-why">' + ic('heart', 14) + esc(sk.why) + '</p>' : '') + '</div><div class="sk-acts">' + acts + '</div></div>' +
+    '<div class="sk-body"><div class="sk-ringw">' + skRing(p.pct, 212, 14, 'skg-j', 'sk-ring') + '<div class="sk-ringm"><b class="num" id="sk-pct">' + Math.round(p.pct * 100) + '<small>%</small></b><span class="num">' + fmtIN(p.done) + '</span></div></div>' +
+    '<div class="sk-today">' + big + '<span class="sk-adj ' + skTone(p) + '" id="sk-adj">' + ic(skTone(p) === 'up' ? 'repeat' : skTone(p) === 'ahead' ? 'bolt' : skTone(p) === 'bad' ? 'flag' : 'sparkle', 15) + '<span>' + esc(skAdjText(sk, p)) + '</span></span></div>' +
+    '<div class="sk-facts">' + facts.map(f => '<div><span>' + f[0] + '</span><b class="num">' + f[1] + '</b><small class="num">' + f[2] + '</small></div>').join('') + '</div></div></div>' +
+    '<section class="card sk-plan"><div class="card-h"><h3>Day by day</h3><span class="faint small">Targets change by themselves when a day falls short</span></div><div class="sk-days">' + p.rows.map(r => skDayCell(r, p)).join('') + '</div></section>' +
+    '<div class="sk-row">' + skChartHTML(sk, p) + (skHistHTML() || '<section class="card sk-hist"><div class="card-h"><h3>Past Sankalps</h3></div><div class="empty"><b>None yet</b>Finished Sankalps are kept here.</div></section>') + '</div></section>';
+}
+
+/* ---------- live updates while counting ---------- */
+function skLive() {
+  const c = skCur(); if (!c) return; const { sk, p } = c;
+  const set = (id, v) => { const e = $('#' + id); if (e) e.textContent = v; };
+  const tf = p.todayNeed ? clamp(p.todayDid / p.todayNeed, 0, 1) * 100 : 100;
+  const st = $('#sks-t'); if (st && p.state === 'live') st.innerHTML = fmtIN(p.todayDid) + '<small> / ' + fmtIN(p.todayNeed) + ' today</small>';
+  const sb = $('#sks-bar'); if (sb) sb.style.width = (p.state === 'live' ? tf : p.pct * 100) + '%';
+  if (!$('#sk')) return;
+  set('sk-done', fmtIN(p.done)); set('sk-rem', fmtIN(p.rem));
+  const pc = $('#sk-pct'); if (pc) { pc.firstChild.nodeValue = Math.round(p.pct * 100); const n = pc.nextElementSibling; if (n) n.textContent = fmtIN(p.done); }
+  const rg = $('#sk-ring'); if (rg) rg.setAttribute('stroke-dashoffset', (Number(rg.dataset.c) * (1 - p.pct)).toFixed(1));
+  if (p.state === 'live') {
+    const tb = $('#sk-tbar'); if (tb) tb.style.width = tf + '%';
+    set('sk-tsub', fmtIN(p.todayDid) + ' done · ' + (p.todayLeft ? fmtIN(p.todayLeft) + ' left today' : 'today’s target done'));
+    const d = $('#skd-today');
+    if (d) { const b = $('.skd-n', d); if (b) b.textContent = fmtIN(p.todayDid); const i = $('.skd-bar i', d); if (i) i.style.width = tf + '%'; d.classList.toggle('hit', p.todayDid >= p.todayNeed); }
+    const fut = p.rows.filter(r => r.st === 'fut'); const cells = $$('.skd.fut .skd-n');
+    cells.forEach((el, i) => { if (fut[i]) el.textContent = fut[i].need ? fmtIN(fut[i].need) : '—'; });
+  }
+}
+/* called by japCount after every count */
+function skAfterCount(n) {
+  const sk = S.jap.sankalp; if (!sk) return;
+  const wasDone = !!sk.doneAt;
+  const c = skCur(); if (!c) return; const p = c.p, tk = todayKey();
+  if (n > 0 && p.state === 'live' && p.todayNeed > 0 && p.todayDid >= p.todayNeed && !(sk.hit && sk.hit[tk])) {
+    (sk.hit || (sk.hit = {}))[tk] = 1; save();
+    if (!sk.doneAt) skPop('Today’s Sankalp target', 'done · ' + fmtIN(p.todayNeed));
+  }
+  if (!wasDone && sk.doneAt) skDirty = true;
+  if (V.view === 'jsr') skLive(); else if (V.view === 'home') skWidgetLive();
+}
+function skPop(t, s) {
+  const fx = $('#jp-fx'); if (!fx) { toast(t + ' ' + s); return; }
+  const el = document.createElement('div'); el.className = 'jp-pop sk-pop'; el.innerHTML = '<b>' + esc(t) + '</b><span>' + esc(s) + '</span>'; fx.appendChild(el); setTimeout(() => el.remove(), 2600);
+  if (typeof drShower === 'function') drShower();
+  if (S.jap.sound !== 'off') japBell(true);
+}
+
+/* ---------- opening, scrolling ---------- */
+function skScroll() { const el = $('#sk'); if (!el) return; el.scrollIntoView({ behavior: S.settings.motion ? 'smooth' : 'auto', block: 'start' }); }
+A.skOpen = (el, e) => { if ((typeof WGE !== 'undefined' && WGE.edit) || (e && e.target.closest('[data-act="skNew"]'))) return; S.jap.tab = 'counter'; save(); go('jsr'); setTimeout(skScroll, 120); };
+A.skJump = () => skScroll();
+const skRender = () => keepScroll(render);
+
+/* ---------- take / edit modal ---------- */
+let SKF = null;
+function skFormHTML() {
+  const f = SKF, edit = f.mode === 'edit';
+  const naams = '<option value="all"' + (f.naam === 'all' ? ' selected' : '') + '>All naams together</option>' + S.jap.naams.map(n => '<option value="' + n.id + '"' + (f.naam === n.id ? ' selected' : '') + '>' + esc(n.name) + ' only</option>').join('');
+  return modalHead(edit ? 'Edit Sankalp' : 'Take a Sankalp', edit ? 'Changes re-plan every day from today.' : 'Set the count and the days. Focus plans each day for you.') + '<div class="modal-b"><div class="fields sk-form">' +
+    '<div class="field"><label for="skf-t">How many jap</label><input class="input sk-in" type="number" inputmode="numeric" min="1" id="skf-t" value="' + f.target + '"><div class="chips">' + SK_T.map(o => '<button class="chip' + (f.target === o[0] ? ' on' : '') + '" data-act="skPick" data-f="t" data-v="' + o[0] + '">' + o[1] + '</button>').join('') + '</div></div>' +
+    '<div class="field"><label for="skf-d">In how many days</label><input class="input sk-in" type="number" inputmode="numeric" min="1" max="1000" id="skf-d" value="' + f.days + '"><div class="chips">' + SK_D.map(d => '<button class="chip' + (f.days === d ? ' on' : '') + '" data-act="skPick" data-f="d" data-v="' + d + '">' + d + ' days</button>').join('') + '</div></div>' +
+    '<div class="fields two"><div class="field"><label for="skf-s">Starts on</label><input class="input" type="date" id="skf-s" value="' + f.start + '"></div>' +
+    '<div class="field"><label for="skf-n">Which naam counts</label><select class="select" id="skf-n">' + naams + '</select></div></div>' +
+    '<div class="field"><label for="skf-title">Name <span class="faint">(optional)</span></label><input class="input" id="skf-title" maxlength="60" value="' + esc(f.titleSet ? f.title : '') + '" placeholder="' + esc(skAutoTitle(f.target, f.naam)) + '"></div>' +
+    '<div class="field"><label for="skf-why">For whom or why <span class="faint">(optional)</span></label><input class="input" id="skf-why" maxlength="90" value="' + esc(f.why || '') + '" placeholder="For example, for my family’s health"></div>' +
+    '<div class="sk-prev skx" id="skf-prev">' + skPrevHTML() + '</div>' +
+    '</div></div><div class="modal-f"><button class="btn" data-act="closeModal">Cancel</button><button class="btn primary" data-act="skSave">' + (edit ? 'Save changes' : ic('diya', 17) + 'Take Sankalp') + '</button></div>';
+}
+function skPrevHTML() {
+  const f = SKF, T = Math.max(1, f.target), N = Math.max(1, f.days), per = Math.ceil(T / N), end = addDays(f.start, N - 1);
+  let note = 'Ends ' + fmtDate(end) + ' · ≈ ' + fmtIN(per / S.jap.mala) + ' malas a day';
+  if (f.mode === 'edit' && S.jap.sankalp) {
+    const tmp = Object.assign({}, S.jap.sankalp, { target: T, days: N, start: f.start, naam: f.naam, doneAt: null }); const p = skPlan(tmp);
+    if (p.state === 'live') note = 'Today’s target becomes ' + fmtIN(p.todayNeed) + ' · ends ' + fmtDate(end);
+  }
+  return '<span class="sk-k">' + ic('diya', 14) + 'Your daily plan</span><div class="sk-prev-n"><b class="num">' + fmtIN(per) + '</b><span>a day for ' + plural(N, 'day') + '</span></div><span class="sk-prev-s num">' + esc(note) + '</span>';
+}
+function skFormRead() {
+  const m = topModal(); if (!m || !$('#skf-t', m)) return;
+  SKF.target = Math.max(1, Math.round(num($('#skf-t', m).value, SKF.target)));
+  SKF.days = clamp(Math.round(num($('#skf-d', m).value, SKF.days)), 1, 1000);
+  SKF.start = $('#skf-s', m).value || SKF.start; SKF.naam = $('#skf-n', m).value;
+  const t = $('#skf-title', m).value.trim(); SKF.title = t; SKF.titleSet = !!t; SKF.why = $('#skf-why', m).value.trim();
+}
+function skFormLive() {
+  skFormRead(); const m = topModal(); if (!m) return;
+  const pv = $('#skf-prev', m); if (pv) pv.innerHTML = skPrevHTML();
+  const ti = $('#skf-title', m); if (ti) ti.placeholder = skAutoTitle(SKF.target, SKF.naam);
+  $$('[data-act="skPick"]', m).forEach(b => b.classList.toggle('on', Number(b.dataset.v) === (b.dataset.f === 't' ? SKF.target : SKF.days)));
+}
+function skOpenForm() {
+  const w = openModal(skFormHTML(), { cls: 'wide sk-modal' });
+  w.addEventListener('input', skFormLive); w.addEventListener('change', skFormLive);
+}
+function skArchive(result) {
+  const sk = S.jap.sankalp; if (!sk) return;
+  const p = skPlan(sk);
+  S.jap.skHist.push({ id: sk.id, title: sk.title, target: sk.target, days: sk.days, start: sk.start, naam: sk.naam, why: sk.why || '', done: Math.min(p.done, sk.target), result, endedAt: Date.now(), daysUsed: sk.doneAt ? diffDays(sk.start, dkey(sk.doneAt)) + 1 : 0 });
+  if (S.jap.skHist.length > 60) S.jap.skHist = S.jap.skHist.slice(-60);
+  S.jap.sankalp = null;
+}
+A.skNew = (el, e) => {
+  if (e) e.stopPropagation();
+  const cur = S.jap.sankalp;
+  if (cur && !cur.doneAt && skPlan(cur).state !== 'over') { A.skEdit(); return; }   // one Sankalp at a time
+  const t = el && el.dataset.t ? Number(el.dataset.t) : 100000, d = el && el.dataset.d ? Number(el.dataset.d) : 7;
+  SKF = { mode: 'new', target: t, days: d, start: todayKey(), naam: S.jap.sel && japNaam(S.jap.sel) ? S.jap.sel : 'all', title: '', titleSet: false, why: '' };
+  skOpenForm();
+};
+A.skEdit = () => {
+  const sk = S.jap.sankalp; if (!sk) return;
+  SKF = { mode: 'edit', target: sk.target, days: sk.days, start: sk.start, naam: sk.naam, title: sk.title, titleSet: sk.title !== skAutoTitle(sk.target, sk.naam), why: sk.why || '' };
+  skOpenForm();
+};
+A.skPick = el => { const m = topModal(); if (!m) return; const inp = $(el.dataset.f === 't' ? '#skf-t' : '#skf-d', m); if (inp) { inp.value = el.dataset.v; skFormLive(); } };
+A.skSave = () => {
+  skFormRead(); const f = SKF; if (!f) return;
+  if (f.target < 1 || f.days < 1) { toast('Enter a count and the number of days'); return; }
+  if (f.mode === 'new' && f.start < todayKey()) { toast('Pick today or a later day to start'); return; }
+  const title = f.titleSet ? f.title : skAutoTitle(f.target, f.naam);
+  if (f.mode === 'edit' && S.jap.sankalp) {
+    Object.assign(S.jap.sankalp, { target: f.target, days: f.days, start: f.start, naam: f.naam, title, why: f.why });
+    S.jap.sankalp.doneAt = null; S.jap.sankalp.cheered = 0;
+    save(); closeModal(); skRender(); toast('Sankalp updated. Each day is re-planned');
+    return;
+  }
+  const old = S.jap.sankalp; if (old) skArchive(old.doneAt ? 'done' : 'ended');
+  S.jap.sankalp = { id: uid(), title, target: f.target, days: f.days, start: f.start, naam: f.naam, why: f.why, createdAt: Date.now(), doneAt: null, hit: {} };
+  save(); closeModal(); skRender();
+  if (V.view === 'jsr') setTimeout(skScroll, 80);
+  celebrate({ type: 'skStart' });
+};
+A.skEnd = () => {
+  const sk = S.jap.sankalp; if (!sk) return; const p = skPlan(sk);
+  confirmBox(p.state === 'over' ? 'Close this Sankalp?' : 'End this Sankalp?', 'It moves to your past Sankalps at ' + Math.round(p.pct * 100) + '%. Your jap counts stay in your totals.', p.state === 'over' ? 'Close it' : 'End Sankalp', () => { skArchive('ended'); save(); skRender(); toast('Moved to past Sankalps'); }, true);
+};
+A.skExtend = () => {
+  const sk = S.jap.sankalp; if (!sk) return; const p = skPlan(sk);
+  openModal(modalHead('Add days', fmtIN(p.rem) + ' jap are still left. Pick how many days from today to finish them.') + '<div class="modal-b"><div class="sk-ext">' +
+    [1, 2, 3, 5, 7].map(n => '<button class="sk-pre plain" data-act="skExtendGo" data-n="' + n + '"><b class="num">' + plural(n, 'day') + '</b><span class="num">' + fmtIN(Math.ceil(p.rem / n)) + ' a day</span></button>').join('') + '</div></div>', { cls: 'narrow' });
+};
+A.skExtendGo = el => {
+  const sk = S.jap.sankalp; if (!sk) return; const n = Number(el.dataset.n) || 1;
+  sk.days = diffDays(sk.start, todayKey()) + n; save(); closeModal(); skRender(); toast('Sankalp extended. ' + plural(n, 'day') + ' to finish');
+};
+
+/* ---------- Alex nudge in the evening ---------- */
+function skAlex(add, hr) {
+  const c = skCur(); if (!c || c.p.state !== 'live' || !c.p.todayLeft || hr < 17) return;
+  const { sk, p } = c;
+  add({ id: 'sankalp', icon: 'diya', tone: hr >= 21 ? 'warn' : 'tip', pri: hr >= 21 ? 74 : 56, title: 'Sankalp: ' + fmtIN(p.todayLeft) + ' to go today', text: 'Day ' + p.dayNum + ' of ' + sk.days + ' of "' + sk.title + '". Finish today’s ' + fmtIN(p.todayNeed) + ' so the days ahead do not get heavier.', act: { label: 'Open JSR', act: 'alexGo', attrs: 'data-view="jsr"' } });
+}
 
 /* ---------- insights ---------- */
 function japBuckets(range, naamId) {
@@ -6351,15 +6890,20 @@ W.sync = {
       '<div class="wg-row">' + (on ? '<button class="wg-btn" data-act="cloudSyncNow">' + ic('repeat', 15) + 'Sync</button>' : cloudEnabled() ? '<button class="wg-btn" data-act="cloudSignIn">Sign in</button>' : '') + (w > 2 ? '<button class="wg-btn" data-act="backupSave">' + ic('download', 15) + 'Back up</button>' : '') + '</div></div>';
   }
 };
-const WG_ORDER = ['timer', 'today', 'jap', 'tasks', 'habits', 'calendar', 'streak', 'targets', 'goal', 'chalisa', 'week', 'rank', 'revise', 'report', 'clock', 'quote', 'alex', 'sync'];
+W.sankalp = {
+  name: 'Sankalp', desc: 'Your jap vow: progress, today\'s target and the day-by-day plan', icon: 'diya', free: true, def: [8, 3],
+  render(w, h) { return skWidgetHTML(w, h); }
+};
+const WG_ORDER = ['timer', 'today', 'jap', 'sankalp', 'tasks', 'habits', 'calendar', 'streak', 'targets', 'goal', 'chalisa', 'week', 'rank', 'revise', 'report', 'clock', 'quote', 'alex', 'sync'];
 
 function wgDefault() {
-  const L = [['today', 4, 4], ['timer', 4, 2], ['streak', 2, 2], ['rank', 2, 2], ['jap', 4, 3], ['habits', 4, 3], ['tasks', 4, 4], ['calendar', 4, 2], ['chalisa', 2, 2], ['revise', 2, 2], ['goal', 4, 2], ['week', 4, 2], ['targets', 4, 4], ['report', 4, 4]];
+  const L = [['today', 4, 4], ['timer', 4, 2], ['streak', 2, 2], ['rank', 2, 2], ['jap', 4, 3], ['habits', 4, 3], ['sankalp', 8, 3], ['tasks', 4, 4], ['calendar', 4, 2], ['chalisa', 2, 2], ['revise', 2, 2], ['goal', 4, 2], ['week', 4, 2], ['targets', 4, 4], ['report', 4, 4]];
   return L.map(x => ({ id: uid(), t: x[0], w: x[1], h: x[2] }));
 }
 function wgItems() {
   if (!S.home || !Array.isArray(S.home.items)) S.home = { items: wgDefault() };
   S.home.items = S.home.items.filter(it => it && W[it.t]);
+  if (!S.home.skAdded) { S.home.skAdded = 1; if (!S.home.items.some(x => x.t === 'sankalp')) { const j = S.home.items.findIndex(x => x.t === 'jap'); S.home.items.splice(j < 0 ? S.home.items.length : j + 1, 0, { id: uid(), t: 'sankalp', w: 8, h: 3 }); } try { save(); } catch (e) { /* ignore */ } }
   return S.home.items;
 }
 
