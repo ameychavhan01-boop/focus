@@ -1,0 +1,474 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="promo.css">
+<script src="gsap.min.js"></script>
+</head><body>
+<div id="stage">
+  <div id="blob1" class="blob"></div><div id="blob2" class="blob"></div><div id="blob3" class="blob"></div>
+  <div id="dots"></div>
+  <div id="hooklayer"></div>
+
+  <div id="device"><div id="screen"><img id="page" src="page.png"><div id="glint"></div></div></div>
+  <div id="hl"></div>
+
+  <!-- F1 Today & Overdue -->
+  <div class="comp" id="f1">
+    <div class="c-head"><span class="e">🎯</span> Today &amp; Overdue <span class="right"><span class="vtab on">Today &amp; Overdue</span></span></div>
+    <div style="height:18px"></div>
+    <div class="t-row r"><span class="e">✏️</span><span class="tt">Solve 50 practice questions</span><span class="sp"></span>
+      <span class="alert" id="f1today"><span class="e">⏰</span> Today</span><span class="tag red pop"><span class="e">🔥</span>High</span><span class="tag purple pop">Study</span></div>
+    <div class="t-row r"><span class="e">✉️</span><span class="tt">Reply to emails</span><span class="sp"></span>
+      <span class="alert" id="f1over"><span class="e">⚠️</span> Overdue</span><span class="tag green pop"><span class="e">🌱</span>Low</span><span class="tag blue pop">Work</span></div>
+    <div class="t-new">+ New page</div>
+  </div>
+
+  <!-- F2 Task board -->
+  <div class="comp" id="f2">
+    <div class="c-head"><span class="e">✅</span> Tasks <span class="right"><span class="vtab">All Tasks</span><span class="vtab on">Board</span><span class="vtab">Calendar</span></span></div>
+    <div class="board">
+      <div class="col" id="col0" style="left:0"><div class="col-h"><span class="pill tag gray"><span class="dot" style="background:#9b9b9b"></span>To Do</span>
+        <span class="cnt"><span class="ci" id="cnt0"><span>2</span><span>1</span></span></span></div></div>
+      <div class="col" id="col1" style="left:300px"><div class="col-h"><span class="pill tag blue"><span class="dot" style="background:#5b9bf3"></span>Doing</span>
+        <span class="cnt"><span>1</span></span></div></div>
+      <div class="col" id="col2" style="left:600px"><div class="col-h"><span class="pill tag green"><span class="dot" style="background:#4dbb7f"></span>Done</span>
+        <span class="cnt"><span class="ci" id="cnt2"><span>2</span><span>3</span></span></span></div></div>
+      <div class="card" id="cd1"><div class="tt"><span class="e">✏️</span> Solve 50 practice questions</div><span class="tag red"><span class="e">🔥</span>High</span><div class="badge">✓</div></div>
+      <div class="card" id="cd2"><div class="tt"><span class="e">🗓️</span> Plan next week</div><span class="tag yellow"><span class="e">⚡</span>Medium</span></div>
+      <div class="card" id="cd3"><div class="tt"><span class="e">📘</span> Revise Biology chapter 5</div><span class="tag red" id="cd3tag"><span class="e">🔥</span>High</span></div>
+      <div class="card" id="cd4"><div class="tt"><span class="e">📝</span> Take full mock test</div><span class="tag red"><span class="e">🔥</span>High</span></div>
+      <div class="card" id="cd5"><div class="tt"><span class="e">🚶</span> Morning walk 20 min</div><span class="tag yellow"><span class="e">⚡</span>Medium</span></div>
+    </div>
+  </div>
+
+  <!-- F3 Daily log & habits -->
+  <div class="comp" id="f3">
+    <div class="c-head"><span class="e">📅</span> Sat, 21 Nov <span class="muted">· Daily Log</span></div>
+    <div class="score"><span class="lbl">Habit Score</span>
+      <div class="sqs"><div class="sq"><i></i></div><div class="sq"><i></i></div><div class="sq"><i></i></div><div class="sq"><i></i></div><div class="sq"><i></i></div><div class="sq"><i></i></div></div>
+      <div class="num"><div id="f3num"><span>0/6</span><span>1/6</span><span>2/6</span><span>3/6</span><span>4/6</span></div></div>
+    </div>
+    <div class="habits">
+      <div class="hb"><span class="cb"><span class="fill"></span><svg viewBox="0 0 30 30"><path d="M7 15.5l5.5 5.5L23 9.5"/></svg></span><span class="e">💧</span>Drink water</div>
+      <div class="hb"><span class="cb"><span class="fill"></span><svg viewBox="0 0 30 30"><path d="M7 15.5l5.5 5.5L23 9.5"/></svg></span><span class="e">📚</span>Study 2 hours</div>
+      <div class="hb"><span class="cb"><span class="fill"></span><svg viewBox="0 0 30 30"><path d="M7 15.5l5.5 5.5L23 9.5"/></svg></span><span class="e">🏃</span>Exercise</div>
+      <div class="hb"><span class="cb"><span class="fill"></span><svg viewBox="0 0 30 30"><path d="M7 15.5l5.5 5.5L23 9.5"/></svg></span><span class="e">📖</span>Read 20 min</div>
+      <div class="hb"><span class="cb"><span class="fill"></span><svg viewBox="0 0 30 30"><path d="M7 15.5l5.5 5.5L23 9.5"/></svg></span><span class="e">🧘</span>Meditate</div>
+      <div class="hb"><span class="cb"><span class="fill"></span><svg viewBox="0 0 30 30"><path d="M7 15.5l5.5 5.5L23 9.5"/></svg></span><span class="e">😴</span>Sleep by 11</div>
+    </div>
+  </div>
+
+  <!-- F4 Charts -->
+  <div class="comp" id="f4">
+    <div class="c-head"><span class="e">📈</span> Your Progress <span class="right"><span class="vtab on">Progress Chart</span><span class="vtab">Mood</span><span class="vtab">Trend</span></span></div>
+    <div class="charts">
+      <div class="panel" style="width:530px"><h4>Habit Score · last 7 days</h4>
+        <div class="bars" id="bars"></div>
+        <div class="days"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div>
+      </div>
+      <div class="panel" style="flex:1"><h4>Mood</h4>
+        <div class="donut-wrap"><svg viewBox="0 0 220 220" id="donut"></svg><div class="donut-c e" id="donutc">😄</div></div>
+        <div class="legend">
+          <div><span class="dot" style="background:#4ADE80"></span><span class="e">😄</span> Great</div>
+          <div><span class="dot" style="background:#60A5FA"></span><span class="e">🙂</span> Good</div>
+          <div><span class="dot" style="background:#FBBF24"></span><span class="e">😐</span> Okay</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- F5 Goals -->
+  <div class="comp" id="f5">
+    <div class="c-head"><span class="e">🎯</span> Goals <span class="right"><span class="vtab on">Goal Board</span><span class="vtab">Cards</span></span></div>
+    <div class="gh"><span>Goal</span><span>Progress Bar</span><span>Status</span></div>
+    <div class="gr" data-p="30"><span><span class="e">💪</span> Exercise 4 days a week</span><span class="segs"></span><span><span class="tag blue pop"><span class="dot" style="background:#5b9bf3"></span>In Progress</span></span></div>
+    <div class="gr" data-p="75"><span><span class="e">📚</span> Read 12 books</span><span class="segs"></span><span><span class="tag blue pop"><span class="dot" style="background:#5b9bf3"></span>In Progress</span></span></div>
+    <div class="gr" data-p="45"><span><span class="e">🎓</span> Score 90%+ in finals</span><span class="segs"></span><span><span class="tag blue pop"><span class="dot" style="background:#5b9bf3"></span>In Progress</span></span></div>
+    <div class="gr" data-p="0" style="border-bottom:0"><span><span class="e">💰</span> Save ₹10,000</span><span class="segs"></span><span><span class="tag gray pop"><span class="dot" style="background:#9b9b9b"></span>Not Started</span></span></div>
+  </div>
+
+  <!-- F6 Weekly review -->
+  <div class="comp" id="f6">
+    <div class="c-head"><span class="e">📊</span> Week of 16 Nov <span class="muted">· Weekly Review</span></div>
+    <div class="wk">
+      <div class="ring"><svg viewBox="0 0 290 290"><circle cx="145" cy="145" r="120" fill="none" stroke="#2c2c2c" stroke-width="30"/>
+        <circle id="ringc" cx="145" cy="145" r="120" fill="none" stroke="#6EE7A8" stroke-width="30" stroke-linecap="round"/></svg>
+        <div class="in"><div class="big"><span id="wkpct">0</span>%</div><div class="lab">Week Score</div></div></div>
+      <div class="stats">
+        <div class="stat" id="st1"><span><span class="e">⭐</span> Rating</span><span class="v" style="color:#FBBF24"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span> <span style="color:#fff">Great</span></span></div>
+        <div class="stat" id="st2"><span><span class="e">😴</span> Avg Sleep</span><span class="v"><span id="wksleep">0.0</span> h</span></div>
+        <div class="stat" id="st3"><span><span class="e">📅</span> Days Logged</span><span class="v" id="wkdays">0</span></div>
+      </div>
+    </div>
+    <div class="win" id="wkwin"><span class="e">🏆</span> Biggest win: best mock test score!</div>
+  </div>
+
+  <!-- F7 Calendar + Guide -->
+  <div class="mini" id="f7a" style="left:40px">
+    <h3><span class="e">📅</span> Calendar view</h3><div class="sub2">November 2026</div>
+    <div class="cal" id="cal"></div>
+  </div>
+  <div class="mini" id="f7b" style="left:570px">
+    <h3><span class="e">📖</span> How to use</h3><div class="sub2">Step-by-step guide</div>
+    <div class="step" style="background:#1F3450"><span class="e">🌅</span><div><b>Morning</b>Add today's tasks</div></div>
+    <div class="step" style="background:#4A3B19"><span class="e">☀️</span><div><b>Day</b>Drag tasks to Done</div></div>
+    <div class="step" style="background:#36294F"><span class="e">🌙</span><div><b>Night</b>Tick habits &amp; mood</div></div>
+    <div class="step" style="background:#4A2538"><span class="e">📊</span><div><b>Sunday</b>Weekly review</div></div>
+  </div>
+
+  <svg id="co-svg"></svg>
+  <div id="colayer"></div>
+  <div id="caplayer"></div>
+  <div id="chiplayer"></div>
+
+  <!-- CTA -->
+  <div id="cta-price"><span class="l1">Get it for</span><span class="l2"><span class="g">₹299</span> / $5</span></div>
+  <div id="cta-btn"><span class="shine"></span>Link in bio <span class="e">🔗</span></div>
+  <div id="sparks"></div>
+
+  <svg id="cursor" viewBox="0 0 62 62"><path d="M12 6 L12 48 L23 38 L31 55 L39 51 L31 35 L46 34 Z" fill="#fff" stroke="#0a0a0a" stroke-width="3.5" stroke-linejoin="round"/></svg>
+  <div class="ripple" id="ripple"></div>
+  <div id="vignette"></div>
+</div>
+
+<script>
+// ===================================================================== config
+const VERSION = (new URLSearchParams(location.search).get('v') || 'A').toUpperCase();
+const OFFSET = 0.55;           // timeline starts slightly before frame 0 so the hook is visible instantly
+const K = 972 / 2000;          // screenshot grid unit -> px on the device screen
+const PAGE_H = 4230.38 * K, SCREEN_H = 732, SCREEN_X = 54, SCREEN_Y = 424;
+const T = { hook: 0, intro: 2.5, f1: 4.0, f2: 7.0, f3: 10.5, f4: 14.5, f5: 17.5, f6: 20.5, f7: 23.5, cta: 25.5, end: 29.0 };
+const REG = {   // section of the real page to lift out (x0, y0, x1, y1 in grid units)
+  f1: [150, 1135, 1040, 1351], f2: [150, 1738, 1995, 2398], f3: [150, 2638, 1995, 2978],
+  f4: [150, 2706, 1210, 2765], f5: [150, 3220, 1995, 3615], f6: [150, 3850, 1995, 4020] };
+const CAPS = {
+  intro: "Plan your day.<br><span class='g'>Build habits.</span><span class='sub'>Daily Planner &amp; Habit Tracker · Notion</span>",
+  f1: "<span class='g'>Today</span> <span class='e'>⏰</span> + <span class='g'>Overdue</span> <span class='e'>⚠️</span><br>tasks in one place",
+  f2: "Drag tasks to <span class='g'>Done</span> <span class='e'>✅</span><br>Feel the progress",
+  f3: "Tick 6 daily habits <span class='e'>→</span><br>auto <span class='g'>Habit Score</span>",
+  f4: "Habit <span class='e'>📈</span> + mood <span class='e'>😊</span><br><span class='g'>charts</span> built in",
+  f5: "Watch your <span class='g'>goals</span><br>fill up <span class='e'>🎯</span>",
+  f6: "Sunday review with<br><span class='g'>automatic averages</span> <span class='e'>📊</span>",
+  f7: "+ <span class='g'>Calendar</span> view &amp;<br>step-by-step <span class='g'>guide</span> <span class='e'>📖</span>" };
+const CHIPS = { intro: [null, "<span class='e'>🌿</span> The Notion template"], f1: [1, "Today &amp; Overdue"], f2: [2, "Task Board"],
+  f3: [3, "Daily Log &amp; 6 Habits"], f4: [4, "Habit &amp; Mood Charts"], f5: [5, "Goals"], f6: [6, "Weekly Review"], f7: [7, "Calendar &amp; Guide"],
+};
+const HOOKS = {
+  A: { lines: [["Your", "day"], ["feels", "messy?"], ["<span class='e'>😩</span>"]], pill: "Here's the fix <span class='e'>👇</span>" },
+  B: { lines: [["I", "built"], ["<span class='g'>6</span>", "<span class='g'>habits</span>"], ["with", "this", "<span class='e'>🌱</span>"]], pill: null },
+  C: { lines: [["The", "only"], ["<span class='g'>Notion</span>"], ["<span class='g'>template</span>"], ["you", "need", "<span class='e'>✨</span>"]], pill: null } };
+
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const el = (tag, cls, html, parent) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; (parent || $('#stage')).appendChild(e); return e; };
+const rectOf = e => { let x = 0, y = 0, n = e; while (n && n.id !== 'stage') { x += n.offsetLeft + (n.offsetParent && n.offsetParent.id !== 'stage' ? n.offsetParent.clientLeft : 0);
+  y += n.offsetTop + (n.offsetParent && n.offsetParent.id !== 'stage' ? n.offsetParent.clientTop : 0); n = n.offsetParent; }
+  const w = e.offsetWidth, h = e.offsetHeight; return { x, y, w, h, cx: x + w / 2, cy: y + h / 2 }; };
+const scrollFor = r => Math.max(0, Math.min(PAGE_H - SCREEN_H, ((r[1] + r[3]) / 2) * K - SCREEN_H / 2));
+
+// ===================================================================== build DOM
+// captions: split into words for a word-by-word reveal
+function splitWords(node) {
+  [...node.childNodes].forEach(n => {
+    if (n.nodeType === 3) {
+      const parts = n.textContent.split(/(\s+)/); const frag = document.createDocumentFragment();
+      parts.forEach(p => { if (!p) return; if (/^\s+$/.test(p)) frag.appendChild(document.createTextNode(' '));
+        else { const w = document.createElement('span'); w.className = 'w'; w.innerHTML = `<span class="wi">${p}</span>`; frag.appendChild(w); } });
+      n.replaceWith(frag);
+    } else if (n.nodeType === 1 && n.classList.contains('e')) {
+      const w = document.createElement('span'); w.className = 'w'; n.replaceWith(w); const wi = document.createElement('span'); wi.className = 'wi'; wi.appendChild(n); w.appendChild(wi);
+    } else if (n.nodeType === 1 && n.tagName !== 'BR') splitWords(n);
+  });
+}
+const capEl = {}, chipEl = {};
+for (const k in CAPS) { const c = el('div', 'cap', CAPS[k], $('#caplayer')); splitWords(c); capEl[k] = c; }
+for (const k in CHIPS) { const [n, txt] = CHIPS[k]; chipEl[k] = el('div', 'chip' + (n ? '' : ' brandchip'), (n ? `<span class="num">${n}</span>` : '') + txt, $('#chiplayer')); }
+
+// F4 bars + donut
+const BARV = [3, 5, 4, 6, 4, 6, 5];
+BARV.forEach(v => el('div', 'bar', `<b>${v}</b>`, $('#bars')).style.height = (v / 6 * 200) + 'px');
+const DON = [[0.45, '#4ADE80'], [0.33, '#60A5FA'], [0.22, '#FBBF24']]; const CIRC = 2 * Math.PI * 80;
+{ let acc = 0; const svg = $('#donut'); svg.innerHTML = `<circle cx="110" cy="110" r="80" fill="none" stroke="#2c2c2c" stroke-width="34"/>`;
+  DON.forEach(([f, col], i) => { const len = f * CIRC - 4; svg.insertAdjacentHTML('beforeend',
+    `<circle class="dseg" cx="110" cy="110" r="80" fill="none" stroke="${col}" stroke-width="34" stroke-dasharray="0 ${CIRC}" stroke-dashoffset="${-acc * CIRC}" data-len="${len}"/>`); acc += f; }); }
+// F5 segments
+$$('#f5 .segs').forEach(s => { for (let i = 0; i < 10; i++) el('span', 'seg', '<i></i>', s); el('span', 'pct', '0%', s); });
+// F7 calendar (Nov 2026 starts on a Sunday)
+['S', 'M', 'T', 'W', 'T', 'F', 'S'].forEach(d => el('div', 'wd', d, $('#cal')));
+const CALDOT = { 19: '#6E3630', 20: '#28456C', 21: '#22C55E', 22: '#492F64', 23: '#89632A', 12: '#2B593F', 14: '#28456C', 26: '#6E3630', 28: '#2B593F' };
+for (let d = 1; d <= 35; d++) { const c = el('div', 'd' + (d === 21 ? ' today' : ''), d <= 30 ? d : '', $('#cal')); if (CALDOT[d]) el('i', null, null, c).style.background = CALDOT[d]; }
+// F2 card slots
+const COLX = [0, 300, 600], SLOT = i => 66 + i * 132;
+const place = (id, col, slot) => { const c = $(id); c.style.left = (COLX[col] + 12) + 'px'; c.style.top = SLOT(slot) + 'px'; };
+place('#cd1', 0, 0); place('#cd2', 0, 1); place('#cd3', 1, 0); place('#cd4', 2, 0); place('#cd5', 2, 1);
+
+// hook layer per version
+const H = HOOKS[VERSION]; const hook = el('div', 'hook', '', $('#hooklayer'));
+H.lines.forEach(line => { const l = el('span', 'line', '', hook); line.forEach((w, i) => { if (i) l.appendChild(document.createTextNode(' ')); el('span', 'hw', w, l); }); });
+const pill = H.pill ? el('div', 'hook-pill', H.pill, $('#hooklayer')) : null;
+
+// position components vertically around y=790
+['#f1', '#f2', '#f3', '#f4', '#f5', '#f6'].forEach(id => { const c = $(id); c.style.top = (790 - c.offsetHeight / 2) + 'px'; });
+
+// ===================================================================== timeline helpers
+gsap.ticker.lagSmoothing(0);
+const tl = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
+const at = t => t + OFFSET;
+
+function chipIn(k, t0, t1) {
+  tl.fromTo(chipEl[k], { opacity: 0, y: -24, scale: .9 }, { opacity: 1, y: 0, scale: 1, duration: .4, ease: 'back.out(2)' }, at(t0));
+  if (t1 != null) tl.to(chipEl[k], { opacity: 0, y: -20, duration: .25, ease: 'power2.in' }, at(t1));
+}
+function capIn(k, t0, t1) {
+  const c = capEl[k];
+  tl.fromTo(c, { opacity: 0, scale: .86 }, { opacity: 1, scale: 1, duration: .4, ease: 'back.out(1.8)' }, at(t0));
+  tl.fromTo(c.querySelectorAll('.wi'), { yPercent: 115 }, { yPercent: 0, duration: .45, stagger: .05, ease: 'power4.out' }, at(t0 + .06));
+  if (t1 != null) tl.to(c, { opacity: 0, y: 30, scale: .96, duration: .25, ease: 'power2.in' }, at(t1));
+}
+const coSvg = $('#co-svg');
+function callout(text, targetSel, comp, side, px, frac, t0, t1) {
+  const tgt = rectOf($(targetSel)), cr = rectOf($(comp));
+  const py = side === 'above' ? cr.y - 62 : cr.y + cr.h + 62;
+  const pillEl = el('div', 'co', text, $('#colayer')); pillEl.style.left = px + 'px'; pillEl.style.top = py + 'px';
+  const pr = { h: pillEl.offsetHeight };
+  const tx = tgt.x + tgt.w * frac[0], ty = tgt.y + tgt.h * frac[1];
+  const sy = side === 'above' ? py + pr.h / 2 : py - pr.h / 2;
+  const my = (sy + ty) / 2;
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  path.setAttribute('d', `M${px},${sy} C${px},${my} ${tx},${my} ${tx},${ty}`); coSvg.appendChild(path);
+  const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  dot.setAttribute('cx', tx); dot.setAttribute('cy', ty); dot.setAttribute('r', 10); coSvg.appendChild(dot);
+  const len = path.getTotalLength();
+  gsap.set(path, { strokeDasharray: len, strokeDashoffset: len, opacity: 1 }); gsap.set(dot, { scale: 0, transformOrigin: '50% 50%' });
+  tl.fromTo(pillEl, { opacity: 0, scale: .6 }, { opacity: 1, scale: 1, duration: .35, ease: 'back.out(2.2)' }, at(t0));
+  tl.to(path, { strokeDashoffset: 0, duration: .4, ease: 'power2.inOut' }, at(t0 + .1));
+  tl.to(dot, { scale: 1, duration: .3, ease: 'back.out(3)' }, at(t0 + .42));
+  tl.to(dot, { scale: 1.5, duration: .25, yoyo: true, repeat: 3, ease: 'sine.inOut' }, at(t0 + .75));
+  tl.to([pillEl, path, dot], { opacity: 0, duration: .2, ease: 'power2.in' }, at(t1));
+}
+function deviceFocus(t, focus) {
+  tl.to('#device', focus ? { scale: 1, y: 0, filter: 'blur(0px) brightness(1)', duration: .4, ease: 'power2.out' }
+                         : { scale: .9, y: 10, filter: 'blur(9px) brightness(0.35)', duration: .55, ease: 'power3.out' }, at(t));
+}
+// scroll the real page, outline the section, then lift the rebuilt component out of the screen
+function liftOut(key, t0) {
+  const r = REG[key], s = scrollFor(r);
+  tl.to('#page', { y: -s, duration: .62, ease: 'power3.inOut' }, at(t0));
+  const R = { x: SCREEN_X + r[0] * K, y: SCREEN_Y + r[1] * K - s, w: (r[2] - r[0]) * K, h: (r[3] - r[1]) * K };
+  tl.set('#hl', { left: R.x - 8, top: R.y - 8, width: R.w + 16, height: R.h + 16 }, at(t0 + .4));
+  tl.fromTo('#hl', { opacity: 0, scale: 1.08 }, { opacity: 1, scale: 1, duration: .25, ease: 'power2.out', immediateRender: false }, at(t0 + .42));
+  tl.to('#hl', { opacity: 0, duration: .25 }, at(t0 + .82));
+  const comp = $('#' + key), F = rectOf(comp);
+  tl.fromTo(comp, { x: (R.x + R.w / 2) - F.cx, y: (R.y + R.h / 2) - F.cy, scale: R.w / F.w, opacity: 0 },
+    { x: 0, y: 0, scale: 1, duration: .7, ease: 'expo.out' }, at(t0 + .72));
+  tl.to(comp, { opacity: 1, duration: .18, ease: 'none' }, at(t0 + .72));
+  tl.fromTo(comp, { boxShadow: '0 0 0 rgba(0,0,0,0), 0 0 0 1px rgba(255,255,255,.03), 0 0 0 rgba(110,231,168,0)' },
+    { boxShadow: '0 50px 120px rgba(0,0,0,.75), 0 0 0 1px rgba(255,255,255,.03), 0 0 80px rgba(110,231,168,.12)', duration: .7 }, at(t0 + .72));
+  deviceFocus(t0 + .72, false);
+}
+function compOut(sel, t) { tl.to(sel, { opacity: 0, scale: .9, y: -40, duration: .3, ease: 'power2.in' }, at(t)); }
+function counter(sel, steps) { // steps: [[time, index]]  (stacked spans)
+  const h = $(sel).firstElementChild.offsetHeight;
+  steps.forEach(([t, i]) => tl.to(sel, { y: -h * i, duration: .25, ease: 'back.out(2)' }, at(t)));
+}
+function tap(x, y, t) {
+  tl.to('#cursor', { scale: .82, duration: .08, yoyo: true, repeat: 1, ease: 'power1.inOut' }, at(t));
+  tl.set('#ripple', { left: x, top: y }, at(t));
+  tl.fromTo('#ripple', { opacity: .9, scale: .3 }, { opacity: 0, scale: 1.3, duration: .4, ease: 'power2.out', immediateRender: false }, at(t));
+}
+const cursorTo = (x, y, t, d = .3) => tl.to('#cursor', { x: x - 10, y: y - 6, duration: d, ease: 'power3.inOut' }, at(t));
+
+// ===================================================================== background drift
+tl.to('#blob1', { x: 160, y: 140, duration: 9, ease: 'sine.inOut', yoyo: true, repeat: 3 }, 0);
+tl.to('#blob2', { x: -180, y: -160, duration: 11, ease: 'sine.inOut', yoyo: true, repeat: 3 }, 0);
+tl.to('#blob3', { x: -120, y: 120, duration: 7, ease: 'sine.inOut', yoyo: true, repeat: 4 }, 0);
+tl.fromTo('#dots', { y: 0 }, { y: -88, duration: T.end + 1, ease: 'none' }, 0);
+
+// ===================================================================== HOOK
+gsap.set('#device', { opacity: 0 });
+const words = $$('.hook .hw');
+tl.fromTo(words, { opacity: 0, scale: 1.7, filter: 'blur(14px)' }, { opacity: 1, scale: 1, filter: 'blur(0px)', duration: .28, stagger: .07, ease: 'power3.out' }, 0);
+tl.to('.hook', { scale: 1.05, duration: 2.0, ease: 'none' }, at(0));
+if (VERSION === 'A') {
+  const M = [["📚 Assignment due!", 90, 230, -8, 'warn'], ["⏰ Exam Monday", 560, 190, 6, 'yel'], ["📱 47 notifications", 600, 420, -5, ''],
+    ["😴 Slept at 3 am", 40, 470, 7, ''], ["✉️ Reply to emails", 70, 1120, 5, 'warn'], ["🏃 Gym?? 😅", 690, 1100, -9, 'yel'],
+    ["📝 Notes everywhere", 120, 1390, -4, ''], ["📅 What's due today?", 520, 1560, 6, 'warn'], ["🎯 Goals???", 760, 1330, 10, '']];
+  const ms = M.map(([txt, x, y, r, c]) => { const m = el('div', 'mess ' + c, txt.replace(/^(\S+)/, "<span class='e'>$1</span>"), $('#hooklayer')); m.style.left = x + 'px'; m.style.top = y + 'px'; gsap.set(m, { rotation: r }); return m; });
+  $('#hooklayer').prepend(...ms);
+  tl.fromTo(ms, { opacity: 0, scale: .4 }, { opacity: .8, scale: 1, duration: .35, stagger: .05, ease: 'back.out(2)' }, 0);
+  ms.forEach((m, i) => tl.to(m, { rotation: `+=${i % 2 ? 5 : -5}`, x: i % 2 ? 8 : -8, duration: .11, yoyo: true, repeat: 15, ease: 'sine.inOut' }, .3 + i * .02));
+  ms.forEach(m => { const r = rectOf(m); tl.to(m, { x: 540 - r.cx, y: 820 - r.cy, scale: 0, rotation: 0, opacity: 0, duration: .45, ease: 'power3.in' }, at(1.95)); });
+  tl.fromTo(pill, { opacity: 0, y: 50, scale: .8 }, { opacity: 1, y: 0, scale: 1, duration: .4, ease: 'back.out(2)' }, at(.75));
+  tl.to(pill, { y: 14, duration: .25, yoyo: true, repeat: 3, ease: 'sine.inOut' }, at(1.15));
+  tl.to(pill, { opacity: 0, scale: .8, duration: .25, ease: 'power2.in' }, at(2.15));
+}
+if (VERSION === 'B') {
+  const sqs = []; for (let i = 0; i < 6; i++) { const s = el('div', 'hsq', '<i></i><svg viewBox="0 0 70 70"><path d="M16 36l12 12L54 22"/></svg>', $('#hooklayer')); s.style.left = (90 + i * 150) + 'px'; sqs.push(s); }
+  const hc = el('div', 'hcount', '<div id="hcn">' + [0, 1, 2, 3, 4, 5, 6].map(n => `<span>${n}/6 habits</span>`).join('') + '</div>', $('#hooklayer'));
+  tl.fromTo(sqs, { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: .35, stagger: .04, ease: 'back.out(2)' }, at(0));
+  tl.fromTo(hc, { opacity: 0 }, { opacity: 1, duration: .3 }, at(.2));
+  sqs.forEach((s, i) => { const t = .45 + i * .2;
+    tl.to(s.querySelector('i'), { scale: 1, duration: .25, ease: 'back.out(2.5)' }, at(t));
+    tl.to(s.querySelector('path'), { strokeDashoffset: 0, duration: .22, ease: 'power2.out' }, at(t + .08));
+    tl.fromTo(s, { scale: 1 }, { scale: 1.12, duration: .1, yoyo: true, repeat: 1, immediateRender: false }, at(t));
+    tl.to('#hcn', { y: -80 * (i + 1), duration: .2, ease: 'back.out(2)' }, at(t)); });
+  const cols = ['#6EE7A8', '#FBBF24', '#60A5FA', '#F472B6', '#ffffff'];
+  for (let i = 0; i < 26; i++) { const c = el('div', 'conf', '', $('#hooklayer')); c.style.background = cols[i % 5]; c.style.left = '540px'; c.style.top = '1300px';
+    const a = (i / 26) * Math.PI * 2, d = 280 + (i % 4) * 90;
+    tl.fromTo(c, { opacity: 1, x: 0, y: 0, rotation: 0 }, { x: Math.cos(a) * d, y: Math.sin(a) * d * .8 + 120, rotation: 360 + i * 40, opacity: 0, duration: .9, ease: 'power2.out', immediateRender: false }, at(1.62)); }
+  tl.to([...sqs, hc], { opacity: 0, y: 80, duration: .3, stagger: .02, ease: 'power2.in' }, at(2.05));
+}
+if (VERSION === 'C') {
+  const A = [["📝 Notes app", 80, 260, -6], ["✅ To-do app", 600, 220, 5], ["📅 Calendar app", 60, 1160, 4], ["🔁 Habit app", 640, 1120, -6],
+    ["📔 Journal", 120, 1420, -3], ["🎯 Goal tracker", 580, 1440, 6]];
+  const as = A.map(([txt, x, y, r]) => { const a = el('div', 'app', txt.replace(/^(\S+)/, "<span class='e'>$1</span>") + '<span class="strike"></span>', $('#hooklayer')); a.style.left = x + 'px'; a.style.top = y + 'px'; gsap.set(a, { rotation: r }); return a; });
+  $('#hooklayer').prepend(...as);
+  tl.fromTo(as, { opacity: 0, scale: .5 }, { opacity: .9, scale: 1, duration: .35, stagger: .06, ease: 'back.out(2)' }, 0);
+  as.forEach((a, i) => tl.to(a.querySelector('.strike'), { scaleX: 1, duration: .2, ease: 'power2.out' }, at(.55 + i * .1)));
+  as.forEach(a => { const r = rectOf(a); tl.to(a, { x: 540 - r.cx, y: 1330 - r.cy, scale: .2, rotation: 0, opacity: 0, duration: .45, ease: 'power3.in' }, at(1.25)); });
+  const one = el('div', 'one', "<span class='e'>🌿</span> All in 1 template", $('#hooklayer'));
+  tl.fromTo(one, { opacity: 0, scale: .3 }, { opacity: 1, scale: 1, duration: .45, ease: 'back.out(2.2)' }, at(1.62));
+  tl.to(one, { opacity: 0, scale: .8, duration: .25, ease: 'power2.in' }, at(2.2));
+}
+tl.to('.hook', { opacity: 0, scale: 1.35, filter: 'blur(16px)', duration: .4, ease: 'power2.in' }, at(2.1));
+
+// ===================================================================== INTRO: device flies in
+tl.fromTo('#device', { opacity: 0, scale: 1.3, rotationX: 28, y: 140, filter: 'blur(14px) brightness(1)' },
+  { opacity: 1, scale: 1, rotationX: 0, y: 0, filter: 'blur(0px) brightness(1)', duration: .85, ease: 'expo.out' }, at(T.intro - .15));
+tl.fromTo('#glint', { x: 0 }, { x: 2200, duration: 1.0, ease: 'power2.inOut' }, at(T.intro + .35));
+chipIn('intro', T.intro + .1, T.f1 - .25);
+capIn('intro', T.intro + .2, T.f1 - .25);
+
+// ===================================================================== FEATURES (computed after layout)
+function feature(key, t0, t1, extra) {
+  chipIn(key, t0, t1 - .25); capIn(key, t0 + .15, t1 - .3);
+  if (REG[key]) liftOut(key, t0);
+  extra(t0, t1);
+  if (REG[key]) compOut('#' + key, t1 - .32);
+  if (REG[key] && key !== 'f6') deviceFocus(t1 - .3, true);
+}
+
+// ----- F1 Today & Overdue
+feature('f1', T.f1, T.f2, (S, E) => {
+  tl.fromTo('#f1 .r', { x: -50, opacity: 0 }, { x: 0, opacity: 1, duration: .4, stagger: .1 }, at(S + .95));
+  tl.fromTo('#f1 .pop, #f1 .alert', { scale: 0 }, { scale: 1, duration: .35, stagger: .04, ease: 'back.out(2.5)' }, at(S + 1.1));
+  tl.to('#f1today .e', { rotation: 18, duration: .07, yoyo: true, repeat: 9, ease: 'sine.inOut', transformOrigin: '50% 50%' }, at(S + 1.6));
+  tl.fromTo('#f1over', { boxShadow: '0 0 0 0 rgba(235,87,87,.85)', backgroundColor: 'rgba(235,87,87,0)' },
+    { boxShadow: '0 0 0 16px rgba(235,87,87,0)', backgroundColor: 'rgba(235,87,87,.28)', duration: .55, repeat: 2, ease: 'power1.out' }, at(S + 1.55));
+  callout("Due today <span class='e'>⏰</span>", '#f1today', '#f1', 'above', 640, [.5, 0], S + 1.35, E - .3);
+  callout("Missed it? Flagged <span class='e'>⚠️</span>", '#f1over', '#f1', 'below', 560, [.5, 1], S + 1.6, E - .3);
+});
+
+// ----- F2 Task board with drag & drop
+feature('f2', T.f2, T.f3, (S, E) => {
+  tl.fromTo('#f2 .card', { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: .35, stagger: .06, immediateRender: true }, at(S + .95));
+  const board = rectOf($('#f2 .board'));
+  const cx = (col, slot) => board.x + COLX[col] + 12 + 128, cy = slot => board.y + SLOT(slot) + 58;
+  tl.set('#cursor', { x: 1100, y: 1500, opacity: 1 }, at(S + 1.3));
+  cursorTo(cx(0, 0) + 40, cy(0) + 10, S + 1.32, .38);
+  tl.to('#cursor', { scale: .85, duration: .1 }, at(S + 1.72));
+  tl.to('#cd1', { scale: 1.07, rotation: -4, zIndex: 5, boxShadow: '0 30px 60px rgba(0,0,0,.7), 0 0 0 2px #6EE7A8', duration: .15 }, at(S + 1.72));
+  // carry: To Do -> Doing -> Done
+  tl.to('#cd1', { x: 300, y: -20, duration: .38, ease: 'power2.inOut' }, at(S + 1.88));
+  cursorTo(cx(1, 0) + 40, cy(0) - 10, S + 1.88, .38);
+  tl.to('#cd1', { x: 600, y: 0, rotation: 3, duration: .38, ease: 'power2.inOut' }, at(S + 2.28));
+  cursorTo(cx(2, 0) + 40, cy(0) + 10, S + 2.28, .38);
+  tl.to('#cd2', { top: SLOT(0), duration: .3, ease: 'power3.out' }, at(S + 1.95));
+  counter('#cnt0', [[S + 1.95, 1]]);
+  tl.to(['#cd4', '#cd5'], { top: (i) => SLOT(i + 1) + 0, duration: .3, ease: 'power3.out' }, at(S + 2.32));
+  tl.to('#cd1', { scale: 1, rotation: 0, boxShadow: '0 6px 16px rgba(0,0,0,.35), 0 0 0 2px #6EE7A8', duration: .25, ease: 'back.out(2)' }, at(S + 2.66));
+  tl.to('#cursor', { scale: 1, duration: .1 }, at(S + 2.66));
+  tl.fromTo('#cd1 .badge', { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: .35, ease: 'back.out(3)' }, at(S + 2.7));
+  counter('#cnt2', [[S + 2.7, 1]]);
+  tl.to('#cursor', { x: '+=160', y: '+=260', opacity: 0, duration: .35, ease: 'power2.in' }, at(S + 2.85));
+  callout("Drag &amp; drop <span class='e'>✋</span>", '#col1 .pill', '#f2', 'above', 390, [.5, 0], S + 1.25, E - .3);
+  callout("Priority tags <span class='e'>🏷️</span>", '#cd3tag', '#f2', 'below', 470, [.5, 1], S + 1.5, E - .3);
+});
+
+// ----- F3 Daily log: tick habits, score fills
+feature('f3', T.f3, T.f4, (S, E) => {
+  tl.fromTo('#f3 .hb', { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: .35, stagger: .06 }, at(S + .95));
+  const cbs = $$('#f3 .cb'), sq = $$('#f3 .sq i');
+  tl.set('#cursor', { x: 1100, y: 1500, opacity: 1, scale: 1 }, at(S + 1.15));
+  [0, 1, 2, 3].forEach((i, n) => {
+    const r = rectOf(cbs[i]), t = S + 1.55 + n * .42;
+    cursorTo(r.cx + 6, r.cy + 4, t - (n ? .3 : .38), n ? .3 : .38);
+    tap(r.cx, r.cy, t);
+    tl.to(cbs[i].querySelector('.fill'), { scale: 1, duration: .22, ease: 'back.out(2.5)' }, at(t + .03));
+    tl.to(cbs[i].querySelector('path'), { strokeDashoffset: 0, duration: .2 }, at(t + .08));
+    tl.to(cbs[i].parentElement, { backgroundColor: 'rgba(34,197,94,.14)', duration: .25 }, at(t + .05));
+    tl.to(sq[i], { scale: 1, duration: .3, ease: 'back.out(2.2)' }, at(t + .1));
+    tl.fromTo(sq[i].parentElement, { scale: 1 }, { scale: 1.18, duration: .1, yoyo: true, repeat: 1, immediateRender: false }, at(t + .1));
+  });
+  counter('#f3num', [0, 1, 2, 3].map(n => [S + 1.65 + n * .42, n + 1]));
+  tl.to('#cursor', { x: '+=200', y: '+=300', opacity: 0, duration: .35, ease: 'power2.in' }, at(S + 3.05));
+  tl.fromTo('#f3 .score', { boxShadow: '0 0 0 0 rgba(110,231,168,0)' }, { boxShadow: '0 0 0 4px rgba(110,231,168,.9), 0 0 40px rgba(110,231,168,.5)', duration: .3, yoyo: true, repeat: 1 }, at(S + 3.0));
+  callout("Score updates itself <span class='e'>⚡</span>", '#f3 .sqs', '#f3', 'above', 560, [.5, 0], S + 1.25, E - .3);
+  callout("Tick a habit <span class='e'>✔️</span>", '#f3 .hb:nth-child(5) .cb', '#f3', 'below', 300, [.5, 1], S + 1.45, E - .3);
+});
+
+// ----- F4 charts
+feature('f4', T.f4, T.f5, (S, E) => {
+  tl.fromTo('#bars .bar', { scaleY: 0 }, { scaleY: 1, duration: .55, stagger: .07, ease: 'back.out(1.4)' }, at(S + .95));
+  tl.fromTo('#bars .bar b', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .25, stagger: .07 }, at(S + 1.3));
+  $$('.dseg').forEach((c, i) => { const o = { v: 0 }, len = +c.dataset.len;
+    tl.to(o, { v: 1, duration: .38, ease: 'power2.inOut', onUpdate: () => c.setAttribute('stroke-dasharray', `${o.v * len} ${CIRC}`) }, at(S + 1.05 + i * .3)); });
+  tl.fromTo('#donutc', { scale: 0 }, { scale: 1, duration: .4, ease: 'back.out(3)' }, at(S + 1.9));
+  callout("Your habit trend <span class='e'>📈</span>", '#bars .bar:nth-child(4)', '#f4', 'above', 320, [.5, 0], S + 1.3, E - .3);
+  callout("Mood at a glance <span class='e'>😊</span>", '#f4 .legend', '#f4', 'below', 700, [.5, 1], S + 1.5, E - .3);
+});
+
+// ----- F5 goals
+feature('f5', T.f5, T.f6, (S, E) => {
+  tl.fromTo('#f5 .gr', { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: .35, stagger: .08 }, at(S + .95));
+  $$('#f5 .gr').forEach((row, ri) => { const p = +row.dataset.p, segs = row.querySelectorAll('.seg i'), pct = row.querySelector('.pct'), o = { v: 0 };
+    tl.to(o, { v: p, duration: 1.0, ease: 'power2.out', onUpdate: () => {
+      segs.forEach((s, i) => s.style.width = Math.max(0, Math.min(1, o.v / 10 - i)) * 100 + '%'); pct.textContent = Math.round(o.v) + '%'; } }, at(S + 1.15 + ri * .08)); });
+  tl.fromTo('#f5 .pop', { scale: 0 }, { scale: 1, duration: .3, stagger: .06, ease: 'back.out(2.5)' }, at(S + 1.4));
+  callout("Bar fills as you go <span class='e'>📊</span>", '#f5 .gr:nth-of-type(3) .segs', '#f5', 'above', 600, [.6, 0], S + 1.3, E - .3);
+  callout("Status at a glance <span class='e'>👀</span>", '#f5 .gr:nth-of-type(6) .tag', '#f5', 'below', 640, [.5, 1], S + 1.5, E - .3);
+});
+
+// ----- F6 weekly review
+feature('f6', T.f6, T.f7, (S, E) => {
+  const RC = 2 * Math.PI * 120; gsap.set('#ringc', { attr: { 'stroke-dasharray': `0 ${RC}` } });
+  const o = { v: 0 };
+  tl.to(o, { v: 72, duration: 1.1, ease: 'power2.out', onUpdate: () => { $('#ringc').setAttribute('stroke-dasharray', `${o.v / 100 * RC} ${RC}`); $('#wkpct').textContent = Math.round(o.v); } }, at(S + 1.0));
+  tl.fromTo('#f6 .stat', { x: 50, opacity: 0 }, { x: 0, opacity: 1, duration: .35, stagger: .1 }, at(S + 1.0));
+  tl.fromTo('#f6 .star', { scale: 0, rotation: -90 }, { scale: 1, rotation: 0, duration: .3, stagger: .07, ease: 'back.out(3)' }, at(S + 1.3));
+  const sl = { v: 0 }; tl.to(sl, { v: 7, duration: .8, onUpdate: () => $('#wksleep').textContent = sl.v.toFixed(1) }, at(S + 1.2));
+  const dl = { v: 0 }; tl.to(dl, { v: 3, duration: .6, onUpdate: () => $('#wkdays').textContent = Math.round(dl.v) }, at(S + 1.3));
+  tl.fromTo('#wkwin', { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: .35 }, at(S + 1.6));
+  callout("Auto habit average <span class='e'>⚡</span>", '.ring', '#f6', 'above', 300, [.5, 0], S + 1.3, E - .3);
+  callout("Sleep average, done <span class='e'>😴</span>", '#st2 .v', '#f6', 'above', 760, [.5, 0], S + 1.5, E - .3);
+});
+
+// ----- F7 calendar + guide (device stays dimmed)
+chipIn('f7', T.f7, T.cta - .25); capIn('f7', T.f7 + .1, T.cta - .3);
+tl.fromTo('#f7a', { x: -300, opacity: 0, rotation: -6 }, { x: 0, opacity: 1, rotation: -2, duration: .5, ease: 'expo.out' }, at(T.f7));
+tl.fromTo('#f7b', { x: 300, opacity: 0, rotation: 6 }, { x: 0, opacity: 1, rotation: 2, duration: .5, ease: 'expo.out' }, at(T.f7 + .08));
+tl.fromTo('#cal .d', { scale: 0 }, { scale: 1, duration: .25, stagger: .008, ease: 'back.out(2)' }, at(T.f7 + .2));
+tl.fromTo('#cal .d i', { scaleX: 0 }, { scaleX: 1, duration: .25, stagger: .04, transformOrigin: '0 50%' }, at(T.f7 + .65));
+tl.fromTo('#cal .today', { boxShadow: 'inset 0 0 0 3px #6EE7A8, 0 0 0 0 rgba(110,231,168,.8)' }, { boxShadow: 'inset 0 0 0 3px #6EE7A8, 0 0 0 14px rgba(110,231,168,0)', duration: .6, repeat: 1 }, at(T.f7 + .7));
+tl.fromTo('#f7b .step', { x: 60, opacity: 0 }, { x: 0, opacity: 1, duration: .35, stagger: .1 }, at(T.f7 + .3));
+tl.to(['#f7a', '#f7b'], { opacity: 0, y: -40, scale: .92, duration: .3, ease: 'power2.in' }, at(T.cta - .3));
+
+// ===================================================================== CTA
+deviceFocus(T.cta - .1, true);
+tl.to('#page', { y: 0, duration: .8, ease: 'power3.inOut' }, at(T.cta));
+tl.to('#device', { y: -250, scale: .78, duration: .8, ease: 'power3.inOut' }, at(T.cta + .05));
+tl.to('#device', { y: -262, duration: .5, yoyo: true, repeat: 4, ease: 'sine.inOut' }, at(T.cta + .85));
+tl.fromTo('#cta-price .l1', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: .4 }, at(T.cta + .45));
+tl.fromTo('#cta-price .l2', { opacity: 0, scale: 1.6, filter: 'blur(10px)' }, { opacity: 1, scale: 1, filter: 'blur(0px)', duration: .45, ease: 'back.out(1.6)' }, at(T.cta + .6));
+tl.fromTo('#cta-btn', { opacity: 0, scale: .5 }, { opacity: 1, scale: 1, duration: .45, ease: 'back.out(2.4)' }, at(T.cta + .85));
+for (let b = 0; b < 4; b++) tl.to('#cta-btn', { scale: 1.06, duration: .12, yoyo: true, repeat: 1, ease: 'power1.inOut' }, at(T.cta + 1.5 + b * .5));
+tl.fromTo('#cta-btn .shine', { x: 0 }, { x: 1300, duration: .7, repeat: 2, repeatDelay: .35, ease: 'power2.inOut' }, at(T.cta + 1.2));
+for (let i = 0; i < 14; i++) { const s = el('div', 'spark', '', $('#sparks')); const a = i / 14 * Math.PI * 2;
+  s.style.left = '540px'; s.style.top = '1120px';
+  tl.fromTo(s, { opacity: 1, x: 0, y: 0, scale: 1 }, { x: Math.cos(a) * (420 + (i % 3) * 60), y: Math.sin(a) * 200, opacity: 0, scale: .3, duration: .9, ease: 'power3.out', immediateRender: false }, at(T.cta + .65)); }
+
+// ===================================================================== exports for the renderer
+window.DURATION = T.end;
+window.seek = t => { tl.time(t + OFFSET, false); };
+tl.time(OFFSET, false);
+window.READY = true;
+</script>
+</body></html>

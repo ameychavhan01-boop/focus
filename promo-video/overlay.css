@@ -1,0 +1,48 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: transparent; }
+body { font-family: 'Inter', 'Noto Color Emoji', sans-serif; color: #fff; -webkit-font-smoothing: antialiased; }
+body:not(.full) #root { display: inline-block; padding: 40px; }  /* room for shadows */
+body.full #root { width: 1080px; height: 1920px; position: relative; overflow: hidden; }
+.g { color: #6EE7A8; }
+.emoji { font-family: 'Noto Color Emoji'; }
+
+/* Scene caption: white bold text on a dark rounded card */
+.cap { max-width: 900px; padding: 34px 48px 38px; border-radius: 40px; text-align: center;
+  background: rgba(10, 15, 13, 0.92); border: 2px solid rgba(110, 231, 168, 0.35);
+  box-shadow: 0 18px 50px rgba(0,0,0,0.55);
+  font-weight: 800; font-size: 66px; line-height: 1.16; letter-spacing: -1.2px;
+  text-shadow: 0 2px 0 rgba(0,0,0,0.6); }
+.cap .sub { display: block; margin-top: 16px; font-size: 54px; letter-spacing: 2px; }
+
+/* Small label chip above the screen */
+.chip { display: inline-flex; align-items: center; gap: 18px; padding: 16px 30px 16px 18px; border-radius: 999px;
+  background: rgba(16, 24, 20, 0.92); border: 2px solid rgba(110, 231, 168, 0.45);
+  font-weight: 700; font-size: 40px; letter-spacing: -0.3px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+.chip .num { display: inline-grid; place-items: center; width: 58px; height: 58px; border-radius: 50%;
+  background: #6EE7A8; color: #0B1A12; font-weight: 800; font-size: 30px; }
+
+/* Hook */
+.hook { width: 1000px; text-align: center; }
+.hook h1 { font-weight: 900; font-size: 136px; line-height: 1.04; letter-spacing: -4px;
+  -webkit-text-stroke: 10px #07100B; paint-order: stroke fill; text-shadow: 0 10px 40px rgba(0,0,0,0.7); }
+.hook-sub { display: inline-block; padding: 22px 44px; border-radius: 999px; background: #6EE7A8; color: #0B1A12;
+  font-weight: 800; font-size: 60px; letter-spacing: -1px; box-shadow: 0 14px 40px rgba(0,0,0,0.5); }
+
+/* "Plus..." feature chips */
+.plus-title { font-weight: 900; font-size: 110px; letter-spacing: -3px; text-align: center;
+  -webkit-text-stroke: 8px #07100B; paint-order: stroke fill; }
+.fchip { display: inline-flex; align-items: center; gap: 24px; width: 820px; padding: 30px 40px; border-radius: 36px;
+  background: rgba(16, 24, 20, 0.95); border: 2px solid rgba(110, 231, 168, 0.4);
+  font-weight: 800; font-size: 58px; letter-spacing: -1px; box-shadow: 0 14px 40px rgba(0,0,0,0.45); }
+.fchip .ic { font-size: 64px; }
+
+/* Call to action */
+.cta { width: 960px; text-align: center; }
+.cta .price { font-weight: 900; font-size: 104px; line-height: 1.05; letter-spacing: -3px;
+  -webkit-text-stroke: 8px #07100B; paint-order: stroke fill; }
+.cta .btn { display: inline-block; margin-top: 34px; padding: 30px 60px; border-radius: 999px;
+  background: #6EE7A8; color: #0B1A12; font-weight: 900; font-size: 66px; letter-spacing: -1.5px;
+  box-shadow: 0 0 0 10px rgba(110,231,168,0.18), 0 20px 50px rgba(0,0,0,0.5); }
+.brand { display: inline-flex; align-items: center; gap: 16px; padding: 18px 34px; border-radius: 999px;
+  background: rgba(16,24,20,0.92); border: 2px solid rgba(255,255,255,0.14);
+  font-weight: 700; font-size: 44px; letter-spacing: 1px; }

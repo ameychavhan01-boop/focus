@@ -1,0 +1,47 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="promo.css">
+<style>
+  .t-hook { position: absolute; left: 0; right: 0; top: 300px; text-align: center; }
+  .t-hook .line { display: block; font-weight: 900; font-size: 132px; line-height: 1.02; letter-spacing: -4.5px;
+    -webkit-text-stroke: 12px #050806; paint-order: stroke fill; text-shadow: 0 14px 50px rgba(0,0,0,.8); }
+  #device { top: 820px; transform: rotate(-4deg) scale(.86); opacity: 1; }
+  .scorecard { position: absolute; left: 330px; top: 1180px; width: 700px; padding: 26px 30px; border-radius: 30px; transform: rotate(3deg);
+    background: linear-gradient(180deg, #1f1f1f, #181818); border: 2.5px solid #6EE7A8;
+    box-shadow: 0 40px 100px rgba(0,0,0,.8), 0 0 70px rgba(110,231,168,.35); }
+  .scorecard .lbl { font-size: 30px; font-weight: 700; color: rgba(255,255,255,.55); margin-bottom: 14px; }
+  .scorecard .row { display: flex; align-items: center; gap: 12px; }
+  .scorecard .sq { width: 70px; height: 70px; border-radius: 12px; background: #d9d9d9; }
+  .scorecard .sq.on { background: #22C55E; }
+  .scorecard .n { margin-left: 14px; font-size: 60px; font-weight: 900; color: #fff; }
+  .price { position: absolute; left: 50px; top: 1240px; width: 250px; height: 250px; border-radius: 50%; transform: rotate(-10deg);
+    background: #6EE7A8; color: #0B1A12; display: grid; place-content: center; text-align: center;
+    box-shadow: 0 0 0 12px rgba(110,231,168,.2), 0 30px 70px rgba(0,0,0,.6); }
+  .price b { display: block; font-size: 84px; font-weight: 900; letter-spacing: -3px; line-height: 1; }
+  .price span { font-size: 30px; font-weight: 800; }
+  .tag-bottom { position: absolute; left: 540px; top: 1590px; transform: translate(-50%, -50%); white-space: nowrap;
+    padding: 20px 40px; border-radius: 999px; background: rgba(14,20,17,.94); border: 2.5px solid rgba(110,231,168,.55);
+    font-size: 44px; font-weight: 800; letter-spacing: -.5px; box-shadow: 0 16px 40px rgba(0,0,0,.5); }
+</style></head><body>
+<div id="stage">
+  <div id="blob1" class="blob"></div><div id="blob2" class="blob"></div><div id="blob3" class="blob"></div>
+  <div id="dots"></div>
+  <div class="t-hook" id="hook"></div>
+  <div id="device"><div id="screen"><img id="page" src="page.png"></div></div>
+  <div class="scorecard"><div class="lbl">Habit Score · auto</div>
+    <div class="row"><div class="sq on"></div><div class="sq on"></div><div class="sq on"></div><div class="sq on"></div><div class="sq"></div><div class="sq"></div><span class="n">4/6</span></div></div>
+  <div class="price"><b>₹299</b><span>/ $5</span></div>
+  <div class="tag-bottom"><span class="e">🌿</span> Notion Daily Planner &amp; Habit Tracker</div>
+  <div id="vignette"></div>
+</div>
+<script>
+const v = (new URLSearchParams(location.search).get('v') || 'A').toUpperCase();
+const H = {
+  A: ["Your day", "feels messy? <span class='e'>😩</span>", "<span class='g'>Fix it.</span>"],
+  B: ["I built", "<span class='g'>6 habits</span>", "with this <span class='e'>🌱</span>"],
+  C: ["The only", "<span class='g'>Notion template</span>", "you need <span class='e'>✨</span>"] }[v];
+document.getElementById('hook').innerHTML = H.map(l => `<span class="line">${l}</span>`).join('');
+if (v === 'C') document.querySelectorAll('.t-hook .line')[1].style.fontSize = '116px';
+window.READY = true;
+</script>
+</body></html>
