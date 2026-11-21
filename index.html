@@ -1086,6 +1086,21 @@ body[data-view="focus"] .ab { border-radius: 22px 22px 7px 22px; transform-origi
 .stage.theatre .unlink { background: rgba(255, 255, 255, .2); color: #fff; }
 .stage.theatre .rdots i { background: rgba(255, 255, 255, .35); } .stage.theatre .rdots i.on { background: #fff; } .stage.theatre .rdots.rd-lg i.cur { background: transparent; box-shadow: inset 0 0 0 2px #fff; }
 .stage.theatre .breath i { background: #fff; }
+/* timer theme picker */
+.scene-pick { display: flex; align-items: center; gap: 10px; max-width: 100%; }
+.sp-l { font-size: 12.5px; font-weight: 650; letter-spacing: .05em; text-transform: uppercase; color: var(--text3); flex: none; }
+.stage.theatre .sp-l { color: rgba(255, 255, 255, .78); text-shadow: 0 1px 10px rgba(0, 0, 0, .5); }
+.sp-row { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; min-width: 0; padding: 2px; }
+.sp-row::-webkit-scrollbar { display: none; }
+.set-sp { flex-wrap: wrap; margin-top: 10px; }
+.chip.sp-chip { height: 32px; padding: 0 12px 0 6px; font-size: 13px; gap: 7px; flex: none; white-space: nowrap; }
+.sp-sw { width: 20px; height: 20px; border-radius: 50%; flex: none; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .25); }
+.sw-none { background: radial-gradient(circle, transparent 46%, var(--accent) 50% 62%, transparent 66%), var(--card2); }
+.sw-sun { background: radial-gradient(circle at 38% 66%, #fff6d8 0 13%, transparent 16%), linear-gradient(180deg, #3d3a8a, #c4669a 48%, #ffa35c 74%, #3a2733 75%); }
+.sw-ocean { background: radial-gradient(circle at 70% 70%, rgba(110, 255, 225, .9) 0 7%, transparent 10%), linear-gradient(180deg, #bfe9ff 0 16%, #3fb6e6 18%, #0b5f9a 55%, #020a16); }
+.sw-space { background: radial-gradient(circle at 66% 40%, #f3c48b 0 22%, transparent 25%), radial-gradient(circle at 25% 72%, #fff 0 5%, transparent 7%), linear-gradient(150deg, #0b1a40, #2a0f40); }
+.sw-aurora { background: linear-gradient(180deg, transparent 0 74%, #0a1018 75%), linear-gradient(170deg, #050b1c 10%, #2fe39a 45%, #7b4bd6 62%, #0f2a3a 74%); }
+@media (max-width: 560px) { .scene-pick { flex-direction: column; gap: 6px; } .scene-pick .sp-row { flex-wrap: wrap; justify-content: center; overflow: visible; } }
 .th-quote { text-align: center; min-height: 50px; max-width: 560px; padding: 0 12px; transition: opacity .6s; text-shadow: 0 1px 16px rgba(0, 0, 0, .5); }
 .th-quote.swap { opacity: 0; }
 .th-quote b { display: block; font-size: 12.5px; font-weight: 650; letter-spacing: .05em; opacity: .82; margin-bottom: 3px; }
@@ -2383,7 +2398,7 @@ function defaults() {
       morningPlan: true, carryOver: true, weekStart: 1,
       backupOn: true, backupDay: 0, backupHour: 14,
       xpHabit: 5, xpHabitAll: 20, xpStep: 50, xpGoal: 300, goalIntro: true, motion: true,
-      theatre: true, theatreQuotes: true, quotes: [], coachName: 'Alex', alexNudges: true, alexVoice: false,
+      theatre: true, scene: 'sun', sceneLast: 'sun', theatreQuotes: true, quotes: [], coachName: 'Alex', alexNudges: true, alexVoice: false,
       skin: 'midnight', wpId: 'moon', wpAuto: 'off', wpDim: 0.35, wpOn: { home: true }
     },
     areas: [
@@ -2419,6 +2434,11 @@ function hydrate(data) {
   out.settings.targets.areas = Object.assign({}, (ds.targets && ds.targets.areas) || d.settings.targets.areas);
   ['tasks', 'sessions', 'revisions', 'events', 'distractions', 'xpLog', 'customTrophies', 'areas', 'ranks', 'habits', 'goals'].forEach(k => { if (!Array.isArray(out[k])) out[k] = d[k]; });
   if (!out.settings.presets || !out.settings.presets.length) out.settings.presets = d.settings.presets;
+  /* timer themes: older saves only had the sunrise on/off switch */
+  const SC_OK = ['none', 'sun', 'ocean', 'space', 'aurora'];
+  if (SC_OK.indexOf(ds.scene) < 0) out.settings.scene = ds.theatre === false ? 'none' : 'sun';
+  if (SC_OK.indexOf(out.settings.sceneLast) < 1) out.settings.sceneLast = out.settings.scene !== 'none' ? out.settings.scene : 'sun';
+  out.settings.theatre = out.settings.scene !== 'none';
   if (!out.ranks.length) out.ranks = d.ranks;
   if (!out.sel) out.sel = d.sel;
   if (!out.days) out.days = {};
@@ -3496,13 +3516,13 @@ function stageHTML() {
   const running = !!t, brk = t && t.phase === 'break';
   const tagSrc = t && t.phase === 'focus' ? t : S.sel;
   const task = tagSrc.taskId ? taskById(tagSrc.taskId) : null;
-  const th = !!s.theatre;
-  let h = '<section class="stage' + (th ? ' theatre' : '') + '">' + (th ? '<canvas class="th-cv" id="th-cv"></canvas><div class="th-scrim"></div>' : '') + '<div class="stage-top">';
+  const sc = curScene(), th = sc !== 'none';
+  let h = '<section class="stage' + (th ? ' theatre sc-' + sc : '') + '">' + (th ? '<canvas class="th-cv" id="th-cv"></canvas><div class="th-scrim"></div>' : '') + '<div class="stage-top">';
   h += running
     ? '<div class="chip static">' + ic(t.mode === 'pomodoro' ? 'timer' : 'clock', 16) + (t.mode === 'pomodoro' ? 'Pomodoro' : 'Stopwatch') + '</div>'
     : '<div class="seg" role="tablist"><button class="' + (s.mode === 'pomodoro' ? 'on' : '') + '" data-act="setMode" data-v="pomodoro">Pomodoro</button><button class="' + (s.mode === 'stopwatch' ? 'on' : '') + '" data-act="setMode" data-v="stopwatch">Stopwatch</button></div>';
   h += '<div class="grow"></div>' +
-    '<button class="icon-btn' + (th ? ' on' : '') + '" data-act="toggleTheatre" aria-label="Focus theatre">' + ic('sunrise', 21) + '</button>' +
+    '<button class="icon-btn' + (th ? ' on' : '') + '" data-act="toggleTheatre" aria-label="Timer theme on or off">' + ic('sunrise', 21) + '</button>' +
     '<button class="icon-btn" data-act="cycleFace" aria-label="Change clock face">' + ic('clock', 21) + '</button>' +
     '<button class="icon-btn' + (s.tick ? ' on' : '') + '" data-act="toggleTick" aria-label="Ticking sound">' + ic(s.tick ? 'sound' : 'mute', 21) + '</button>' +
     '<button class="icon-btn" data-act="openPad" aria-label="Distraction pad">' + ic('note', 21) + '</button>' +
@@ -3529,6 +3549,7 @@ function stageHTML() {
     h += '<div class="seg"><button class="' + (s.strict === 'relaxed' ? 'on' : '') + '" data-act="setStrict" data-v="relaxed">' + ic('leaf', 16) + 'Relaxed</button><button class="' + (s.strict === 'hardcore' ? 'on' : '') + '" data-act="setStrict" data-v="hardcore">' + ic('bolt', 16) + 'Hardcore</button></div></div>';
     h += '<div class="hint">' + (s.strict === 'hardcore' ? 'No pause, no leaving the app. ' + s.hardcoreMult + '× XP' : '') + '</div>';
     h += '<div class="ctl"><button class="btn primary big" data-act="timerStart">' + ic('play', 20) + 'Start focus</button></div>';
+    h += scenePickHTML(sc);
   } else {
     const every = Math.max(1, p.every);
     let dots = '';
@@ -4675,7 +4696,7 @@ function thRidge(ctx, pts, W, baseY, H, color, flip) {
   for (let i = 0; i < pts.length; i++) ctx.lineTo(W * i / (pts.length - 1), baseY - pts[i] * H * (flip ? -0.55 : 1));
   ctx.lineTo(W, baseY); ctx.closePath(); ctx.fill();
 }
-function thDraw(cv, ts, dt) {
+function thDrawSun(cv, ts, dt) {
   const dpr = Math.min(TH.q, window.devicePixelRatio || 1); const cw = cv.clientWidth, ch = cv.clientHeight; if (!cw || !ch) return;
   const W = Math.round(cw * dpr), H = Math.round(ch * dpr); if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
   const ctx = cv.getContext('2d'); const p = clamp(TH.p, 0, 1), k = skyAt(p), hz = H * 0.72, u = Math.min(W, H);
@@ -4778,9 +4799,466 @@ function thDraw(cv, ts, dt) {
   const vg = ctx.createRadialGradient(W / 2, H * 0.46, u * 0.3, W / 2, H * 0.46, Math.max(W, H) * 0.78); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.3)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
 }
 
+
+/* ============================================================
+   Focus — more timer themes. Each one tells the story of the
+   session like the sunrise does: p runs 0 → 1 with the session.
+   Deep Dive sinks from the sunlit surface to the abyss, Space
+   Voyage flies from Earth to a ringed planet, Northern Lights
+   grows from a faint glow to a full aurora. Breaks get their own
+   scene: floating back up, orbiting the planet, falling snow.
+   ============================================================ */
+const mkKeys = (rows, names) => rows.map(r => { const o = { p: r[0] }; names.forEach((n, i) => { o[n] = hex3(r[i + 1]); }); return o; });
+function keyAt(keys, p) {
+  p = clamp(p, 0, 1); let i = 0; while (i < keys.length - 2 && p > keys[i + 1].p) i++;
+  const a = keys[i], b = keys[i + 1], t = clamp((p - a.p) / (b.p - a.p), 0, 1), o = {};
+  for (const k in a) if (k !== 'p') o[k] = mix3(a[k], b[k], t);
+  return o;
+}
+const scRand = seed => { let s = seed; return () => (s = (s * 16807) % 2147483647) / 2147483647; };
+function scRidge(R, amp, sharp, base) {
+  const f = [0.9 + R() * 0.9, 2.1 + R() * 1.6, 4.7 + R() * 3, 10 + R() * 6], ph = [R() * 6.28, R() * 6.28, R() * 6.28, R() * 6.28], w = [1, .5, .24, .1], pts = [];
+  for (let i = 0; i <= 96; i++) { const x = i / 96; let h = 0; for (let k = 0; k < 4; k++) { const v = Math.sin(x * f[k] * 6.28 + ph[k]); h += (sharp ? 1 - 2 * Math.abs(v) : v) * w[k]; } pts.push(base + amp * (0.5 + 0.5 * clamp(h / 1.84, -1, 1))); }
+  return pts;
+}
+const ridgeAt = (pts, x) => { const f = clamp(x, 0, 1) * (pts.length - 1), i = Math.min(pts.length - 2, f | 0); return pts[i] + (pts[i + 1] - pts[i]) * (f - i); };
+function scVignette(e, a) {
+  const { ctx, W, H, u } = e;
+  const vg = ctx.createRadialGradient(W / 2, H * 0.46, u * 0.3, W / 2, H * 0.46, Math.max(W, H) * 0.78);
+  vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,' + a.toFixed(3) + ')'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+}
+
+/* ---------- Deep Dive ---------- */
+const OC_KEYS = mkKeys([
+  [0.00, '#5fcdec', '#0b6aa6'],
+  [0.18, '#2aa3d8', '#08497f'],
+  [0.42, '#0f5b94', '#062a52'],
+  [0.66, '#07294c', '#02111f'],
+  [0.86, '#041428', '#01070f'],
+  [1.00, '#020a17', '#000307']
+], ['top', 'bot']);
+const OC = { on: false };
+function ocInit() {
+  const R = scRand(20261121);
+  OC.bub = []; for (let i = 0; i < 44; i++) OC.bub.push({ x: R(), y: R() * 1.2, r: 0.6 + R() * 2.6, v: 0.035 + R() * 0.07, ph: R() * 6.28 });
+  OC.snow = []; for (let i = 0; i < 90; i++) OC.snow.push({ x: R(), y: R(), s: 0.4 + R() * 1.3, v: 0.004 + R() * 0.012, ph: R() * 6.28 });
+  OC.school = []; for (let i = 0; i < 16; i++) OC.school.push({ dx: (R() - 0.5) * 0.9, dy: (R() - 0.5) * 0.8, ph: R() * 6.28, s: 0.75 + R() * 0.5 });
+  OC.jelly = [[0.16, 0.2, 1.1, '#ff7ad9'], [0.82, 0.55, 0.85, '#9d8bff'], [0.62, 0.95, 0.7, '#62e6ff'], [0.33, 1.15, 0.6, '#ff9ecf']].map((j, i) => ({ x: j[0], y: j[1], s: j[2], c: hex3(j[3]), ph: i * 1.7 }));
+  OC.glow = []; for (let i = 0; i < 70; i++) OC.glow.push({ x: R(), y: R(), ph: R() * 6.28, sp: 0.4 + R() * 1.6, s: 0.6 + R() * 1.6, c: R() < 0.7 ? [110, 255, 225] : [150, 170, 255] });
+  OC.bed = scRidge(R, 0.11, false, 0.02);
+  OC.weed = []; for (let i = 0; i < 22; i++) OC.weed.push({ x: R(), h: 0.05 + R() * 0.11, ph: R() * 6.28 });
+  OC.coral = []; for (let i = 0; i < 26; i++) OC.coral.push({ x: R(), ph: R() * 6.28, c: R() < 0.5 ? [255, 110, 200] : [90, 240, 255] });
+  OC.on = true;
+}
+function ocFish(ctx, x, y, sz, dir, flap, col, a) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(dir, 1); ctx.globalAlpha = a; ctx.fillStyle = col;
+  ctx.beginPath(); ctx.ellipse(0, 0, sz, sz * 0.38, 0, 0, 6.2832); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(-sz * 0.8, 0); ctx.lineTo(-sz * 1.55, -sz * 0.45 + flap); ctx.lineTo(-sz * 1.45, flap * 0.3); ctx.lineTo(-sz * 1.55, sz * 0.45 + flap); ctx.closePath(); ctx.fill();
+  ctx.restore(); ctx.globalAlpha = 1;
+}
+function ocDraw(e, ts, dt, p, brk) {
+  const { ctx, W, H, u, dpr } = e; const k = keyAt(OC_KEYS, p);
+  const surf = H * (0.17 - p * 1.7), lit = 1 - smooth(0.04, 0.55, p);
+  /* water */
+  let g = ctx.createLinearGradient(0, Math.max(0, surf), 0, H); g.addColorStop(0, rgb3(k.top)); g.addColorStop(1, rgb3(k.bot)); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  /* the sky and the wavy surface seen from just below it */
+  if (surf > -H * 0.04) {
+    const wave = x => surf + Math.sin(x / W * 13 + ts * 1.3) * 3.2 * dpr + Math.sin(x / W * 31 - ts * 2.1) * 1.6 * dpr;
+    ctx.save(); ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(W, 0); for (let x = W; x >= 0; x -= W / 80) ctx.lineTo(x, wave(x)); ctx.closePath(); ctx.clip();
+    const sg = ctx.createLinearGradient(0, 0, 0, Math.max(1, surf)); sg.addColorStop(0, '#7cc6f2'); sg.addColorStop(1, '#dff3ff'); ctx.fillStyle = sg; ctx.fillRect(0, 0, W, Math.max(1, surf) + 6 * dpr);
+    const sb = ctx.createRadialGradient(W * 0.72, surf * 0.2, 0, W * 0.72, surf * 0.2, u * 0.4); sb.addColorStop(0, 'rgba(255,255,240,.95)'); sb.addColorStop(.12, 'rgba(255,250,225,.5)'); sb.addColorStop(1, 'rgba(255,250,225,0)'); ctx.fillStyle = sb; ctx.fillRect(0, 0, W, Math.max(1, surf) + 6 * dpr);
+    ctx.restore();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.strokeStyle = 'rgba(230,250,255,.75)'; ctx.lineWidth = 2 * dpr; ctx.beginPath(); for (let x = 0; x <= W; x += W / 80) { if (x === 0) ctx.moveTo(x, wave(x)); else ctx.lineTo(x, wave(x)); } ctx.stroke();
+    const sh = ctx.createLinearGradient(0, surf, 0, surf + H * 0.12); sh.addColorStop(0, 'rgba(190,240,255,.35)'); sh.addColorStop(1, 'rgba(190,240,255,0)'); ctx.fillStyle = sh; ctx.fillRect(0, surf, W, H * 0.12);
+    ctx.globalCompositeOperation = 'source-over';
+  }
+  /* shafts of sunlight that fade as you sink */
+  if (lit > 0.01) {
+    ctx.globalCompositeOperation = 'lighter'; const top = Math.max(0, surf);
+    for (let i = 0; i < 7; i++) {
+      const x0 = W * (0.06 + i * 0.145 + Math.sin(ts * 0.11 + i * 1.7) * 0.03), w0 = W * (0.018 + (i % 3) * 0.012), x1 = x0 + W * (0.1 + (i % 2) * 0.06) - W * 0.12, w1 = w0 * 3.4;
+      const fl = 0.55 + 0.45 * Math.sin(ts * 0.5 + i * 2.3);
+      const rg = ctx.createLinearGradient(0, top, 0, H * 0.95); rg.addColorStop(0, 'rgba(210,245,255,' + (0.16 * lit * fl).toFixed(3) + ')'); rg.addColorStop(1, 'rgba(210,245,255,0)');
+      ctx.fillStyle = rg; ctx.beginPath(); ctx.moveTo(x0 - w0, top); ctx.lineTo(x0 + w0, top); ctx.lineTo(x1 + w1, H * 0.95); ctx.lineTo(x1 - w1, H * 0.95); ctx.closePath(); ctx.fill();
+    }
+    ctx.globalCompositeOperation = 'source-over';
+  }
+  /* marine snow drifting past */
+  ctx.fillStyle = '#e8f6ff';
+  for (const s of OC.snow) {
+    const y = ((s.y - ts * s.v + p * 2.2) % 1 + 1) % 1, x = s.x + Math.sin(ts * 0.3 + s.ph) * 0.006;
+    ctx.globalAlpha = (0.14 + 0.32 * p) * (0.6 + 0.4 * Math.sin(ts + s.ph)); ctx.beginPath(); ctx.arc(x * W, y * H, s.s * dpr * 0.8, 0, 6.2832); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+  /* a school of fish in the sunlit water, and a second one further off */
+  const fA = 1 - smooth(0.28, 0.46, p);
+  if (fA > 0.01) {
+    const fc = rgb3(mix3(k.bot, [0, 0, 0], 0.35)), sz = u * 0.016;
+    const cx = (((ts * 0.022 + 0.25) % 1.5) - 0.25) * W, cy = H * (0.66 + 0.05 * Math.sin(ts * 0.27));
+    for (const f of OC.school) ocFish(ctx, cx + f.dx * u * 0.42 + Math.sin(ts * 1.4 + f.ph) * u * 0.01, cy + f.dy * u * 0.22 + Math.sin(ts * 0.9 + f.ph) * u * 0.008, sz * f.s, 1, Math.sin(ts * 9 + f.ph) * sz * 0.22, fc, 0.78 * fA);
+    const cx2 = (1.2 - ((ts * 0.012 + 0.6) % 1.5)) * W, cy2 = H * (0.3 + 0.04 * Math.sin(ts * 0.2 + 1));
+    for (let i = 0; i < 9; i++) { const f = OC.school[i]; ocFish(ctx, cx2 + f.dx * u * 0.22, cy2 + f.dy * u * 0.1, sz * 0.5 * f.s, -1, Math.sin(ts * 10 + f.ph) * sz * 0.12, fc, 0.42 * fA); }
+  }
+  /* a manta ray gliding through the middle depths */
+  const mA = smooth(0.2, 0.3, p) * (1 - smooth(0.56, 0.66, p));
+  if (mA > 0.01) {
+    const mx = (((ts * 0.011 + 0.1) % 1.6) - 0.3) * W, my = H * (0.36 + 0.05 * Math.sin(ts * 0.21)), ms = u * 0.12, fl = Math.sin(ts * 1.1) * ms * 0.28;
+    ctx.save(); ctx.translate(mx, my); ctx.globalAlpha = 0.62 * mA; ctx.fillStyle = rgb3(mix3(k.bot, [0, 0, 0], 0.5));
+    ctx.beginPath(); ctx.moveTo(ms * 0.55, 0); ctx.quadraticCurveTo(ms * 0.1, -ms * 0.1, -ms * 0.1, -ms * 0.85 - fl); ctx.quadraticCurveTo(-ms * 0.25, -ms * 0.2, -ms * 0.5, 0);
+    ctx.quadraticCurveTo(-ms * 0.25, ms * 0.2, -ms * 0.1, ms * 0.85 + fl * 0.4); ctx.quadraticCurveTo(ms * 0.1, ms * 0.1, ms * 0.55, 0); ctx.fill();
+    ctx.strokeStyle = ctx.fillStyle; ctx.lineWidth = 1.4 * dpr; ctx.beginPath(); ctx.moveTo(-ms * 0.45, 0); ctx.quadraticCurveTo(-ms * 0.9, Math.sin(ts * 1.5) * ms * 0.08, -ms * 1.3, Math.sin(ts * 1.5 + 1) * ms * 0.1); ctx.stroke();
+    ctx.restore(); ctx.globalAlpha = 1;
+  }
+  /* jellyfish, glowing more the darker it gets */
+  const jA = smooth(0.34, 0.48, p) * (1 - smooth(0.9, 0.99, p) * 0.6);
+  if (jA > 0.01) {
+    for (const j of OC.jelly) {
+      const x = (j.x + Math.sin(ts * 0.17 + j.ph) * 0.03) * W, y = (((j.y - ts * 0.01 * j.s) % 1.35 + 1.35) % 1.35 - 0.18) * H;
+      const pul = 0.5 + 0.5 * Math.sin(ts * 1.5 + j.ph), bw = j.s * u * 0.05 * (1 + 0.1 * pul), bh = bw * 0.82 * (1 - 0.12 * pul), gl = 0.25 + 0.75 * smooth(0.45, 0.85, p);
+      ctx.globalCompositeOperation = 'lighter';
+      const jg = ctx.createRadialGradient(x, y, 0, x, y, bw * 3.2); jg.addColorStop(0, rgb3(j.c, 0.22 * jA * gl)); jg.addColorStop(1, rgb3(j.c, 0)); ctx.fillStyle = jg; ctx.fillRect(x - bw * 3.2, y - bw * 3.2, bw * 6.4, bw * 6.4);
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.strokeStyle = rgb3(j.c, 0.38 * jA); ctx.lineWidth = 1.2 * dpr; ctx.lineCap = 'round';
+      for (let t = 0; t < 6; t++) {
+        const tx = x + (t - 2.5) / 2.5 * bw * 0.75; ctx.beginPath(); ctx.moveTo(tx, y);
+        for (let s = 1; s <= 9; s++) ctx.lineTo(tx + Math.sin(ts * 2 + s * 0.7 + t * 1.3 + j.ph) * bw * 0.16 * s / 9, y + s / 9 * bw * (2 + (t % 2) * 0.6));
+        ctx.stroke();
+      }
+      const bg = ctx.createRadialGradient(x, y - bh * 0.4, 0, x, y - bh * 0.3, bw * 1.1); bg.addColorStop(0, rgb3(mix3(j.c, [255, 255, 255], 0.5), 0.75 * jA)); bg.addColorStop(1, rgb3(j.c, 0.32 * jA));
+      ctx.fillStyle = bg; ctx.beginPath(); ctx.ellipse(x, y, bw, bh, 0, Math.PI, 0);
+      for (let s = 0; s <= 6; s++) ctx.lineTo(x + bw - s / 6 * bw * 2, y + (s % 2 ? bh * 0.16 : 0));
+      ctx.closePath(); ctx.fill();
+    }
+  }
+  /* glowing plankton in the deep */
+  const gA = smooth(0.58, 0.9, p);
+  if (gA > 0.01) {
+    ctx.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < OC.glow.length; i++) {
+      const s = OC.glow[i], a = gA * Math.pow(Math.max(0, Math.sin(ts * s.sp + s.ph)), 3); if (a < 0.02) continue;
+      const x = (s.x + Math.sin(ts * 0.13 + s.ph) * 0.01) * W, y = (((s.y - ts * 0.004) % 1) + 1) % 1 * H;
+      if (i % 6 === 0) { const r = u * 0.022 * s.s; const pg = ctx.createRadialGradient(x, y, 0, x, y, r); pg.addColorStop(0, rgb3(s.c, 0.4 * a)); pg.addColorStop(1, rgb3(s.c, 0)); ctx.fillStyle = pg; ctx.fillRect(x - r, y - r, r * 2, r * 2); }
+      ctx.fillStyle = rgb3(s.c, 0.9 * a); ctx.beginPath(); ctx.arc(x, y, s.s * dpr, 0, 6.2832); ctx.fill();
+    }
+    ctx.globalCompositeOperation = 'source-over';
+  }
+  /* an anglerfish's lure bobbing in the dark */
+  const aA = smooth(0.82, 0.95, p);
+  if (aA > 0.01) {
+    const lx = W * (0.2 + 0.05 * Math.sin(ts * 0.13)), ly = H * (0.5 + 0.04 * Math.sin(ts * 0.47)), bs = u * 0.07;
+    ctx.save(); ctx.globalAlpha = 0.55 * aA; ctx.fillStyle = '#0b1b2a'; ctx.beginPath(); ctx.ellipse(lx - bs * 0.55, ly + bs * 0.9, bs, bs * 0.62, -0.15, 0, 6.2832); ctx.fill();
+    ctx.strokeStyle = '#13283a'; ctx.lineWidth = 1.5 * dpr; ctx.beginPath(); ctx.moveTo(lx - bs * 0.2, ly + bs * 0.35); ctx.quadraticCurveTo(lx - bs * 0.1, ly - bs * 0.15, lx, ly); ctx.stroke(); ctx.restore();
+    ctx.globalCompositeOperation = 'lighter'; const lr = u * 0.06 * (0.85 + 0.15 * Math.sin(ts * 3.1));
+    const lg = ctx.createRadialGradient(lx, ly, 0, lx, ly, lr); lg.addColorStop(0, 'rgba(220,255,240,' + (0.9 * aA).toFixed(3) + ')'); lg.addColorStop(.15, 'rgba(120,255,220,' + (0.45 * aA).toFixed(3) + ')'); lg.addColorStop(1, 'rgba(120,255,220,0)');
+    ctx.fillStyle = lg; ctx.fillRect(lx - lr, ly - lr, lr * 2, lr * 2); ctx.globalCompositeOperation = 'source-over';
+  }
+  /* bubbles rising; more of them while you float back up */
+  const bA = (1 - p * 0.65) * (brk ? 1.25 : 1);
+  ctx.lineWidth = 1 * dpr;
+  for (const b of OC.bub) {
+    const y = ((b.y - ts * b.v * (brk ? 1.8 : 1)) % 1.2 + 1.2) % 1.2 - 0.1, x = (b.x + Math.sin(ts * 1.3 + b.ph) * 0.008) * W, r = b.r * dpr * 1.4;
+    ctx.strokeStyle = 'rgba(225,248,255,' + (0.5 * bA).toFixed(3) + ')'; ctx.beginPath(); ctx.arc(x, y * H, r, 0, 6.2832); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,' + (0.55 * bA).toFixed(3) + ')'; ctx.beginPath(); ctx.arc(x - r * 0.35, y * H - r * 0.35, r * 0.28, 0, 6.2832); ctx.fill();
+  }
+  /* the sea floor rises into view near the end */
+  const fl = smooth(0.76, 1, p);
+  if (fl > 0.01) {
+    const by = H * (1.14 - 0.26 * fl);
+    ctx.globalCompositeOperation = 'lighter';
+    for (const c of OC.coral) { const cx = c.x * W, cy = by - ridgeAt(OC.bed, c.x) * H, a = fl * (0.35 + 0.35 * Math.sin(ts * 0.8 + c.ph)); ctx.fillStyle = rgb3(c.c, a); ctx.beginPath(); ctx.arc(cx, cy - 2 * dpr, 1.8 * dpr, 0, 6.2832); ctx.fill(); }
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.strokeStyle = 'rgba(14,44,52,' + (0.9 * fl).toFixed(3) + ')'; ctx.lineWidth = 2.4 * dpr; ctx.lineCap = 'round';
+    for (const w of OC.weed) {
+      const x = w.x * W, y = by - ridgeAt(OC.bed, w.x) * H + 2 * dpr, h = w.h * H; ctx.beginPath(); ctx.moveTo(x, y);
+      for (let s = 1; s <= 8; s++) ctx.lineTo(x + Math.sin(ts * 0.9 + w.ph + s * 0.5) * u * 0.012 * s / 8, y - h * s / 8);
+      ctx.stroke();
+    }
+    thRidge(ctx, OC.bed, W, by, H, '#01050a');
+  }
+  scVignette(e, 0.28 + 0.3 * p);
+}
+
+/* ---------- Space Voyage ---------- */
+const SP_KEYS = mkKeys([
+  [0.00, '#030617', '#0b1a40'],
+  [0.40, '#04051a', '#120f36'],
+  [0.70, '#0b0620', '#2a0f40'],
+  [1.00, '#0a0614', '#2c1530']
+], ['top', 'bot']);
+const SP = { on: false };
+function spInit() {
+  const R = scRand(20261122);
+  SP.stars = [70, 60, 36].map(n => { const a = []; for (let i = 0; i < n; i++) a.push({ x: R(), y: R(), s: 0.4 + R() * 1.4, ph: R() * 6.28, tw: 0.6 + R() * 2 }); return a; });
+  SP.vel = [0.004, 0.012, 0.034]; SP.off = [0, 0, 0];
+  SP.ast = []; for (let i = 0; i < 26; i++) { const pts = []; for (let j = 0; j < 9; j++) pts.push(0.68 + R() * 0.42); SP.ast.push({ wp: 0.39 + R() * 0.25, y: R(), r: 0.008 + R() * 0.024, rot: R() * 6.28, vr: (R() - 0.5) * 0.8, d: 0.6 + R() * 0.8, pts }); }
+  SP.neb = [[-0.2, -0.1, 0.42, '#c04bd6'], [0.15, 0.12, 0.36, '#2fc6c9'], [0.05, -0.25, 0.3, '#5560ff'], [0.32, -0.05, 0.28, '#ff5fa2'], [-0.05, 0.25, 0.3, '#7d4bff']].map(b => ({ dx: b[0], dy: b[1], r: b[2], c: hex3(b[3]) }));
+  SP.bm = 0; SP.go = 0; SP.on = true;
+}
+function spEarth(ctx, x, y, r, ts) {
+  ctx.globalCompositeOperation = 'lighter';
+  const at = ctx.createRadialGradient(x, y, r * 0.95, x, y, r * 1.16); at.addColorStop(0, 'rgba(90,170,255,.5)'); at.addColorStop(1, 'rgba(90,170,255,0)'); ctx.fillStyle = at; ctx.beginPath(); ctx.arc(x, y, r * 1.16, 0, 6.2832); ctx.fill();
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.save(); ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.clip();
+  const og = ctx.createRadialGradient(x + r * 0.35, y - r * 0.4, 0, x, y, r); og.addColorStop(0, '#3d93e8'); og.addColorStop(1, '#0a2a5e'); ctx.fillStyle = og; ctx.fillRect(x - r, y - r, r * 2, r * 2);
+  const rot = ts * 0.006;
+  ctx.fillStyle = 'rgba(74,140,92,.6)'; [[-0.3, -0.35, 0.34, 0.2], [0.25, -0.05, 0.26, 0.38], [-0.1, 0.35, 0.3, 0.16], [0.55, -0.5, 0.18, 0.12]].forEach(l => { ctx.beginPath(); ctx.ellipse(x + ((l[0] + rot) % 1.6 + 1.6) % 1.6 * r - r * 0.6, y + l[1] * r, l[2] * r, l[3] * r, 0.4, 0, 6.2832); ctx.fill(); });
+  ctx.fillStyle = 'rgba(255,255,255,.18)'; [[-0.5, -0.2, 0.4, 0.05], [0.1, 0.25, 0.5, 0.06], [0.3, -0.4, 0.3, 0.04], [-0.2, 0.55, 0.35, 0.05]].forEach(c => { ctx.beginPath(); ctx.ellipse(x + ((c[0] + rot * 1.4) % 1.6 + 1.6) % 1.6 * r - r * 0.6, y + c[1] * r, c[2] * r, c[3] * r, -0.2, 0, 6.2832); ctx.fill(); });
+  const sh = ctx.createLinearGradient(x + r * 0.5, y - r * 0.5, x - r * 0.7, y + r * 0.7); sh.addColorStop(0, 'rgba(0,0,10,0)'); sh.addColorStop(.55, 'rgba(0,0,10,.35)'); sh.addColorStop(1, 'rgba(0,0,10,.85)'); ctx.fillStyle = sh; ctx.fillRect(x - r, y - r, r * 2, r * 2);
+  ctx.restore();
+}
+function spMoon(ctx, x, y, r) {
+  ctx.save(); ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.clip();
+  const mg = ctx.createRadialGradient(x + r * 0.3, y - r * 0.3, 0, x, y, r); mg.addColorStop(0, '#e9e7e1'); mg.addColorStop(1, '#8d8b88'); ctx.fillStyle = mg; ctx.fillRect(x - r, y - r, r * 2, r * 2);
+  ctx.fillStyle = 'rgba(110,108,104,.4)'; [[-.32, -.2, .22], [.28, .15, .17], [-.05, .45, .13], [.1, -.45, .1], [.5, -.1, .09]].forEach(c => { ctx.beginPath(); ctx.arc(x + c[0] * r, y + c[1] * r, c[2] * r, 0, 6.2832); ctx.fill(); });
+  const sh = ctx.createLinearGradient(x + r * 0.4, y - r * 0.4, x - r * 0.8, y + r * 0.8); sh.addColorStop(0, 'rgba(0,0,8,0)'); sh.addColorStop(.6, 'rgba(0,0,8,.5)'); sh.addColorStop(1, 'rgba(0,0,8,.9)'); ctx.fillStyle = sh; ctx.fillRect(x - r, y - r, r * 2, r * 2);
+  ctx.restore();
+}
+function spRing(ctx, x, y, r, half) {
+  ctx.save(); ctx.translate(x, y); ctx.rotate(-0.32); ctx.scale(1, 0.26);
+  ctx.beginPath(); if (half) ctx.rect(-r * 3, 0, r * 6, r * 3); else ctx.rect(-r * 3, -r * 3, r * 6, r * 3); ctx.clip();
+  [[1.45, 0.07, '255,220,170', .55], [1.62, 0.12, '230,190,140', .42], [1.86, 0.08, '255,230,190', .3], [2.05, 0.05, '220,180,140', .2]].forEach(b => { ctx.strokeStyle = 'rgba(' + b[2] + ',' + b[3] + ')'; ctx.lineWidth = r * b[1]; ctx.beginPath(); ctx.arc(0, 0, r * b[0], 0, 6.2832); ctx.stroke(); });
+  ctx.restore();
+}
+function spPlanet(ctx, x, y, r, ts) {
+  ctx.globalCompositeOperation = 'lighter';
+  const at = ctx.createRadialGradient(x, y, r * 0.9, x, y, r * 1.35); at.addColorStop(0, 'rgba(255,170,110,.3)'); at.addColorStop(1, 'rgba(255,170,110,0)'); ctx.fillStyle = at; ctx.beginPath(); ctx.arc(x, y, r * 1.35, 0, 6.2832); ctx.fill();
+  ctx.globalCompositeOperation = 'source-over';
+  spRing(ctx, x, y, r, false);
+  ctx.save(); ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.clip();
+  const pg = ctx.createLinearGradient(x, y - r, x, y + r); pg.addColorStop(0, '#f3c48b'); pg.addColorStop(1, '#8f4a2f'); ctx.fillStyle = pg; ctx.fillRect(x - r, y - r, r * 2, r * 2);
+  ctx.translate(x, y); ctx.rotate(-0.32);
+  for (let i = -6; i <= 6; i++) { ctx.fillStyle = i % 2 ? 'rgba(120,55,30,.22)' : 'rgba(255,225,180,.16)'; ctx.fillRect(-r * 1.5, i * r * 0.16 + Math.sin(ts * 0.1 + i) * r * 0.02, r * 3, r * (0.06 + (i * i % 5) * 0.012)); }
+  ctx.fillStyle = 'rgba(190,80,50,.45)'; ctx.beginPath(); ctx.ellipse(r * 0.25, r * 0.3, r * 0.16, r * 0.08, 0, 0, 6.2832); ctx.fill();
+  ctx.rotate(0.32); ctx.translate(-x, -y);
+  const sh = ctx.createLinearGradient(x - r * 0.6, y - r * 0.6, x + r * 0.8, y + r * 0.8); sh.addColorStop(0, 'rgba(10,0,10,0)'); sh.addColorStop(.55, 'rgba(10,0,10,.3)'); sh.addColorStop(1, 'rgba(10,0,10,.85)'); ctx.fillStyle = sh; ctx.fillRect(x - r, y - r, r * 2, r * 2);
+  ctx.restore();
+  spRing(ctx, x, y, r, true);
+}
+function spShip(ctx, x, y, s, ang, flame, ts, dpr) {
+  ctx.save(); ctx.translate(x, y); ctx.rotate(ang);
+  if (flame > 0.02) {
+    ctx.globalCompositeOperation = 'lighter';
+    const tl = ctx.createLinearGradient(-s * 1, 0, -s * 9, 0); tl.addColorStop(0, 'rgba(140,200,255,' + (0.28 * flame).toFixed(3) + ')'); tl.addColorStop(1, 'rgba(140,200,255,0)'); ctx.fillStyle = tl; ctx.beginPath(); ctx.moveTo(-s * 0.9, -s * 0.22); ctx.lineTo(-s * 9, -s * 0.05); ctx.lineTo(-s * 9, s * 0.05); ctx.lineTo(-s * 0.9, s * 0.22); ctx.fill();
+    const fl = s * (1.1 + 0.35 * Math.sin(ts * 31) + 0.2 * Math.sin(ts * 17)) * flame;
+    const fg = ctx.createRadialGradient(-s * 0.95, 0, 0, -s * 0.95, 0, fl * 1.4); fg.addColorStop(0, 'rgba(255,255,240,.95)'); fg.addColorStop(.3, 'rgba(255,190,90,.75)'); fg.addColorStop(.7, 'rgba(255,90,40,.25)'); fg.addColorStop(1, 'rgba(255,90,40,0)');
+    ctx.fillStyle = fg; ctx.beginPath(); ctx.moveTo(-s * 0.9, -s * 0.24); ctx.quadraticCurveTo(-s * 0.95 - fl * 0.6, -s * 0.2, -s * 0.95 - fl * 1.4, 0); ctx.quadraticCurveTo(-s * 0.95 - fl * 0.6, s * 0.2, -s * 0.9, s * 0.24); ctx.fill();
+    ctx.globalCompositeOperation = 'source-over';
+  }
+  ctx.fillStyle = '#e8493f'; ctx.beginPath(); ctx.moveTo(-s * 0.35, -s * 0.3); ctx.lineTo(-s * 1.0, -s * 0.72); ctx.lineTo(-s * 0.92, -s * 0.2); ctx.fill(); ctx.beginPath(); ctx.moveTo(-s * 0.35, s * 0.3); ctx.lineTo(-s * 1.0, s * 0.72); ctx.lineTo(-s * 0.92, s * 0.2); ctx.fill();
+  const bg = ctx.createLinearGradient(0, -s * 0.4, 0, s * 0.4); bg.addColorStop(0, '#ffffff'); bg.addColorStop(.55, '#c9cfdb'); bg.addColorStop(1, '#7c8597');
+  ctx.fillStyle = bg; ctx.beginPath(); ctx.moveTo(s * 1.2, 0); ctx.quadraticCurveTo(s * 0.75, -s * 0.4, s * 0.1, -s * 0.38); ctx.lineTo(-s * 0.85, -s * 0.3); ctx.quadraticCurveTo(-s * 1.0, 0, -s * 0.85, s * 0.3); ctx.lineTo(s * 0.1, s * 0.38); ctx.quadraticCurveTo(s * 0.75, s * 0.4, s * 1.2, 0); ctx.fill();
+  ctx.fillStyle = '#e8493f'; ctx.beginPath(); ctx.moveTo(s * 1.2, 0); ctx.quadraticCurveTo(s * 1.0, -s * 0.22, s * 0.78, -s * 0.3); ctx.lineTo(s * 0.78, s * 0.3); ctx.quadraticCurveTo(s * 1.0, s * 0.22, s * 1.2, 0); ctx.fill();
+  ctx.fillStyle = '#20314f'; ctx.beginPath(); ctx.arc(s * 0.32, -s * 0.02, s * 0.17, 0, 6.2832); ctx.fill();
+  ctx.fillStyle = '#7fd8ff'; ctx.beginPath(); ctx.arc(s * 0.32, -s * 0.02, s * 0.12, 0, 6.2832); ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,.85)'; ctx.beginPath(); ctx.arc(s * 0.28, -s * 0.07, s * 0.04, 0, 6.2832); ctx.fill();
+  ctx.restore();
+}
+function spDraw(e, ts, dt, p, brk) {
+  const { ctx, W, H, u, dpr } = e; const k = keyAt(SP_KEYS, p);
+  SP.bm += ((brk ? 1 : 0) - SP.bm) * Math.min(1, dt * 0.9);
+  const cruise = 1 - SP.bm;
+  let g = ctx.createLinearGradient(0, 0, W * 0.3, H); g.addColorStop(0, rgb3(k.top)); g.addColorStop(1, rgb3(k.bot)); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  /* a faint band of the galaxy */
+  ctx.save(); ctx.translate(W * 0.55, H * 0.4); ctx.rotate(-0.5); ctx.scale(1, 0.18);
+  const mw = ctx.createRadialGradient(0, 0, 0, 0, 0, Math.max(W, H) * 0.7); mw.addColorStop(0, 'rgba(200,190,255,.12)'); mw.addColorStop(1, 'rgba(200,190,255,0)'); ctx.fillStyle = mw; ctx.fillRect(-W * 2, -W * 2, W * 4, W * 4); ctx.restore();
+  /* stars in three layers; the near ones streak while you travel */
+  const go = !!(S.timer && S.timer.phase === 'focus' && !S.timer.paused); SP.go += ((go ? 1 : 0) - SP.go) * Math.min(1, dt * 0.8);
+  const spd = 0.1 + 0.9 * cruise * SP.go;
+  for (let L = 0; L < 3; L++) {
+    SP.off[L] = (SP.off[L] + dt * SP.vel[L] * spd) % 1;
+    const streak = L === 2 ? SP.vel[L] * spd * W * 0.9 : 0;
+    ctx.fillStyle = '#fff'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.1 * dpr; ctx.lineCap = 'round';
+    for (const s of SP.stars[L]) {
+      const x = ((s.x - SP.off[L]) % 1 + 1) % 1 * W, y = s.y * H, a = (0.35 + 0.25 * L) * (0.6 + 0.4 * Math.sin(ts * s.tw + s.ph));
+      ctx.globalAlpha = a;
+      if (streak > 2 * dpr) { ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + streak, y); ctx.stroke(); }
+      else { ctx.beginPath(); ctx.arc(x, y, s.s * dpr * (0.6 + 0.25 * L), 0, 6.2832); ctx.fill(); }
+    }
+  }
+  ctx.globalAlpha = 1;
+  /* the nebula drifts past in the later part of the trip */
+  const nx = W * (0.5 + (0.74 - p) * 1.5), nA = 1 - smooth(0.18, 0.42, Math.abs(0.74 - p));
+  if (nA > 0.01) {
+    ctx.globalCompositeOperation = 'lighter';
+    for (const b of SP.neb) { const x = nx + b.dx * W, y = H * (0.42 + b.dy), r = b.r * Math.max(W, H) * (0.9 + 0.08 * Math.sin(ts * 0.1 + b.dx * 9)); const ng = ctx.createRadialGradient(x, y, 0, x, y, r); ng.addColorStop(0, rgb3(b.c, 0.2 * nA)); ng.addColorStop(.5, rgb3(b.c, 0.07 * nA)); ng.addColorStop(1, rgb3(b.c, 0)); ctx.fillStyle = ng; ctx.fillRect(x - r, y - r, r * 2, r * 2); }
+    ctx.globalCompositeOperation = 'source-over';
+  }
+  /* Earth falls behind, the Moon passes by */
+  const ex = W * (0.04 - p * 3.4), er = u * 0.34;
+  if (ex + er * 1.2 > 0) spEarth(ctx, ex, H * 1.0, er, ts);
+  const mx = W * (0.66 + (0.24 - p) * 3.4), mr = u * 0.075;
+  if (mx > -mr * 2 && mx < W + mr * 2) spMoon(ctx, mx, H * 0.26, mr);
+  /* the asteroid belt */
+  for (const a of SP.ast) {
+    const x = W * (0.5 + (a.wp - p) * 3.2 * a.d), r = a.r * u * a.d; if (x < -r * 2 || x > W + r * 2) continue;
+    const y = H * (0.08 + a.y * 0.84); a.rot += dt * a.vr;
+    ctx.save(); ctx.translate(x, y); ctx.rotate(a.rot);
+    const ag = ctx.createLinearGradient(-r, -r, r, r); ag.addColorStop(0, a.d > 1 ? '#a69584' : '#7d7266'); ag.addColorStop(1, '#2a2420'); ctx.fillStyle = ag;
+    ctx.beginPath(); a.pts.forEach((q, i) => { const an = i / a.pts.length * 6.2832; if (i) ctx.lineTo(Math.cos(an) * r * q, Math.sin(an) * r * q); else ctx.moveTo(Math.cos(an) * r * q, Math.sin(an) * r * q); }); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = 'rgba(0,0,0,.25)'; ctx.beginPath(); ctx.arc(r * 0.2, r * 0.15, r * 0.22, 0, 6.2832); ctx.fill();
+    ctx.restore();
+  }
+  /* the destination: a ringed planet that grows as you get closer */
+  const D = smooth(0.45, 1, p), pr = u * (0.035 + 0.19 * D * D), px = W * (0.85 - 0.08 * D - 0.1 * SP.bm), py = H * (0.3 + 0.03 * D);
+  /* the ship: crosses the screen as the session runs, then circles the planet on a break */
+  const s = u * 0.032;
+  const cx = W * (0.1 + 0.56 * p) + Math.sin(ts * 0.5) * u * 0.006, cy = H * (0.52 - 0.12 * Math.sin(Math.PI * p)) + Math.sin(ts * 0.8) * u * 0.01;
+  const oa = ts * 0.32, ox = px + Math.cos(oa) * pr * 1.4, oy = py + Math.sin(oa) * pr * 0.45, back = Math.sin(oa) < 0;
+  const shx = cx + (ox - cx) * SP.bm, shy = cy + (oy - cy) * SP.bm;
+  const ang = (1 - SP.bm) * (Math.cos(ts * 0.8) * 0.06 - 0.12 * Math.cos(Math.PI * p) * 0.6) + SP.bm * Math.atan2(Math.cos(oa) * pr * 0.45, -Math.sin(oa) * pr * 1.4);
+  const ss = s * (1 - SP.bm * (back ? 0.35 : 0.1));
+  if (SP.bm > 0.5 && back) spShip(ctx, shx, shy, ss, ang, 0.35 * cruise + 0.15, ts, dpr);
+  spPlanet(ctx, px, py, pr, ts);
+  if (!(SP.bm > 0.5 && back)) spShip(ctx, shx, shy, ss, ang, 0.2 + 0.8 * cruise * (0.3 + 0.7 * SP.go), ts, dpr);
+  scVignette(e, 0.32);
+}
+
+/* ---------- Northern Lights ---------- */
+const AU = { on: false };
+function auInit() {
+  const R = scRand(20261123);
+  AU.stars = []; for (let i = 0; i < 170; i++) AU.stars.push({ x: R(), y: Math.pow(R(), 1.2), s: 0.4 + R() * 1.3, ph: R() * 6.28, sp: 0.5 + R() * 2 });
+  AU.r = [scRidge(R, 0.16, true, 0.03), scRidge(R, 0.08, true, 0.015)];
+  AU.bank = scRidge(R, 0.05, false, 0.1);
+  AU.trees = []; for (let i = 0; i < 30; i++) { let x = R(); if (x > 0.78 && x < 0.92) x -= 0.2; AU.trees.push({ x: clamp(x, 0, 1), h: 0.07 + R() * 0.09, w: 0.5 + R() * 0.3 }); }
+  AU.trees.sort((a, b) => a.h - b.h);
+  AU.snow = []; for (let i = 0; i < 130; i++) AU.snow.push({ x: R(), y: R(), s: 0.6 + R() * 1.8, v: 0.03 + R() * 0.05, ph: R() * 6.28 });
+  AU.cv = document.createElement('canvas'); AU.sn = 0; AU.shoot = null; AU.on = true;
+}
+/* the aurora is worked out per pixel on a small canvas, then scaled up, which gives it its soft glow */
+function auLights(ts, I, aw, ah) {
+  const c = AU.cv; if (c.width !== aw || c.height !== ah) { c.width = aw; c.height = ah; AU.img = null; }
+  const x2 = c.getContext('2d'); if (!AU.img) AU.img = x2.createImageData(aw, ah);
+  const d = AU.img.data, pk = smooth(0.8, 1, I);
+  const rib = [0, 1, 2].map(r => ({ s: clamp((I - r * 0.26) / 0.32, 0, 1) * (1 - r * 0.15), yb: new Float32Array(aw), hh: new Float32Array(aw), ray: new Float32Array(aw) }));
+  for (let i = 0; i < aw; i++) {
+    const x = i / aw;
+    for (let r = 0; r < 3; r++) {
+      const R = rib[r]; if (!R.s) continue;
+      R.yb[i] = 0.5 + r * 0.1 + 0.13 * Math.sin(x * (2.1 + r * 0.7) + ts * 0.06 * (1 + r * 0.6) + r * 2.1) + 0.05 * Math.sin(x * 5.3 - ts * 0.1 + r * 1.3) + 0.02 * Math.sin(x * 13 + ts * 0.3 + r);
+      R.hh[i] = 0.2 + 0.24 * I + 0.07 * Math.sin(x * 3 + ts * 0.05 + r);
+      const v = 0.5 + 0.5 * Math.sin(x * 70 + 3 * Math.sin(x * 6 + ts * 0.22 + r) + ts * 0.45 * (1 + r * 0.4));
+      R.ray[i] = R.s * (0.35 + 0.65 * v * v) * (0.7 + 0.3 * Math.sin(x * 9 - ts * 0.35 + r * 2));
+    }
+  }
+  for (let j = 0; j < ah; j++) {
+    const y = j / ah;
+    for (let i = 0; i < aw; i++) {
+      let cr = 0, cg = 0, cb = 0;
+      for (let r = 0; r < 3; r++) {
+        const R = rib[r]; if (!R.s) continue;
+        const dd = R.yb[i] - y; let f, q;
+        if (dd < 0) { f = Math.exp(-dd * dd * 900); q = 0; } else { q = dd / R.hh[i]; f = Math.exp(-q * 2.4); }
+        f *= R.ray[i]; if (f < 0.004) continue;
+        if (q < 0.45) { const t = q / 0.45; cr += f * (60 - 20 * t); cg += f * (255 - 50 * t); cb += f * (140 + 50 * t); }
+        else { const t = Math.min(1, (q - 0.45) / 0.55); cr += f * (40 + 120 * t); cg += f * (205 - 150 * t); cb += f * (190 + 40 * t); }
+        if (dd < 0 && pk) { cr += f * 255 * pk * 0.7; cg -= f * 120 * pk * 0.7; cb += f * 60 * pk * 0.7; }
+      }
+      const o = (j * aw + i) * 4; d[o] = cr > 255 ? 255 : cr; d[o + 1] = cg > 255 ? 255 : cg < 0 ? 0 : cg; d[o + 2] = cb > 255 ? 255 : cb; d[o + 3] = 255;
+    }
+  }
+  x2.putImageData(AU.img, 0, 0);
+  return c;
+}
+function auDraw(e, ts, dt, p, brk) {
+  const { ctx, W, H, u, dpr } = e;
+  const I = 0.12 + 0.88 * smooth(0, 1, p), hz = H * 0.64, lake = H * 0.8;
+  AU.sn += ((brk ? 1 : 0) - AU.sn) * Math.min(1, dt * 0.6);
+  /* night sky, with a green cast near the horizon as the aurora grows */
+  const hzc = mix3([15, 40, 58], [20, 90, 70], 0.55 * I);
+  let g = ctx.createLinearGradient(0, 0, 0, hz); g.addColorStop(0, '#02040f'); g.addColorStop(.55, '#061427'); g.addColorStop(1, rgb3(hzc)); ctx.fillStyle = g; ctx.fillRect(0, 0, W, hz + 2);
+  ctx.fillStyle = '#fff';
+  for (const s of AU.stars) { const a = (0.35 + 0.6 * Math.sin(ts * s.sp + s.ph)) * (1 - s.y * 0.6) * (1 - 0.35 * I); if (a < 0.03) continue; ctx.globalAlpha = a; ctx.beginPath(); ctx.arc(s.x * W, s.y * hz, s.s * dpr * 0.8, 0, 6.2832); ctx.fill(); }
+  ctx.globalAlpha = 1;
+  if (!AU.shoot && Math.random() < 0.002) AU.shoot = { x: 0.1 + Math.random() * 0.6, y: 0.04 + Math.random() * 0.2, t: 0 };
+  if (AU.shoot) {
+    const sh = AU.shoot; sh.t += dt; const q = sh.t / 0.9; if (q >= 1) AU.shoot = null; else {
+      const x = (sh.x + q * 0.2) * W, y = (sh.y + q * 0.09) * hz, tx = x - 0.11 * W * Math.min(1, q * 3), ty = y - 0.05 * hz * Math.min(1, q * 3);
+      const sg = ctx.createLinearGradient(tx, ty, x, y); sg.addColorStop(0, 'rgba(255,255,255,0)'); sg.addColorStop(1, 'rgba(255,255,255,' + (0.85 * (1 - q)).toFixed(3) + ')');
+      ctx.strokeStyle = sg; ctx.lineWidth = 2 * dpr; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(x, y); ctx.stroke();
+    }
+  }
+  /* the lights */
+  const aw = 150, ah = clamp(Math.round(aw * hz / W), 40, 160), lc = auLights(ts, I, aw, ah);
+  ctx.globalCompositeOperation = 'lighter'; ctx.imageSmoothingEnabled = true; try { ctx.imageSmoothingQuality = 'high'; } catch (err) { /* older browsers */ }
+  ctx.globalAlpha = 0.95; ctx.drawImage(lc, 0, 0, W, hz);
+  const hg = ctx.createRadialGradient(W / 2, hz, 0, W / 2, hz, W * 0.7); hg.addColorStop(0, 'rgba(70,255,160,' + (0.1 * I).toFixed(3) + ')'); hg.addColorStop(1, 'rgba(70,255,160,0)'); ctx.fillStyle = hg; ctx.fillRect(0, 0, W, hz);
+  ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+  /* snowy mountains, rimmed with the aurora's light */
+  const far = mix3([28, 44, 66], hzc, 0.25), mid = [14, 24, 38];
+  thRidge(ctx, AU.r[0], W, hz, H, rgb3(far)); thRidge(ctx, AU.r[1], W, hz, H, rgb3(mid));
+  ctx.strokeStyle = 'rgba(130,255,200,' + (0.18 * I).toFixed(3) + ')'; ctx.lineWidth = 1.2 * dpr; ctx.beginPath(); AU.r[0].forEach((v, i) => { const x = W * i / (AU.r[0].length - 1), y = hz - v * H; if (i) ctx.lineTo(x, y); else ctx.moveTo(x, y); }); ctx.stroke();
+  /* a still, frozen lake that mirrors the sky */
+  const lg = ctx.createLinearGradient(0, hz, 0, lake); lg.addColorStop(0, rgb3(mix3(hzc, [0, 0, 0], 0.35))); lg.addColorStop(1, '#040a14'); ctx.fillStyle = lg; ctx.fillRect(0, hz, W, lake - hz + 2);
+  ctx.save(); ctx.beginPath(); ctx.rect(0, hz, W, lake - hz); ctx.clip(); ctx.translate(0, hz * 2); ctx.scale(1, -1);
+  ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = 0.32; ctx.drawImage(lc, 0, 0, W, hz); ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 0.5;
+  thRidge(ctx, AU.r[0], W, hz, H, rgb3(mix3(far, [0, 0, 0], 0.3))); thRidge(ctx, AU.r[1], W, hz, H, rgb3(mix3(mid, [0, 0, 0], 0.3)));
+  ctx.restore(); ctx.globalAlpha = 1;
+  ctx.strokeStyle = 'rgba(200,230,255,.06)'; ctx.lineWidth = 1 * dpr;
+  for (let i = 0; i < 6; i++) { const y = hz + (lake - hz) * ((i + 0.7) / 6.5); ctx.beginPath(); ctx.moveTo(W * ((i * 0.37) % 1) * 0.5, y); ctx.lineTo(W * ((i * 0.37) % 1) * 0.5 + W * (0.2 + i * 0.05), y); ctx.stroke(); }
+  /* the snow bank in front, a cabin with a lit window, and pines */
+  const bankY = x => H + 2 - ridgeAt(AU.bank, x) * H - (H - lake) * 0.15;
+  const bk = ctx.createLinearGradient(0, lake - H * 0.04, 0, H); bk.addColorStop(0, rgb3(mix3([120, 145, 175], [120, 230, 180], 0.18 * I))); bk.addColorStop(1, '#1d2838');
+  ctx.fillStyle = bk; ctx.beginPath(); ctx.moveTo(0, H); for (let i = 0; i <= 48; i++) ctx.lineTo(W * i / 48, bankY(i / 48)); ctx.lineTo(W, H); ctx.closePath(); ctx.fill();
+  const cx = W * 0.85, cy = bankY(0.85) + u * 0.006, cw = u * 0.075, ch = cw * 0.62;
+  ctx.globalCompositeOperation = 'lighter';
+  const wg = ctx.createRadialGradient(cx, cy - ch * 0.45, 0, cx, cy - ch * 0.45, cw * 2.4); wg.addColorStop(0, 'rgba(255,170,80,.18)'); wg.addColorStop(1, 'rgba(255,170,80,0)'); ctx.fillStyle = wg; ctx.fillRect(cx - cw * 2.4, cy - ch * 0.45 - cw * 2.4, cw * 4.8, cw * 4.8); /* window glow */
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.fillStyle = '#0a1018'; ctx.fillRect(cx - cw / 2, cy - ch, cw, ch); ctx.fillRect(cx + cw * 0.18, cy - ch * 1.75, cw * 0.12, ch * 0.6);
+  ctx.beginPath(); ctx.moveTo(cx - cw * 0.62, cy - ch * 0.95); ctx.lineTo(cx, cy - ch * 1.65); ctx.lineTo(cx + cw * 0.62, cy - ch * 0.95); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = 'rgba(220,235,255,.8)'; ctx.lineWidth = 2.2 * dpr; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(cx - cw * 0.62, cy - ch * 0.95); ctx.lineTo(cx, cy - ch * 1.65); ctx.lineTo(cx + cw * 0.62, cy - ch * 0.95); ctx.stroke();
+  const fl = 0.85 + 0.15 * Math.sin(ts * 5) * Math.sin(ts * 2.3);
+  ctx.fillStyle = 'rgba(255,190,100,' + fl.toFixed(3) + ')'; ctx.fillRect(cx - cw * 0.3, cy - ch * 0.68, cw * 0.2, ch * 0.3); ctx.fillRect(cx + cw * 0.08, cy - ch * 0.68, cw * 0.2, ch * 0.3);
+  for (let i = 0; i < 6; i++) {
+    const a = (ts * 0.09 + i / 6) % 1, sx = cx + cw * 0.24 + a * u * 0.07 + Math.sin(ts * 0.7 + i * 2) * u * 0.008, sy = cy - ch * 1.8 - a * u * 0.2, r = u * (0.008 + a * 0.028);
+    ctx.fillStyle = 'rgba(190,205,225,' + (0.16 * (1 - a) * Math.min(1, a * 6)).toFixed(3) + ')'; ctx.beginPath(); ctx.arc(sx, sy, r, 0, 6.2832); ctx.fill();
+  }
+  ctx.fillStyle = '#050b12';
+  for (const t of AU.trees) {
+    const x = t.x * W, b = bankY(t.x) + u * 0.01, h = t.h * H, w = h * 0.36 * t.w;
+    ctx.fillRect(x - w * 0.06, b - h * 0.12, w * 0.12, h * 0.14);
+    for (let k = 0; k < 4; k++) { const ty = b - h * 0.1 - k * h * 0.22, tw = w * (1 - k * 0.2); ctx.beginPath(); ctx.moveTo(x - tw / 2, ty); ctx.lineTo(x, ty - h * 0.36); ctx.lineTo(x + tw / 2, ty); ctx.closePath(); ctx.fill(); }
+  }
+  /* snowfall on a break */
+  if (AU.sn > 0.01) {
+    ctx.fillStyle = '#fff';
+    for (const f of AU.snow) {
+      const y = ((f.y + ts * f.v) % 1) * H, x = ((f.x + Math.sin(ts * 0.5 + f.ph) * 0.015 + ts * 0.004) % 1) * W;
+      ctx.globalAlpha = AU.sn * (0.45 + 0.4 * (f.s / 2.4)); ctx.beginPath(); ctx.arc(x, y, f.s * dpr, 0, 6.2832); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+  scVignette(e, 0.3);
+}
+
+/* ---------- the theme list ---------- */
+const SCENES = {
+  none: { name: 'Normal' },
+  sun: { name: 'Sunrise' },
+  ocean: { name: 'Deep Dive', st: OC, init: ocInit, draw: ocDraw, idle: 0, brkP: 0, brk: 'Back at the surface',
+    phases: [[0.06, 'At the surface'], [0.3, 'Sunlit water'], [0.6, 'Twilight zone'], [0.86, 'Midnight zone'], [1.01, 'The abyss']] },
+  space: { name: 'Space', st: SP, init: spInit, draw: spDraw, idle: 0, brkP: 1, brk: 'In orbit',
+    phases: [[0.1, 'Leaving Earth'], [0.36, 'Passing the Moon'], [0.62, 'Asteroid belt'], [0.86, 'Through the nebula'], [0.97, 'Approach'], [1.01, 'Arrival']] },
+  aurora: { name: 'Aurora', st: AU, init: auInit, draw: auDraw, idle: 0.1, brkP: 0.4, brk: 'Snowfall',
+    phases: [[0.15, 'Clear night'], [0.4, 'First glow'], [0.65, 'Curtains rising'], [0.88, 'Dancing lights'], [1.01, 'Full aurora']] }
+};
+const SCENE_IDS = ['none', 'sun', 'ocean', 'space', 'aurora'];
+const curScene = () => (SCENES[S.settings.scene] ? S.settings.scene : 'sun');
+function thDraw(cv, ts, dt) {
+  const sc = SCENES[TH.sc]; if (!sc || !sc.draw) { thDrawSun(cv, ts, dt); return; }
+  const dpr = Math.min(TH.q, window.devicePixelRatio || 1); const cw = cv.clientWidth, ch = cv.clientHeight; if (!cw || !ch) return;
+  const W = Math.round(cw * dpr), H = Math.round(ch * dpr); if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+  const ctx = cv.getContext('2d'); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+  sc.draw({ ctx, W, H, u: Math.min(W, H), dpr }, ts, dt, clamp(TH.p, 0, 1), !!(S.timer && S.timer.phase === 'break'));
+}
+const scPhase = (sc, p) => { for (let i = 0; i < sc.phases.length; i++) if (p < sc.phases[i][0]) return i; return sc.phases.length - 1; };
+
 /* where the sky should be: follows the session, or the real time of day when idle */
 function thTarget() {
   const t = S.timer;
+  const sc = SCENES[TH.sc];
+  if (sc && sc.draw) { TH.target = !t ? sc.idle : t.phase === 'break' ? sc.brkP : (t.planned ? clamp(timerElapsed() / t.planned, 0, 1) : (timerElapsed() % 3600) / 3600); return; }
   if (!t) { const d = new Date(), h = d.getHours() + d.getMinutes() / 60; TH.target = h < 4.5 ? 0.02 : h < 5.6 ? 0.02 + (h - 4.5) / 1.1 * 0.065 : h <= 18.9 ? 0.085 + (h - 5.6) / 13.3 * 0.83 : h < 20.2 ? 0.915 + (h - 18.9) / 1.3 * 0.075 : 0.995; }
   else if (t.phase === 'break') TH.target = 1;
   else { const el = timerElapsed(); TH.target = 0.045 + 0.93 * (t.planned ? clamp(el / t.planned, 0, 1) : (el % 3600) / 3600); }
@@ -4807,6 +5285,14 @@ function thLine(i) {
 }
 function thQuote() {
   const el = $('#th-quote'); if (!el) return;
+  const sc = SCENES[TH.sc];
+  if (sc && sc.draw) {
+    const t = S.timer, lb = t && t.phase === 'break' ? sc.brk : sc.phases[scPhase(sc, TH.target)][1], k = TH.sc + ':' + lb;
+    if (el.dataset.k === k) return;
+    const first = !el.dataset.k; el.dataset.k = k; const html = () => { el.innerHTML = '<b>' + esc(lb) + '</b>'; };
+    if (first) { html(); return; }
+    el.classList.add('swap'); setTimeout(() => { if (el.isConnected) { html(); el.classList.remove('swap'); } }, 650); return;
+  }
   const t = S.timer; const key = t ? (t.phase === 'break' ? 'b' : String(thPhase(TH.target))) : 'idle';
   if (el.dataset.k === key) return;
   const first = !el.dataset.k; el.dataset.k = key;
@@ -4828,12 +5314,25 @@ function thLoop(now) {
 }
 function thMount() {
   const cv = $('#th-cv'); if (!cv) return;
+  const sc = curScene(); if (TH.sc !== sc) { TH.sc = sc; TH.p = null; }
+  const d = SCENES[sc]; if (d.init && !d.st.on) d.init();
   if (!TH.stars) thInit();
   thTarget(); if (TH.p == null) TH.p = TH.target;
   thDraw(cv, performance.now() / 1000, 0); thQuote();
   if (!TH.on) { TH.on = true; TH.lastT = 0; requestAnimationFrame(thLoop); }
 }
-A.toggleTheatre = () => { S.settings.theatre = !S.settings.theatre; save(); render(); toast(S.settings.theatre ? 'Focus theatre on' : 'Focus theatre off'); };
+function setScene(id) {
+  if (!SCENES[id]) return; const s = S.settings;
+  s.scene = id; s.theatre = id !== 'none'; if (id !== 'none') s.sceneLast = id;
+  save(); render();
+}
+A.setScene = el => setScene(el.dataset.v);
+A.toggleTheatre = () => { const on = curScene() === 'none'; setScene(on ? (S.settings.sceneLast || 'sun') : 'none'); toast(on ? SCENES[curScene()].name + ' theme on' : 'Timer theme off'); };
+/* the Theme row under the start button, and the same choice in Settings */
+function sceneChips(sc) {
+  return SCENE_IDS.map(id => '<button class="chip sp-chip' + (id === sc ? ' on' : '') + '" data-act="setScene" data-v="' + id + '" aria-pressed="' + (id === sc) + '"><i class="sp-sw sw-' + id + '"></i>' + SCENES[id].name + '</button>').join('');
+}
+const scenePickHTML = sc => '<div class="scene-pick" role="group" aria-label="Theme"><span class="sp-l">Theme</span><div class="sp-row">' + sceneChips(sc) + '</div></div>';
 
 /* ============================================================
    Focus — Alex, the offline coach. Alex reads your own history
@@ -7414,9 +7913,9 @@ function settingsBody(sec) {
       setRow('Coach name', '', '<input class="input" style="width:200px" data-chg="set" data-path="settings.coachName" data-type="text" data-re="1" value="' + esc(coachName()) + '" aria-label="Coach name">') +
       setRow('Speak up on his own', 'A short note under the square when something needs your attention. Never during a focus session', sw('settings.alexNudges', 'Coach nudges')) +
       setRow('Read his notes aloud', 'Uses the iPad\u2019s built-in voice. The speaker button in his panel reads on demand', sw('settings.alexVoice', 'Read notes aloud')) + '</section>';
-    h += '<section class="card"><div class="card-h"><h3>Focus theatre</h3></div>' +
-      setRow('Sunrise to sunset behind the clock', 'The sky moves from dawn to nightfall as your session runs', sw('settings.theatre', 'Focus theatre')) +
-      setRow('Lines under the clock', 'A short line that changes with each part of the day', sw('settings.theatreQuotes', 'Lines under the clock')) +
+    h += '<section class="card"><div class="card-h"><h3>Timer theme</h3></div>' +
+      '<div class="set-row"><div class="grow"><b>Scene behind the clock</b><div class="small muted">It moves with your session: sunrise to nightfall, a dive to the sea floor, a trip to a far planet, or an aurora that grows</div><div class="sp-row set-sp">' + sceneChips(curScene()) + '</div></div></div>' +
+      setRow('Lines under the clock', 'Sunrise theme only. A short line that changes with each part of the day', sw('settings.theatreQuotes', 'Lines under the clock')) +
       '<div class="field" style="margin-top:14px"><label for="own-quotes">Your own lines and quotes, one per line</label><textarea class="textarea" id="own-quotes" data-chg="quotes" placeholder="Type the lines that fire you up. They join the rotation in the theatre and with your coach.">' + esc((s.quotes || []).join('\n')) + '</textarea></div></section>';
   } else if (sec === 'timer') {
     h += '<section class="card"><div class="card-h"><h3>Pomodoro presets</h3><button class="more" data-act="presetAdd">Add preset</button></div><div class="ptable"><div class="phead"><span>Name</span><span>Focus</span><span>Break</span><span>Long break</span><span>Long break every</span><span></span></div>' +
