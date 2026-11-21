@@ -1,5 +1,5 @@
 /* Focus: offline support. Loads the newest version when online, the saved copy when offline. */
-const CACHE = 'focus-v2';
+const CACHE = 'focus-v3';
 const FONTS = 'focus-fonts-v1';
 const ASSETS = ['./', 'index.html', 'manifest.webmanifest', 'icon-180.png', 'icon-512.png'];
 self.addEventListener('install', e => {
